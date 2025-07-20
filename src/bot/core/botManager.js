@@ -8,6 +8,7 @@ class BotManager extends EventEmitter {
         super();
         this.activeBots = new Map();
         this.botCounter = 0;
+        this.botFreezeStates = new Map(); // Хранит состояние заморозки для каждого бота
     }
 
     // Утилиты для работы с адресом сервера
@@ -69,6 +70,9 @@ class BotManager extends EventEmitter {
                 createdAt: Date.now()
             });
 
+            // Инициализируем состояние заморозки
+            this.botFreezeStates.set(uniqueBotName, false);
+
             // Подключаемся к серверу
             await this.connectBot(uniqueBotName);
 
@@ -128,6 +132,7 @@ class BotManager extends EventEmitter {
         );
         
         console.log(`Disconnected ${botNames.length} bots`);
+        this.botFreezeStates.clear(); // Очищаем все состояния заморозки
         return results;
     }
 
@@ -140,6 +145,16 @@ class BotManager extends EventEmitter {
     isBotConnected(botName) {
         const botInfo = this.activeBots.get(botName);
         return botInfo ? botInfo.isConnected : false;
+    }
+
+    // Проверка состояния заморозки бота
+    isFreezeBot(botName) {
+        return this.botFreezeStates.get(botName) || false;
+    }
+
+    // Установка состояния заморозки бота
+    setFreezeBot(botName, isFrozen) {
+        this.botFreezeStates.set(botName, isFrozen);
     }
 
     // Получение всех активных ботов
@@ -162,7 +177,7 @@ class BotManager extends EventEmitter {
                 botInfo.client.disconnect();
             }
             this.activeBots.delete(botName);
-            console.log(`Bot ${botName} removed from manager`);
+            this.botFreezeStates.delete(botName); // Очищаем состояние заморозки
             return true;
         }
         return false;
@@ -252,6 +267,17 @@ class BotManager extends EventEmitter {
 
         // Получение снапшота
         client.on('snapshot', (snapshot) => {
+            // Обновляем состояние заморозки бота на основе снапшота
+            try {
+                const myDDNetChar = client.SnapshotUnpacker.getObjExDDNetCharacter(client.SnapshotUnpacker.OwnID);
+                if (myDDNetChar) {
+                    const isFrozen = myDDNetChar.m_FreezeEnd !== 0;
+                    this.botFreezeStates.set(botName, isFrozen);
+                }
+            } catch (error) {
+                console.error(`Error updating freeze state for ${botName}:`, error);
+            }
+            
             this.emit(`${botName}:snapshot`, snapshot);
         });
 

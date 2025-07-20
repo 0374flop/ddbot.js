@@ -1,13 +1,7 @@
-const BotManager = require('./core/botManager');
-const BotMovement = require('./core/BotMovement');
-const BotChatEmote = require('./core/BotChat-emote');
-
-// Создаем экземпляр BotManager
-const botManager = new BotManager();
+const botCore = require('./index-core');
+const botFeatures = require('./index-features');
 
 module.exports = {
-    BotManager,
-    botManager,
-    BotMovement,
-    BotChatEmote
+    botCore,
+    botFeatures
 };

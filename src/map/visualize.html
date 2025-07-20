@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Map Visualizer</title>
+  <style>
+    body {
+      background: #111;
+      color: #eee;
+      font-family: sans-serif;
+      margin: 20px;
+    }
+    canvas {
+      border: 1px solid #eee;
+      image-rendering: pixelated;
+    }
+    #legend {
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .legend-color {
+      width: 20px;
+      height: 20px;
+      border: 1px solid #eee;
+    }
+    #error {
+      color: #ff5555;
+      margin-top: 10px;
+    }
+    #debug {
+      margin-top: 10px;
+      color: #ccc;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🗺️ Map Visualizer</h1>
+  <input type="file" id="fileInput" accept=".json">
+  <br><br>
+  <canvas id="mapCanvas"></canvas>
+  <div id="legend"></div>
+  <div id="error"></div>
+  <div id="debug"></div>
+
+  <script>
+    const colors = {
+      "hookable": "#ffffff",
+      "death": "#ff0000",
+      "unhookable": "#555555",
+      "nolaser": "#888888",
+      "hookthrough": "#ffaa00",
+      "through": "#ff5500",
+      "jump": "#00ff55",
+      "freeze": "#00ffff",
+      "teleinevil": "#ff00ff",
+      "unfreeze": "#00aa88",
+      "dfreeze": "#00aaff",
+      "dunfreeze": "#0088aa",
+      "teleinweapon": "#aa00ff",
+      "teleinhook": "#5500ff",
+      "walljump": "#ffff55",
+      "ehook_enable": "#55ff55",
+      "ehook_disable": "#aa5555",
+      "hit_enable": "#ff5555",
+      "hit_disable": "#aa3333",
+      "solo_enable": "#55aa55",
+      "solo_disable": "#335533",
+      "switch_timed_open": "#ffaa88",
+      "switch_timed_close": "#ff8855",
+      "switch_open": "#ffcc88",
+      "switch_close": "#ff9966",
+      "telein": "#00ff00",
+      "teleout": "#ff00ff",
+      "speed_boost": "#55ffaa",
+      "telecheck": "#88ff00",
+      "telecheckout": "#ff88ff",
+      "telecheckin": "#00ff88",
+      "refill_jumps": "#55ff00",
+      "start": "#00ff00",
+      "finish": "#ff0000",
+      "time_checkpoint": "#ffff88",
+      "stop": "#ff5555",
+      "telecheckinevil": "#ff00aa",
+      "checkpoint": "#88ff88",
+      "through_all": "#ff7700",
+      "through_dir": "#ff9900",
+      "tune": "#aa55ff",
+      "entities_off": "#333333",
+      "credits": "#ffddaa",
+      "teleport_in": "#00ff00",
+      "teleport_out": "#ff00ff",
+      "speedup": "#55ffaa",
+      "switch": "#ffaa88",
+      "tune_layer": "#aa55ff",
+      "spawn": "#00ff00",
+      "spawn_red": "#ff5555",
+      "spawn_blue": "#5555ff",
+      "flagstand_red": "#ff3333",
+      "flagstand_blue": "#3333ff",
+      "armor_1": "#aaaaaa",
+      "health_1": "#ff88aa",
+      "weapon_shotgun": "#ffaa00",
+      "weapon_grenade": "#ff5500",
+      "powerup_ninja": "#ff00aa",
+      "weapon_laser": "#aa00ff",
+      "laser_fast_ccw": "#8800ff",
+      "laser_normal_ccw": "#aa00ff",
+      "laser_slow_ccw": "#cc00ff",
+      "laser_stop": "#ff00ff",
+      "laser_slow_cw": "#cc00ff",
+      "laser_normal_cw": "#aa00ff",
+      "laser_fast_cw": "#8800ff",
+      "laser_short": "#aa55ff",
+      "laser_medium": "#aa77ff",
+      "laser_long": "#aa99ff",
+      "laser_c_slow": "#aa55aa",
+      "laser_c_normal": "#aa77aa",
+      "laser_c_fast": "#aa99aa",
+      "laser_o_slow": "#aa55cc",
+      "laser_o_normal": "#aa77cc",
+      "laser_o_fast": "#aa99cc",
+      "plasmae": "#ff55ff",
+      "plasmaf": "#ff77ff",
+      "plasma": "#ff99ff",
+      "plasmau": "#ffbbff",
+      "crazy_shotgun_ex": "#ffaa55",
+      "crazy_shotgun": "#ffcc55",
+      "armor_shotgun": "#aaaaaa",
+      "armor_grenade": "#aaaaaa",
+      "armor_ninja": "#aaaaaa",
+      "armor_laser": "#aaaaaa",
+      "dragger_weak": "#55ff55",
+      "dragger_normal": "#77ff77",
+      "dragger_strong": "#99ff99",
+      "dragger_weak_nw": "#55ff55",
+      "dragger_normal_nw": "#77ff77",
+      "dragger_strong_nw": "#99ff99",
+      "door": "#ff5555"
+    };
+
+    document.getElementById('fileInput').addEventListener('change', function (e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const errorDiv = document.getElementById('error');
+      const debugDiv = document.getElementById('debug');
+      errorDiv.textContent = '';
+      debugDiv.textContent = '';
+
+      const reader = new FileReader();
+      reader.onload = function (event) {
+        try {
+          const data = JSON.parse(event.target.result);
+          debugDiv.textContent = 'Loaded keys: ' + Object.keys(data).join(', ');
+          drawMap(data);
+          createLegend(data);
+        } catch (err) {
+          errorDiv.textContent = 'Error parsing JSON: ' + err.message;
+        }
+      };
+      reader.onerror = function () {
+        errorDiv.textContent = 'Error reading file';
+      };
+      reader.readAsText(file);
+    });
+
+    function drawMap(data) {
+      const canvas = document.getElementById('mapCanvas');
+      const ctx = canvas.getContext('2d');
+
+      let maxX = 0, maxY = 0;
+      for (let key in data) {
+        data[key].forEach(tile => {
+          if (tile.x > maxX) maxX = tile.x;
+          if (tile.y > maxY) maxY = tile.y;
+        });
+      }
+
+      const scale = 8;
+      canvas.width = (maxX + 1) * scale;
+      canvas.height = (maxY + 1) * scale;
+
+      ctx.fillStyle = '#111';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const priorityOrder = [
+        'hookable', 'unhookable', 'nolaser', 'hookthrough', 'through',
+        'jump', 'freeze', 'unfreeze', 'dfreeze', 'dunfreeze',
+        'telein', 'teleout', 'teleinevil', 'teleinweapon', 'teleinhook',
+        'telecheck', 'telecheckout', 'telecheckin', 'telecheckinevil',
+        'speed_boost', 'switch_timed_open', 'switch_timed_close',
+        'switch_open', 'switch_close', 'tune', 'through_all', 'through_dir',
+        'walljump', 'ehook_enable', 'ehook_disable', 'hit_enable', 'hit_disable',
+        'solo_enable', 'solo_disable', 'refill_jumps', 'time_checkpoint',
+        'checkpoint', 'entities_off', 'credits',
+        'teleport_in', 'teleport_out', 'speedup', 'switch', 'tune_layer',
+        'start', 'finish', 'stop', 'spawn', 'spawn_red', 'spawn_blue',
+        'flagstand_red', 'flagstand_blue', 'armor_1', 'health_1',
+        'weapon_shotgun', 'weapon_grenade', 'powerup_ninja', 'weapon_laser',
+        'laser_fast_ccw', 'laser_normal_ccw', 'laser_slow_ccw', 'laser_stop',
+        'laser_slow_cw', 'laser_normal_cw', 'laser_fast_cw', 'laser_short',
+        'laser_medium', 'laser_long', 'laser_c_slow', 'laser_c_normal',
+        'laser_c_fast', 'laser_o_slow', 'laser_o_normal', 'laser_o_fast',
+        'plasmae', 'plasmaf', 'plasma', 'plasmau', 'crazy_shotgun_ex',
+        'crazy_shotgun', 'armor_shotgun', 'armor_grenade', 'armor_ninja',
+        'armor_laser', 'dragger_weak', 'dragger_normal', 'dragger_strong',
+        'dragger_weak_nw', 'dragger_normal_nw', 'dragger_strong_nw', 'door'
+      ];
+
+      for (let key of priorityOrder) {
+        if (data[key] && data[key].length > 0) {
+          const color = colors[key] || '#888';
+          ctx.fillStyle = color;
+          data[key].forEach(tile => {
+            ctx.fillRect(tile.x * scale, tile.y * scale, scale, scale);
+            if (['teleport_in', 'teleport_out', 'switch', 'tune_layer'].includes(key) && tile.number !== undefined) {
+              ctx.fillStyle = '#ffffff';
+              ctx.font = '12px sans-serif';
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
+              ctx.fillText(tile.number, tile.x * scale + scale / 2, tile.y * scale + scale / 2);
+            } else if (key === 'speedup' && tile.angle !== undefined) {
+              ctx.fillStyle = '#ffffff';
+              ctx.font = '12px sans-serif';
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
+              ctx.fillText(`${tile.angle}°`, tile.x * scale + scale / 2, tile.y * scale + scale / 2);
+            }
+          });
+        }
+      }
+    }
+
+    function createLegend(data) {
+      const legend = document.getElementById('legend');
+      legend.innerHTML = '';
+      for (let key in data) {
+        if (data[key].length > 0) {
+          const item = document.createElement('div');
+          item.className = 'legend-item';
+          const colorBox = document.createElement('div');
+          colorBox.className = 'legend-color';
+          colorBox.style.backgroundColor = colors[key] || '#888';
+          const label = document.createElement('span');
+          label.textContent = key;
+          item.appendChild(colorBox);
+          item.appendChild(label);
+          legend.appendChild(item);
+        }
+      }
+    }
+  </script>
+</body>
+</html>
