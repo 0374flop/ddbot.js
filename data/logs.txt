@@ -67,3 +67,246 @@
 [2025-07-22T06:00:03.178Z] [INFO] [Main] Map downloaded and parsed
 [2025-07-22T06:00:10.458Z] [INFO] [BotManager] Bot Urawa1 disconnected successfully
 [2025-07-22T06:00:10.460Z] [INFO] [BotManager] Disconnected 1 bots
+[2025-07-22T08:35:42.249Z] [INFO] [pyFatherAi] [test.py] test.py ����� � ������
+
+[2025-07-22T08:35:42.253Z] [INFO] [pyFatherAi] [test.py] test.py �������: Привет, Test!
+
+[2025-07-22T08:39:07.568Z] [INFO] [pyFatherAi] [test.py] test.py ����� � ������
+test.py �������: Привет, Test!
+
+[2025-07-22T08:39:58.654Z] [INFO] [pyFatherAi] [test.py] test.py ����� � ������
+[test.py]: Привет, Test!
+
+[2025-07-22T08:41:20.763Z] [INFO] [pyFatherAi] [test.py] test.py ����� � ������
+[test.py]: Привет, Test!
+
+[2025-07-22T09:08:00.848Z] [INFO] [BotManager] Creating bot: Urawa1 on 57.128.201.180:8323
+[2025-07-22T09:08:01.069Z] [ERROR] [pyFatherAi] [ai.py] Traceback (most recent call last):
+
+[2025-07-22T09:08:01.074Z] [ERROR] [pyFatherAi] [ai.py]   File "C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\ai.py", line 39, in load_q_table
+    with open(Q_TABLE_PATH, "rb") as f:
+         ~~~~^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Dell\\Desktop\\���������\\ddbot.js\\src\\AI\\core\\..\\q_table.pkl'
+
+[2025-07-22T09:08:01.077Z] [ERROR] [pyFatherAi] [ai.py] 
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+
+[2025-07-22T09:08:01.097Z] [INFO] [BotManager] Bot Urawa1 connected successfully
+[2025-07-22T09:08:01.127Z] [ERROR] [pyFatherAi] [ai.py]   File "C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\ai.py", line 180, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\ai.py", line 138, in main
+    load_q_table()
+    ~~~~~~~~~~~~^^
+
+[2025-07-22T09:08:01.128Z] [ERROR] [pyFatherAi] [ai.py]   File "C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\ai.py", line 43, in load_q_table
+    print(f"\U0001f4c2 Q-������� �� �������, ������������ �����")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dell\AppData\Local\Programs\Python\Python313\Lib\encodings\cp1251.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f4c2' in position 0: character maps to <undefined>
+
+[2025-07-22T09:09:02.762Z] [INFO] [BotManager] Creating bot: Urawa1 on 57.128.201.180:8309
+[2025-07-22T09:09:02.986Z] [ERROR] [pyFatherAi] [ai.py] Traceback (most recent call last):
+
+[2025-07-22T09:09:02.987Z] [ERROR] [pyFatherAi] [ai.py]   File "C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\ai.py", line 39, in load_q_table
+    with open(Q_TABLE_PATH, "rb") as f:
+         ~~~~^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Dell\\Desktop\\���������\\ddbot.js\\src\\AI\\core\\..\\q_table.pkl'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+
+[2025-07-22T09:09:02.988Z] [ERROR] [pyFatherAi] [ai.py]   File "C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\ai.py", line 180, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\ai.py", line 138, in main
+    load_q_table()
+    ~~~~~~~~~~~~^^
+
+[2025-07-22T09:09:02.990Z] [ERROR] [pyFatherAi] [ai.py]   File "C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\ai.py", line 43, in load_q_table
+    print(f"\U0001f4c2 Q-������� �� �������, ������������ �����")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dell\AppData\Local\Programs\Python\Python313\Lib\encodings\cp1251.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f4c2' in position 0: character maps to <undefined>
+
+[2025-07-22T09:09:03.402Z] [INFO] [BotManager] Bot Urawa1 connected successfully
+[2025-07-22T09:12:10.034Z] [INFO] [BotManager] Creating bot: Urawa1 on 57.128.201.180:8309
+[2025-07-22T09:12:10.221Z] [ERROR] [pyFatherAi] [ai.py] ai.py ready
+Q-table not found, using new one
+
+[2025-07-22T09:12:10.594Z] [INFO] [BotManager] Bot Urawa1 connected successfully
+[2025-07-22T09:12:13.207Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:12:15.637Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:12:17.757Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:12:20.357Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:12:22.357Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:12:24.633Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:12:26.916Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:12:29.437Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:12:31.525Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:12:33.676Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:12:36.477Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:12:39.716Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:13:02.722Z] [INFO] [BotManager] Creating bot: Urawa1 on 57.128.201.180:8309
+[2025-07-22T09:13:02.997Z] [ERROR] [pyFatherAi] [ai.py] ai.py ready
+
+[2025-07-22T09:13:03.005Z] [ERROR] [pyFatherAi] [ai.py] Q-table loaded from C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:13:03.211Z] [INFO] [BotManager] Bot Urawa1 connected successfully
+[2025-07-22T09:13:05.438Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:13:07.638Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:13:09.638Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:13:12.126Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:13:14.839Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:13:17.318Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:13:19.717Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:13:21.717Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:13:23.759Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:13:25.798Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:13:27.838Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:13:29.837Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:13:32.677Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:13:54.616Z] [INFO] [BotManager] Creating bot: Urawa1 on 57.128.201.180:8309
+[2025-07-22T09:13:54.842Z] [ERROR] [pyFatherAi] [ai.py] ai.py ready
+
+[2025-07-22T09:13:54.843Z] [ERROR] [pyFatherAi] [ai.py] Q-table loaded from C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:13:55.201Z] [INFO] [BotManager] Bot Urawa1 connected successfully
+[2025-07-22T09:13:57.516Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:13:59.557Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:14:01.636Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:14:03.677Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:14:05.713Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:14:07.916Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:14:10.156Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:14:13.756Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:14:16.236Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:14:19.557Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:14:22.284Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:14:24.556Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:19:16.189Z] [INFO] [BotManager] Creating bot: Urawa1 on 57.128.201.180:8309
+[2025-07-22T09:19:16.394Z] [ERROR] [pyFatherAi] [ai.py] ai.py ready
+
+[2025-07-22T09:19:16.394Z] [ERROR] [pyFatherAi] [ai.py] Q-table loaded from C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:19:16.794Z] [INFO] [BotManager] Bot Urawa1 connected successfully
+[2025-07-22T09:19:20.036Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:19:22.317Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:19:24.519Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:19:26.717Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:19:28.956Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:19:31.078Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:19:33.077Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:19:35.085Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:19:37.157Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:19:39.323Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:19:41.316Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:19:43.317Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:19:45.365Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:19:46.233Z] [INFO] [BotManager] Bot Urawa1 disconnected successfully
+[2025-07-22T09:19:46.237Z] [INFO] [BotManager] Disconnected 1 bots
+[2025-07-22T09:21:17.351Z] [INFO] [BotManager] Creating bot: Urawa1 on 57.128.201.180:8309
+[2025-07-22T09:21:17.556Z] [ERROR] [pyFatherAi] [ai.py] ai.py ready
+
+[2025-07-22T09:21:17.564Z] [ERROR] [pyFatherAi] [ai.py] Q-table loaded from C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:21:17.994Z] [INFO] [BotManager] Bot Urawa1 connected successfully
+[2025-07-22T09:21:20.084Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:21:22.405Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:21:24.757Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:21:30.116Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:21:33.515Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:21:36.516Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:21:40.358Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:21:42.476Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:21:44.677Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:21:46.716Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T09:21:47.386Z] [INFO] [BotManager] Bot Urawa1 disconnected successfully
+[2025-07-22T09:21:47.389Z] [INFO] [BotManager] Disconnected 1 bots
+[2025-07-22T11:55:07.040Z] [INFO] [BotManager] Creating bot: Urawa1 on 57.128.201.180:8309
+[2025-07-22T11:55:07.356Z] [ERROR] [pyFatherAi] [ai.py] ai.py ready
+
+[2025-07-22T11:55:07.357Z] [ERROR] [pyFatherAi] [ai.py] Q-table loaded from C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T11:55:07.496Z] [INFO] [BotManager] Bot Urawa1 connected successfully
+[2025-07-22T11:55:24.661Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T11:55:27.099Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T11:55:29.192Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T11:55:31.420Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T11:55:33.619Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T11:55:35.618Z] [ERROR] [pyFatherAi] [ai.py] Q-table saved to C:\Users\Dell\Desktop\���������\ddbot.js\src\AI\core\..\q_table.pkl
+
+[2025-07-22T11:55:37.109Z] [INFO] [BotManager] Bot Urawa1 disconnected successfully
+[2025-07-22T11:55:37.113Z] [INFO] [BotManager] Disconnected 1 bots

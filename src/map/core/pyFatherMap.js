@@ -1,7 +1,7 @@
 const { spawn } = require('child_process');
 const path = require('path');
 const fs = require('fs');
-const logger = require('../../logger').getLogger('pyFather');
+const logger = require('../../logger').getLogger('pyFatherMap');
 
 function main(inputPath, outputPath) {
     logger.info(`Parsing map from ${inputPath} to ${outputPath}`);

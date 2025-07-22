@@ -1,5 +1,5 @@
 const MapDownloader = require('./core/MapDownloader');
-const pyFather = require('./core/pyFather');
+const pyFather = require('./core/pyFatherMap');
 const path = require('path');
 
 const MAPS_DIR = path.join(__dirname, '..', '..', 'data', 'maps');
