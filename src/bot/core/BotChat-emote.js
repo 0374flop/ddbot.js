@@ -1,3 +1,5 @@
+const logger = require('../../logger').getLogger('BotChatEmote');
+
 class BotChatEmote {
     constructor(client) {
         this.client = client;
@@ -16,7 +18,7 @@ class BotChatEmote {
     // Отправка сообщения
     say(message) {
         if (!this.chatEnabled) {
-            console.log('Chat is disabled');
+            logger.info('Chat is disabled');
             return false;
         }
 
@@ -24,7 +26,7 @@ class BotChatEmote {
             this.game.Say(message);
             return true;
         } catch (error) {
-            console.error('Error sending message:', error);
+            logger.error('Error sending message:', error);
             return false;
         }
     }
@@ -39,7 +41,7 @@ class BotChatEmote {
     // Отправка эмоции
     emote(emoteType) {
         if (!this.emoteEnabled) {
-            console.log('Emotes are disabled');
+            logger.info('Emotes are disabled');
             return false;
         }
 
@@ -47,7 +49,7 @@ class BotChatEmote {
             this.game.Emote(emoteType);
             return true;
         } catch (error) {
-            console.error('Error sending emote:', error);
+            logger.error('Error sending emote:', error);
             return false;
         }
     }
@@ -66,12 +68,12 @@ class BotChatEmote {
                     this.stopAutoEmote();
                 }
             } catch (error) {
-                console.error('Error in auto emote:', error);
+                logger.error('Error in auto emote:', error);
                 this.stopAutoEmote();
             }
         }, intervalMs);
 
-        console.log(`Auto emote started with type ${emoteType}, interval ${intervalMs}ms`);
+        logger.info(`Auto emote started with type ${emoteType}, interval ${intervalMs}ms`);
     }
 
     // Остановка автоматических эмоций
@@ -79,7 +81,7 @@ class BotChatEmote {
         if (this.emoteInterval) {
             clearInterval(this.emoteInterval);
             this.emoteInterval = null;
-            console.log('Auto emote stopped');
+            logger.info('Auto emote stopped');
         }
     }
 

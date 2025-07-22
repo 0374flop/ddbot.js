@@ -1,9 +1,12 @@
 const bot = require('./src/bot/index');
+const map = require('./src/map/index');
+const path = require('path');
+const logger = require('./src/logger').getLogger('Main');
 
 async function main() {
 let botName;
 async function botNameprint() {
-    const botName2 = await bot.botCore.botManager.createAndConnectBot('57.128.201.180:8311', 'Urawa', {
+    const botName2 = await bot.botCore.botManager.createAndConnectBot('57.128.201.180:8323', 'Urawa', {
         identity: {
             name: 'Urawa',
             clan: ".",
@@ -34,6 +37,31 @@ bot.botCore.botManager.on(`${botName}:connect`, () => {
     });
 });
 
+async function mapLoader(mapName) {
+    const isMapDownloaded = await map.MapDownloader.loadMap(mapName, map.MAPS_DIR);
+    if (isMapDownloaded) {
+        if (map.pyFather.isParsedMap(mapName, map.PARSED_DIR)) {
+            logger.info('Map already parsed and loaded');
+        } else {
+            await map.pyFather.ParseMap(path.join(map.MAPS_DIR, `${mapName}.map`), path.join(map.PARSED_DIR, `${mapName}.json`));
+            logger.info('Map downloaded and parsed');
+        }
+    } else {
+        logger.info('Map be is not downloaded but download now');
+        if (map.pyFather.isParsedMap(mapName, map.PARSED_DIR)) {
+            logger.info('Map already parsed and loaded');
+        } else {
+            logger.info('Map not parsed but parsed now');
+            await map.pyFather.ParseMap(path.join(map.MAPS_DIR, `${mapName}.map`), path.join(map.PARSED_DIR, `${mapName}.json`));
+        }
+    }
+};
+
+bot.botCore.botManager.on(`${botName}:map_details`, (mapDetails) => {
+    const mapName = mapDetails.map_name;
+    mapLoader(mapName);
+});
+
 // Movement code
 let x = 100;
 let direction = -1; // -1 для движения влево, 1 для движения вправо
@@ -60,20 +88,23 @@ setInterval(() => {
     }
 }, Math.random() * 100);
 
-setTimeout(() => {
-    bot.botCore.botManager.disconnectBot(botName);
+function exit() {
+    bot.botCore.botManager.disconnectAllBots();
     setTimeout(() => {
+        logger.info('Main stopped');
         process.exit(0);
-    }, 10000);
+    }, 1000);
+}
+
+setTimeout(() => {
+    exit();
 }, 50000);
 
 process.on('SIGINT', () => {
-    bot.botCore.botManager.disconnectAllBots();
-    setTimeout(() => {
-        process.exit(0);
-    }, 1000);
+    exit();
 });
 
 }
 
+logger.info('Main started');
 main();

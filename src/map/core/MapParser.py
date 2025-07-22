@@ -1,10 +1,15 @@
 import twmap
 import json
+import sys
+import json
+
+input_path = sys.argv[1]
+output_path = sys.argv[2]
 
 # Define NUM_ENTITIES from mapitems.h
 NUM_ENTITIES = 50
 
-m = twmap.Map("Linear.map")
+m = twmap.Map(input_path)
 
 out = {
     "hookable": [],           # TILE_SOLID (1)
@@ -61,107 +66,106 @@ def process_game_layer(layer):
     width = layer.width()
     height = layer.height()
     tiles = layer.tiles
-    print(f"Processing 'game' layer: {width}×{height}")
+    print(f"Processing 'game' layer: {width}x{height}")
 
     for y in range(height):
         for x in range(width):
             tile = tiles[y, x]
             idx = int(tile[0])
             flags = int(tile[1])
-            pos = {"x": x, "y": y, "index": idx, "flags": flags}
-
-            if idx == 1:
-                out["hookable"].append(pos)
-            elif idx == 2:
-                out["death"].append(pos)
-            elif idx == 3:
-                out["unhookable"].append(pos)
-            elif idx == 4:
-                out["nolaser"].append(pos)
-            elif idx == 5:
-                out["hookthrough"].append(pos)
-            elif idx == 6:
-                out["through"].append(pos)
-            elif idx == 7:
-                out["jump"].append(pos)
-            elif idx == 9:
-                out["freeze"].append(pos)
-            elif idx == 10:
-                out["teleinevil"].append(pos)
-            elif idx == 11:
-                out["unfreeze"].append(pos)
-            elif idx == 12:
-                out["dfreeze"].append(pos)
-            elif idx == 13:
-                out["dunfreeze"].append(pos)
-            elif idx == 14:
-                out["teleinweapon"].append(pos)
-            elif idx == 15:
-                out["teleinhook"].append(pos)
-            elif idx == 16:
-                out["walljump"].append(pos)
-            elif idx == 17:
-                out["ehook_enable"].append(pos)
-            elif idx == 18:
-                out["ehook_disable"].append(pos)
-            elif idx == 19:
-                out["hit_enable"].append(pos)
-            elif idx == 20:
-                out["hit_disable"].append(pos)
-            elif idx == 21:
-                out["solo_enable"].append(pos)
-            elif idx == 22:
-                out["solo_disable"].append(pos)
-            elif idx == 23:
-                out["switch_timed_open"].append(pos)
-            elif idx == 24:
-                out["switch_timed_close"].append(pos)
-            elif idx == 25:
-                out["switch_open"].append(pos)
-            elif idx == 26:
-                out["switch_close"].append(pos)
-            elif idx == 27:
-                out["telein"].append(pos)
-            elif idx == 28:
-                out["teleout"].append(pos)
-            elif idx in (29, 30):
-                out["speed_boost"].append(pos)
-            elif idx == 31:
-                out["telecheck"].append(pos)
-            elif idx == 32:
-                out["telecheckout"].append(pos)
-            elif idx == 33:
-                out["telecheckin"].append(pos)
-            elif idx == 34:
-                out["refill_jumps"].append(pos)
-            elif idx == 35:
-                out["start"].append(pos)
-            elif idx == 36:
-                out["finish"].append(pos)
-            elif 37 <= idx <= 61:
-                out["time_checkpoint"].append(pos)
-            elif idx in (62, 63, 64):
-                out["stop"].append(pos)
-            elif idx == 65:
-                out["telecheckinevil"].append(pos)
-            elif idx in (66, 67):
-                out["checkpoint"].append(pos)
-            elif idx == 68:
-                out["through_all"].append(pos)
-            elif idx == 69:
-                out["through_dir"].append(pos)
-            elif idx == 70:
-                out["tune"].append(pos)
-            elif idx in (140, 141, 142, 143, 156, 157, 158, 159):
-                out["credits"].append(pos)
-            elif idx in (190, 191):
-                out["entities_off"].append(pos)
+            if idx != 0 or flags != 0:  # Only non-empty tiles
+                if idx == 1:
+                    out["hookable"].append({"x": x, "y": y})
+                elif idx == 2:
+                    out["death"].append({"x": x, "y": y})
+                elif idx == 3:
+                    out["unhookable"].append({"x": x, "y": y})
+                elif idx == 4:
+                    out["nolaser"].append({"x": x, "y": y})
+                elif idx == 5:
+                    out["hookthrough"].append({"x": x, "y": y})
+                elif idx == 6:
+                    out["through"].append({"x": x, "y": y})
+                elif idx == 7:
+                    out["jump"].append({"x": x, "y": y})
+                elif idx == 9:
+                    out["freeze"].append({"x": x, "y": y})
+                elif idx == 10:
+                    out["teleinevil"].append({"x": x, "y": y})
+                elif idx == 11:
+                    out["unfreeze"].append({"x": x, "y": y})
+                elif idx == 12:
+                    out["dfreeze"].append({"x": x, "y": y})
+                elif idx == 13:
+                    out["dunfreeze"].append({"x": x, "y": y})
+                elif idx == 14:
+                    out["teleinweapon"].append({"x": x, "y": y})
+                elif idx == 15:
+                    out["teleinhook"].append({"x": x, "y": y})
+                elif idx == 16:
+                    out["walljump"].append({"x": x, "y": y})
+                elif idx == 17:
+                    out["ehook_enable"].append({"x": x, "y": y})
+                elif idx == 18:
+                    out["ehook_disable"].append({"x": x, "y": y})
+                elif idx == 19:
+                    out["hit_enable"].append({"x": x, "y": y})
+                elif idx == 20:
+                    out["hit_disable"].append({"x": x, "y": y})
+                elif idx == 21:
+                    out["solo_enable"].append({"x": x, "y": y})
+                elif idx == 22:
+                    out["solo_disable"].append({"x": x, "y": y})
+                elif idx == 23:
+                    out["switch_timed_open"].append({"x": x, "y": y})
+                elif idx == 24:
+                    out["switch_timed_close"].append({"x": x, "y": y})
+                elif idx == 25:
+                    out["switch_open"].append({"x": x, "y": y})
+                elif idx == 26:
+                    out["switch_close"].append({"x": x, "y": y})
+                elif idx == 27:
+                    out["telein"].append({"x": x, "y": y})
+                elif idx == 28:
+                    out["teleout"].append({"x": x, "y": y})
+                elif idx in (29, 30):
+                    out["speed_boost"].append({"x": x, "y": y})
+                elif idx == 31:
+                    out["telecheck"].append({"x": x, "y": y})
+                elif idx == 32:
+                    out["telecheckout"].append({"x": x, "y": y})
+                elif idx == 33:
+                    out["telecheckin"].append({"x": x, "y": y})
+                elif idx == 34:
+                    out["refill_jumps"].append({"x": x, "y": y})
+                elif idx == 35:
+                    out["start"].append({"x": x, "y": y})
+                elif idx == 36:
+                    out["finish"].append({"x": x, "y": y})
+                elif 37 <= idx <= 61:
+                    out["time_checkpoint"].append({"x": x, "y": y})
+                elif idx in (62, 63, 64):
+                    out["stop"].append({"x": x, "y": y})
+                elif idx == 65:
+                    out["telecheckinevil"].append({"x": x, "y": y})
+                elif idx in (66, 67):
+                    out["checkpoint"].append({"x": x, "y": y})
+                elif idx == 68:
+                    out["through_all"].append({"x": x, "y": y})
+                elif idx == 69:
+                    out["through_dir"].append({"x": x, "y": y})
+                elif idx == 70:
+                    out["tune"].append({"x": x, "y": y})
+                elif idx in (140, 141, 142, 143, 156, 157, 158, 159):
+                    out["credits"].append({"x": x, "y": y})
+                elif idx in (190, 191):
+                    out["entities_off"].append({"x": x, "y": y})
 
 def process_tele_layer(layer, type_name):
     width = layer.width()
     height = layer.height()
     tiles = layer.tiles
-    print(f"Processing '{layer.name}' layer: {width}×{height}")
+    print(f"Processing '{layer.name}' layer: {width}x{height}")
 
     for y in range(height):
         for x in range(width):
@@ -180,7 +184,7 @@ def process_speedup_layer(layer):
     width = layer.width()
     height = layer.height()
     tiles = layer.tiles
-    print(f"Processing '{layer.name}' layer: {width}×{height}")
+    print(f"Processing '{layer.name}' layer: {width}x{height}")
 
     for y in range(height):
         for x in range(width):
@@ -203,7 +207,7 @@ def process_switch_layer(layer):
     width = layer.width()
     height = layer.height()
     tiles = layer.tiles
-    print(f"Processing '{layer.name}' layer: {width}×{height}")
+    print(f"Processing '{layer.name}' layer: {width}x{height}")
 
     for y in range(height):
         for x in range(width):
@@ -226,7 +230,7 @@ def process_tune_layer(layer):
     width = layer.width()
     height = layer.height()
     tiles = layer.tiles
-    print(f"Processing '{layer.name}' layer: {width}×{height}")
+    print(f"Processing '{layer.name}' layer: {width}x{height}")
 
     for y in range(height):
         for x in range(width):
@@ -245,7 +249,7 @@ def process_entities(layer):
     width = layer.width()
     height = layer.height()
     tiles = layer.tiles
-    print(f"Checking entities in '{layer.name}' layer: {width}×{height}")
+    print(f"Checking entities in '{layer.name}' layer: {width}x{height}")
 
     for y in range(height):
         for x in range(width):
@@ -323,7 +327,7 @@ for group in m.groups:
         elif name == "tune":
             process_tune_layer(layer)
 
-with open("map_tiles.json", "w", encoding="utf-8") as f:
-    json.dump(out, f, ensure_ascii=False, indent=2)
+with open(output_path, "w", encoding="utf-8") as f:
+    json.dump(out, f, ensure_ascii=False, separators=(',', ':'))
 
-print("✅ Экспорт завершён! Результат в map_tiles.json")
+print("Экспорт завершён! Результат в", output_path)

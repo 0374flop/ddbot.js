@@ -1,0 +1,69 @@
+[2025-07-22T04:24:07.881Z] [INFO] Creating bot: Urawa1 on 57.128.201.180:8323
+[2025-07-22T04:24:08.503Z] [INFO] Bot Urawa1 connected successfully
+[2025-07-22T04:24:08.696Z] [INFO] [MapDownloader] Fetched map type: brutal
+[2025-07-22T04:24:08.698Z] [INFO] [MapDownloader] Map "Stronghold" is already cached.
+[2025-07-22T04:24:08.698Z] [INFO] Parsing map from C:\Users\Dell\Desktop\проектики\ddbot.js\data\maps\Stronghold.map to C:\Users\Dell\Desktop\проектики\ddbot.js\data\parsed\Stronghold.json
+[2025-07-22T04:24:08.707Z] [INFO] Map downloaded and parsed
+[2025-07-22T04:24:57.928Z] [INFO] Bot Urawa1 disconnected successfully
+[2025-07-22T04:25:01.712Z] [INFO] Disconnected 0 bots
+[2025-07-22T04:26:29.589Z] [INFO] [BotManager] Creating bot: Urawa1 on 57.128.201.180:8323
+[2025-07-22T04:26:30.081Z] [INFO] [MapDownloader] Fetched map type: brutal
+[2025-07-22T04:26:30.082Z] [INFO] [MapDownloader] Map "Stronghold" is already cached.
+[2025-07-22T04:26:30.083Z] [INFO] [pyFather] Parsing map from C:\Users\Dell\Desktop\проектики\ddbot.js\data\maps\Stronghold.map to C:\Users\Dell\Desktop\проектики\ddbot.js\data\parsed\Stronghold.json
+[2025-07-22T04:26:30.090Z] [INFO] Map downloaded and parsed
+[2025-07-22T04:26:30.301Z] [INFO] [BotManager] Bot Urawa1 connected successfully
+[2025-07-22T04:26:52.829Z] [INFO] [BotManager] Bot Urawa1 disconnected successfully
+[2025-07-22T04:26:52.832Z] [INFO] [BotManager] Disconnected 1 bots
+[2025-07-22T04:27:30.351Z] [INFO] [BotManager] Creating bot: Urawa1 on 57.128.201.180:8323
+[2025-07-22T04:27:30.904Z] [INFO] [BotManager] Bot Urawa1 connected successfully
+[2025-07-22T04:27:31.009Z] [INFO] [MapDownloader] Fetched map type: brutal
+[2025-07-22T04:27:31.011Z] [INFO] [MapDownloader] Map "Stronghold" is already cached.
+[2025-07-22T04:27:31.012Z] [INFO] [pyFather] Parsing map from C:\Users\Dell\Desktop\проектики\ddbot.js\data\maps\Stronghold.map to C:\Users\Dell\Desktop\проектики\ddbot.js\data\parsed\Stronghold.json
+[2025-07-22T04:27:31.021Z] [INFO] [Main] Map downloaded and parsed
+[2025-07-22T04:28:20.373Z] [INFO] [BotManager] Bot Urawa1 disconnected successfully
+[2025-07-22T04:28:56.334Z] [INFO] [BotManager] Creating bot: Urawa1 on 57.128.201.180:8323
+[2025-07-22T04:28:56.902Z] [INFO] [BotManager] Bot Urawa1 connected successfully
+[2025-07-22T04:28:57.012Z] [INFO] [MapDownloader] Fetched map type: brutal
+[2025-07-22T04:28:57.015Z] [INFO] [MapDownloader] Map "Stronghold" is already cached.
+[2025-07-22T04:28:57.017Z] [INFO] [pyFather] Parsing map from C:\Users\Dell\Desktop\проектики\ddbot.js\data\maps\Stronghold.map to C:\Users\Dell\Desktop\проектики\ddbot.js\data\parsed\Stronghold.json
+[2025-07-22T04:28:57.025Z] [INFO] [Main] Map downloaded and parsed
+[2025-07-22T04:29:26.112Z] [INFO] [BotManager] Bot Urawa1 disconnected successfully
+[2025-07-22T04:29:26.114Z] [INFO] [BotManager] Disconnected 1 bots
+[2025-07-22T05:36:57.937Z] [INFO] [BotManager] Creating bot: Urawa1 on 57.128.201.180:8323
+[2025-07-22T05:36:58.700Z] [INFO] [BotManager] Bot Urawa1 connected successfully
+[2025-07-22T05:36:58.711Z] [INFO] [MapDownloader] Fetched map type: brutal
+[2025-07-22T05:36:58.715Z] [INFO] [MapDownloader] Map "Stronghold" is already cached.
+[2025-07-22T05:36:58.716Z] [INFO] [pyFather] Parsing map from C:\Users\Dell\Desktop\проектики\ddbot.js\data\maps\Stronghold.map to C:\Users\Dell\Desktop\проектики\ddbot.js\data\parsed\Stronghold.json
+[2025-07-22T05:36:58.725Z] [INFO] [Main] Map downloaded and parsed
+[2025-07-22T05:37:17.685Z] [INFO] [BotManager] Bot Urawa1 disconnected successfully
+[2025-07-22T05:37:17.686Z] [INFO] [BotManager] Disconnected 1 bots
+[2025-07-22T05:40:02.850Z] [INFO] [Main] Main started
+[2025-07-22T05:40:02.855Z] [INFO] [BotManager] Creating bot: Urawa1 on 57.128.201.180:8323
+[2025-07-22T05:40:03.500Z] [INFO] [BotManager] Bot Urawa1 connected successfully
+[2025-07-22T05:40:03.538Z] [INFO] [MapDownloader] Fetched map type: brutal
+[2025-07-22T05:40:03.539Z] [INFO] [MapDownloader] Map "Stronghold" is already cached.
+[2025-07-22T05:40:03.539Z] [INFO] [pyFather] Parsing map from C:\Users\Dell\Desktop\проектики\ddbot.js\data\maps\Stronghold.map to C:\Users\Dell\Desktop\проектики\ddbot.js\data\parsed\Stronghold.json
+[2025-07-22T05:40:03.549Z] [INFO] [Main] Map downloaded and parsed
+[2025-07-22T05:40:52.872Z] [INFO] [BotManager] Bot Urawa1 disconnected successfully
+[2025-07-22T05:40:52.874Z] [INFO] [BotManager] Disconnected 1 bots
+[2025-07-22T05:57:36.838Z] [INFO] [Main] Main started
+[2025-07-22T05:57:36.844Z] [INFO] [BotManager] Creating bot: Urawa1 on 57.128.201.180:8323
+[2025-07-22T05:57:37.302Z] [INFO] [BotManager] Bot Urawa1 connected successfully
+[2025-07-22T05:59:19.806Z] [INFO] [Main] Main started
+[2025-07-22T05:59:19.812Z] [INFO] [BotManager] Creating bot: Urawa1 on 57.128.201.180:8323
+[2025-07-22T05:59:20.303Z] [INFO] [BotManager] Bot Urawa1 connected successfully
+[2025-07-22T05:59:20.512Z] [INFO] [MapDownloader] Fetched map type: brutal
+[2025-07-22T05:59:20.514Z] [INFO] [MapDownloader] Map "Stronghold" is already cached.
+[2025-07-22T05:59:20.514Z] [INFO] [Main] Map already parsed and loaded
+[2025-07-22T05:59:31.970Z] [INFO] [BotManager] Bot Urawa1 disconnected successfully
+[2025-07-22T05:59:31.971Z] [INFO] [BotManager] Disconnected 1 bots
+[2025-07-22T06:00:02.055Z] [INFO] [Main] Main started
+[2025-07-22T06:00:02.060Z] [INFO] [BotManager] Creating bot: Urawa1 on 57.128.201.180:8323
+[2025-07-22T06:00:02.702Z] [INFO] [BotManager] Bot Urawa1 connected successfully
+[2025-07-22T06:00:02.756Z] [INFO] [MapDownloader] Fetched map type: brutal
+[2025-07-22T06:00:02.758Z] [INFO] [MapDownloader] Downloading map from: https://raw.githubusercontent.com/ddnet/ddnet-maps/master/types/brutal/maps/Stronghold.map
+[2025-07-22T06:00:03.170Z] [INFO] [MapDownloader] Map "Stronghold" downloaded and cached.
+[2025-07-22T06:00:03.171Z] [INFO] [pyFather] Parsing map from C:\Users\Dell\Desktop\проектики\ddbot.js\data\maps\Stronghold.map to C:\Users\Dell\Desktop\проектики\ddbot.js\data\parsed\Stronghold.json
+[2025-07-22T06:00:03.178Z] [INFO] [Main] Map downloaded and parsed
+[2025-07-22T06:00:10.458Z] [INFO] [BotManager] Bot Urawa1 disconnected successfully
+[2025-07-22T06:00:10.460Z] [INFO] [BotManager] Disconnected 1 bots

@@ -2,6 +2,7 @@ const DDRaceBot = require('neiky-ddracebot.js');
 const EventEmitter = require('events');
 const BotMovement = require('./BotMovement');
 const BotChatEmote = require('./BotChat-emote');
+const logger = require('../../logger').getLogger('BotManager');
 
 class BotManager extends EventEmitter {
     constructor() {
@@ -34,16 +35,25 @@ class BotManager extends EventEmitter {
         const serverPort = this.getPort(fulladdress);
         
         if (!serverIp || !serverPort) {
-            console.error('IP or port not specified');
+            logger.error('IP or port not specified');
             return null;
         }
 
         const uniqueBotName = this.generateUniqueBotName(botName);
-        console.log(`Creating bot: ${uniqueBotName} on ${fulladdress}`);
+        logger.info(`Creating bot: ${uniqueBotName} on ${fulladdress}`);
 
         try {
+            const identity = parameter.identity || {
+                name: botName,
+                clan: "",
+                skin: "default",
+                use_custom_color: 0,
+                color_body: 0,
+                color_feet: 0,
+                country: 0
+            };
             const client = new DDRaceBot.Client(serverIp, serverPort, uniqueBotName, { 
-                identity: parameter.identity 
+                identity: identity
             });
 
             // Увеличиваем лимит слушателей
@@ -78,7 +88,7 @@ class BotManager extends EventEmitter {
 
             return uniqueBotName;
         } catch (error) {
-            console.error(`Failed to create bot ${uniqueBotName}:`, error);
+            logger.error(`Failed to create bot ${uniqueBotName}:`, error);
             return null;
         }
     }
@@ -87,7 +97,7 @@ class BotManager extends EventEmitter {
     async connectBot(botName) {
         const botInfo = this.activeBots.get(botName);
         if (!botInfo) {
-            console.error(`Bot ${botName} not found`);
+            logger.error(`Bot ${botName} not found`);
             return false;
         }
 
@@ -95,11 +105,11 @@ class BotManager extends EventEmitter {
             botInfo.client.joinDDRaceServer();
             botInfo.client.on('connection_au_serveur_ddrace', () => {
                 botInfo.isConnected = true;
-                console.log(`Bot ${botName} connected successfully`);
+                logger.info(`Bot ${botName} connected successfully`);
             });
             return true;
         } catch (error) {
-            console.error(`Failed to connect bot ${botName}:`, error);
+            logger.error(`Failed to connect bot ${botName}:`, error);
             return false;
         }
     }
@@ -108,18 +118,18 @@ class BotManager extends EventEmitter {
     async disconnectBot(botName) {
         const botInfo = this.activeBots.get(botName);
         if (!botInfo) {
-            console.error(`Bot ${botName} not found`);
+            logger.error(`Bot ${botName} not found`);
             return false;
         }
 
         try {
             botInfo.client.Disconnect();
             botInfo.isConnected = false;
-            console.log(`Bot ${botName} disconnected successfully`);
+            logger.info(`Bot ${botName} disconnected successfully`);
             this.removeBot(botName);
             return true;
         } catch (error) {
-            console.error(`Failed to disconnect bot ${botName}:`, error);
+            logger.error(`Failed to disconnect bot ${botName}:`, error);
             return false;
         }
     }
@@ -131,7 +141,7 @@ class BotManager extends EventEmitter {
             botNames.map(botName => this.disconnectBot(botName))
         );
         
-        console.log(`Disconnected ${botNames.length} bots`);
+        logger.info(`Disconnected ${botNames.length} bots`);
         this.botFreezeStates.clear(); // Очищаем все состояния заморозки
         return results;
     }
@@ -187,7 +197,7 @@ class BotManager extends EventEmitter {
     getBot(botName) {
         const botInfo = this.activeBots.get(botName);
         if (!botInfo) {
-            console.error(`Bot ${botName} not found`);
+            logger.error(`Bot ${botName} not found`);
             return null;
         }
 
@@ -239,14 +249,14 @@ class BotManager extends EventEmitter {
             // Проверяем, нужно ли переподключаться
             const botInfo = this.activeBots.get(botName);
             if (botInfo) {
-                console.log(`Bot ${botName} disconnected from server, reason: ${reason}`);
+                logger.info(`Bot ${botName} disconnected from server, reason: ${reason}`);
             } else {
                 return;
             }
             if (botInfo && botInfo.parameter.reconnect) {
                 if (reason.startsWith('You have been banned')) {
-                    console.log(`Bot ${botName} was banned.`);
-                    console.log(`Bot ${botName} will reconnect in 400000ms`);
+                    logger.info(`Bot ${botName} was banned.`);
+                    logger.info(`Bot ${botName} will reconnect in 400000ms`);
                     setTimeout(() => {
                         client.joinDDRaceServer();
                     }, 400000);
@@ -257,7 +267,7 @@ class BotManager extends EventEmitter {
                     } else if (reason.startsWith('This server is full')) {
                         reconnectTime = 40000;
                     }
-                    console.log(`Bot ${botName} will reconnect in ${reconnectTime}ms`);
+                    logger.info(`Bot ${botName} will reconnect in ${reconnectTime}ms`);
                     setTimeout(() => {
                         client.joinDDRaceServer();
                     }, reconnectTime);
@@ -275,7 +285,7 @@ class BotManager extends EventEmitter {
                     this.botFreezeStates.set(botName, isFrozen);
                 }
             } catch (error) {
-                console.error(`Error updating freeze state for ${botName}:`, error);
+                logger.error(`Error updating freeze state for ${botName}:`, error);
             }
             
             this.emit(`${botName}:snapshot`, snapshot);
@@ -290,6 +300,10 @@ class BotManager extends EventEmitter {
         // Дополнительные события
         client.on('error', (error) => {
             this.emit(`${botName}:error`, error);
+        });
+
+        client.on('map_details', (mapDetails) => {
+            this.emit(`${botName}:map_details`, mapDetails);
         });
     }
 }
