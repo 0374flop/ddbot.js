@@ -2,15 +2,15 @@ const bot = require('./src/bot/index');
 const map = require('./src/map/index');
 const path = require('path');
 const logger = require('./src/logger').getLogger('Main');
+const { connectAIToBot, disconnectAIFromBot } = require('./src/AI/core/BotConnectpy');
 
 async function main() {
 let botName;
 async function botNameprint() {
-    const botName2 = await bot.botCore.botManager.createAndConnectBot('57.128.201.180:8323', 'Urawa', {
+    const botName2 = await bot.botCore.botManager.createAndConnectBot('26.230.124.233:8303', 'Towa', {
         identity: {
-            name: 'Urawa',
-            clan: ".",
-            skin: "",
+            clan: "Towa Team",
+            skin: "Astolfofinho",
             use_custom_color: 1,
             color_body: 16711680,
             color_feet: 16711680,
@@ -30,52 +30,36 @@ bot.botFeatures.autoSendConnect(botName, "hii! :3");
 
 bot.botCore.botManager.on(`${botName}:connect`, () => {
     const interval = setInterval(() => {
-        botChatEmote.emote(1);
-    }, 1000);
+        botChatEmote.emote(2);
+    }, 5000);
     bot.botCore.botManager.on(`${botName}:disconnect`, () => {
         clearInterval(interval);
     });
 });
 
-async function mapLoader(mapName) {
-    const isMapDownloaded = await map.MapDownloader.loadMap(mapName, map.MAPS_DIR);
-    if (isMapDownloaded) {
-        if (map.pyFather.isParsedMap(mapName, map.PARSED_DIR)) {
-            logger.info('Map already parsed and loaded');
-        } else {
-            await map.pyFather.ParseMap(path.join(map.MAPS_DIR, `${mapName}.map`), path.join(map.PARSED_DIR, `${mapName}.json`));
-            logger.info('Map downloaded and parsed');
-        }
-    } else {
-        logger.info('Map be is not downloaded but download now');
-        if (map.pyFather.isParsedMap(mapName, map.PARSED_DIR)) {
-            logger.info('Map already parsed and loaded');
-        } else {
-            logger.info('Map not parsed but parsed now');
-            await map.pyFather.ParseMap(path.join(map.MAPS_DIR, `${mapName}.map`), path.join(map.PARSED_DIR, `${mapName}.json`));
-        }
-    }
-};
+map.Automaploader(botName, map.mapLoader);
 
-bot.botCore.botManager.on(`${botName}:map_details`, (mapDetails) => {
-    const mapName = mapDetails.map_name;
-    mapLoader(mapName);
+bot.botCore.botManager.on(`${botName}:message`, (msg) => {
+    const utilisateur = msg.utilisateur?.InformationDuBot;
+    let autormsg = utilisateur?.name || false;
+    const text = msg.message.trim();
+    if (msg && typeof msg.message === 'string') {
+        if (!autormsg) autormsg = "system";
+        logger.info(`'${autormsg}' : ${text}`)
+    } else {
+        return;
+    }
 });
 
-// Movement code
 let x = 100;
-let direction = -1; // -1 для движения влево, 1 для движения вправо
+let direction = -1;
 setInterval(() => {
-    // Плавное движение x от 100 до -100 и обратно
-    x += direction * 10; // Скорость движения
-    
-    // Смена направления при достижении границ
+    x += direction * 10;
     if (x <= -100) {
-        direction = 1; // Двигаемся вправо
+        direction = 1;
     } else if (x >= 100) {
-        direction = -1; // Двигаемся влево
+        direction = -1;
     }
-    
     if (bot.botCore.botManager.isBotConnected(botName) && bot.botCore.botManager.isFreezeBot(botName)) {
         const botClient = bot.botCore.botManager.getBotClient(botName);
         if (botClient && botClient.movement) {
@@ -95,10 +79,6 @@ function exit() {
         process.exit(0);
     }, 1000);
 }
-
-setTimeout(() => {
-    exit();
-}, 50000);
 
 process.on('SIGINT', () => {
     exit();
