@@ -1,5 +1,26 @@
 {
   "dependencies": {
     "neiky-ddracebot.js": "^2.4.0"
-  }
+  },
+  "name": "ddbot",
+  "version": "1.0.0",
+  "description": "ddbot.js — это Node.js проект для автоматизации и управления ботами, а также работы с картами и логами.",
+  "main": "main.js",
+  "devDependencies": {},
+  "scripts": {
+    "start": "node main.js",
+    "test": "node main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/0374flop/ddbot.js.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/0374flop/ddbot.js/issues"
+  },
+  "homepage": "https://github.com/0374flop/ddbot.js#readme"
 }

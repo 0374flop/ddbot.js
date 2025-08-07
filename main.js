@@ -7,7 +7,7 @@ const { connectAIToBot, disconnectAIFromBot } = require('./src/AI/core/BotConnec
 async function main() {
 let botName;
 async function botNameprint() {
-    const botName2 = await bot.botCore.botManager.createAndConnectBot('26.230.124.233:8303', 'Towa', {
+    const botName2 = await bot.botCore.botManager.createAndConnectBot('45.141.57.22:8309', 'Towa', {
         identity: {
             clan: "Towa Team",
             skin: "Astolfofinho",
@@ -72,12 +72,11 @@ setInterval(() => {
     }
 }, Math.random() * 100);
 
-function exit() {
-    bot.botCore.botManager.disconnectAllBots();
-    setTimeout(() => {
-        logger.info('Main stopped');
-        process.exit(0);
-    }, 1000);
+async function exit() {
+    logger.info('Shutting down...');
+    await bot.botCore.botManager.disconnectAllBots();
+    logger.info('Main stopped');
+    process.exit(0);
 }
 
 process.on('SIGINT', () => {
