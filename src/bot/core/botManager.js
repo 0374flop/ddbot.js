@@ -44,7 +44,6 @@ class BotManager extends EventEmitter {
 
         try {
             const identity = parameter.identity || {
-                name: botName,
                 clan: "",
                 skin: "default",
                 use_custom_color: 0,
@@ -52,7 +51,7 @@ class BotManager extends EventEmitter {
                 color_feet: 0,
                 country: 0
             };
-            const client = new DDRaceBot.Client(serverIp, serverPort, uniqueBotName, { 
+            const client = new DDRaceBot.Client(serverIp, serverPort, botName, { 
                 identity: identity
             });
 
