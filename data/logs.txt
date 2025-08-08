@@ -1,1 +1,213 @@
 
+[2025-08-08T22:15:40.349Z] [INFO] [Main] Main started
+[2025-08-08T22:15:40.354Z] [INFO] [BotManager] Creating bot: Towa1 on 45.141.57.31:8308
+[2025-08-08T22:16:00.415Z] [INFO] [BotManager] Bot Towa1 disconnected from server, reason: Timed Out. (no packets received for 18928ms)
+[2025-08-08T22:16:00.418Z] [INFO] [BotManager] Bot Towa1 will reconnect in 6000ms
+[2025-08-08T22:16:07.274Z] [INFO] [Main] Received message: {"team":0,"client_id":-1,"message":"'Towa' entered and joined the game"}
+[2025-08-08T22:16:07.275Z] [INFO] [Main] 'system' : 'Towa' entered and joined the game
+[2025-08-08T22:16:07.275Z] [INFO] [Main] 'system' : DDraceNetwork Mod. Version: 0.6.4, 19.4
+[2025-08-08T22:16:07.276Z] [INFO] [Main] Received message: {"team":0,"client_id":-1,"message":"please visit DDNet.org or say /info and make sure to read our /rules"}
+[2025-08-08T22:16:07.276Z] [INFO] [Main] 'system' : please visit DDNet.org or say /info and make sure to read our /rules
+[2025-08-08T22:16:07.276Z] [INFO] [Main] 'system' : 'Towa' entered and joined the game
+[2025-08-08T22:16:07.275Z] [INFO] [Main] Received message: {"team":0,"client_id":-1,"message":"DDraceNetwork Mod. Version: 0.6.4, 19.4"}
+[2025-08-08T22:16:07.277Z] [INFO] [Main] 'system' : DDraceNetwork Mod. Version: 0.6.4, 19.4
+[2025-08-08T22:16:07.277Z] [INFO] [Main] Received message: {"team":0,"client_id":-1,"message":"DDraceNetwork Mod. Version: 0.6.4, 19.4"}
+[2025-08-08T22:16:07.276Z] [INFO] [Main] Received message: {"team":0,"client_id":-1,"message":"'Towa' entered and joined the game"}
+[2025-08-08T22:16:07.277Z] [INFO] [Main] 'system' : please visit DDNet.org or say /info and make sure to read our /rules
+[2025-08-08T22:16:07.277Z] [INFO] [Main] Received message: {"team":0,"client_id":-1,"message":"please visit DDNet.org or say /info and make sure to read our /rules"}
+[2025-08-08T22:16:07.287Z] [INFO] [Main] Received message: {"team":0,"client_id":14,"message":"Do you know someone who uses a bot? Please report them to the moderators.","utilisateur":{}}
+[2025-08-08T22:16:07.288Z] [INFO] [Main] Received message: {"team":0,"client_id":-1,"message":"Welcome to DDraceNetwork!"}
+[2025-08-08T22:16:07.288Z] [INFO] [Main] Received message: {"team":0,"client_id":14,"message":"Do you know someone who uses a bot? Please report them to the moderators.","utilisateur":{}}
+[2025-08-08T22:16:07.288Z] [INFO] [Main] 'system' : Do you know someone who uses a bot? Please report them to the moderators.
+[2025-08-08T22:16:07.289Z] [INFO] [Main] Received message: {"team":0,"client_id":-1,"message":"Welcome to DDraceNetwork!"}
+[2025-08-08T22:16:07.288Z] [INFO] [Main] 'system' : Do you know someone who uses a bot? Please report them to the moderators.
+[2025-08-08T22:16:07.288Z] [INFO] [Main] 'system' : Welcome to DDraceNetwork!
+[2025-08-08T22:16:07.289Z] [INFO] [Main] 'system' : Welcome to DDraceNetwork!
+[2025-08-08T22:16:07.469Z] [INFO] [BotManager] Bot Towa1 connected successfully
+[2025-08-08T22:16:07.549Z] [INFO] [Main] Received message: {"team":0,"client_id":13,"message":"hii! :3","utilisateur":{"InformationDuBot":{"name":"Towa","clan":"Towa Team","country":-1,"skin":"Astolfofinho","use_custom_color":1,"color_body":16711680,"color_feet":16711680,"id":13},"InformationUtilisateur":{"local":1,"client_id":13,"team":0,"score":-9999,"latency":0}}}
+[2025-08-08T22:16:07.550Z] [INFO] [Main] 'Towa' : hii! :3
+[2025-08-08T22:16:07.552Z] [INFO] [Main] 'Towa' : hii! :3
+[2025-08-08T22:16:07.551Z] [INFO] [Main] Received message: {"team":0,"client_id":13,"message":"hii! :3","utilisateur":{"InformationDuBot":{"name":"Towa","clan":"Towa Team","country":-1,"skin":"Astolfofinho","use_custom_color":1,"color_body":16711680,"color_feet":16711680,"id":13},"InformationUtilisateur":{"local":1,"client_id":13,"team":0,"score":-9999,"latency":0}}}
+[2025-08-08T22:47:49.537Z] [INFO] [Main] Main started
+[2025-08-08T22:47:49.542Z] [INFO] [BotManager] Creating bot: Towa1 on 45.141.57.31:8308
+[2025-08-08T22:48:09.599Z] [INFO] [BotManager] Bot Towa1 disconnected from server, reason: Timed Out. (no packets received for 18903ms)
+[2025-08-08T22:48:09.600Z] [INFO] [BotManager] Bot Towa1 will reconnect in 6000ms
+[2025-08-08T22:48:16.513Z] [INFO] [Main] Received message: {"team":0,"client_id":-1,"message":"'Towa' entered and joined the game"}
+[2025-08-08T22:48:16.514Z] [INFO] [Main] 'system' : 'Towa' entered and joined the game
+[2025-08-08T22:48:16.517Z] [INFO] [Main] 'system' : DDraceNetwork Mod. Version: 0.6.4, 19.4
+[2025-08-08T22:48:16.519Z] [INFO] [Main] Received message: {"team":0,"client_id":-1,"message":"please visit DDNet.org or say /info and make sure to read our /rules"}
+[2025-08-08T22:48:16.519Z] [INFO] [Main] 'system' : please visit DDNet.org or say /info and make sure to read our /rules
+[2025-08-08T22:48:16.521Z] [INFO] [Main] Received message: {"team":0,"client_id":-1,"message":"'Towa' entered and joined the game"}
+[2025-08-08T22:48:16.524Z] [INFO] [Main] 'system' : 'Towa' entered and joined the game
+[2025-08-08T22:48:16.525Z] [INFO] [Main] Received message: {"team":0,"client_id":-1,"message":"DDraceNetwork Mod. Version: 0.6.4, 19.4"}
+[2025-08-08T22:48:16.516Z] [INFO] [Main] Received message: {"team":0,"client_id":-1,"message":"DDraceNetwork Mod. Version: 0.6.4, 19.4"}
+[2025-08-08T22:48:16.529Z] [INFO] [Main] 'system' : DDraceNetwork Mod. Version: 0.6.4, 19.4
+[2025-08-08T22:48:16.530Z] [INFO] [Main] Received message: {"team":0,"client_id":-1,"message":"please visit DDNet.org or say /info and make sure to read our /rules"}
+[2025-08-08T22:48:16.531Z] [INFO] [Main] 'system' : please visit DDNet.org or say /info and make sure to read our /rules
+[2025-08-08T22:48:16.540Z] [INFO] [Main] Received message: {"team":0,"client_id":1,"message":"Do you know someone who uses a bot? Please report them to the moderators.","utilisateur":{}}
+[2025-08-08T22:48:16.542Z] [INFO] [Main] Received message: {"team":0,"client_id":-1,"message":"Welcome to DDraceNetwork!"}
+[2025-08-08T22:48:16.546Z] [INFO] [Main] Received message: {"team":0,"client_id":1,"message":"Do you know someone who uses a bot? Please report them to the moderators.","utilisateur":{}}
+[2025-08-08T22:48:16.548Z] [INFO] [Main] 'system' : Do you know someone who uses a bot? Please report them to the moderators.
+[2025-08-08T22:48:16.550Z] [INFO] [Main] Received message: {"team":0,"client_id":-1,"message":"Welcome to DDraceNetwork!"}
+[2025-08-08T22:48:16.541Z] [INFO] [Main] 'system' : Do you know someone who uses a bot? Please report them to the moderators.
+[2025-08-08T22:48:16.544Z] [INFO] [Main] 'system' : Welcome to DDraceNetwork!
+[2025-08-08T22:48:16.551Z] [INFO] [Main] 'system' : Welcome to DDraceNetwork!
+[2025-08-08T22:48:16.684Z] [INFO] [BotManager] Bot Towa1 connected successfully
+[2025-08-08T22:48:16.751Z] [INFO] [Main] Received message: {"team":0,"client_id":0,"message":"hii! :3","utilisateur":{"InformationDuBot":{"name":"Towa","clan":"Towa Team","country":-1,"skin":"Astolfofinho","use_custom_color":1,"color_body":16711680,"color_feet":16711680,"id":0},"InformationUtilisateur":{"local":1,"client_id":0,"team":0,"score":-9999,"latency":0}}}
+[2025-08-08T22:48:16.752Z] [INFO] [Main] 'Towa' : hii! :3
+[2025-08-08T22:48:16.755Z] [INFO] [Main] Received message: {"team":0,"client_id":0,"message":"hii! :3","utilisateur":{"InformationDuBot":{"name":"Towa","clan":"Towa Team","country":-1,"skin":"Astolfofinho","use_custom_color":1,"color_body":16711680,"color_feet":16711680,"id":0},"InformationUtilisateur":{"local":1,"client_id":0,"team":0,"score":-9999,"latency":0}}}
+[2025-08-08T22:48:16.756Z] [INFO] [Main] 'Towa' : hii! :3
+[2025-08-08T22:48:17.512Z] [INFO] [Main] Received message: {"team":0,"client_id":-1,"message":"'0374_bobriha' entered and joined the game"}
+[2025-08-08T22:48:17.517Z] [INFO] [Main] Received message: {"team":0,"client_id":-1,"message":"'0374_bobriha' entered and joined the game"}
+[2025-08-08T22:48:17.513Z] [INFO] [Main] 'system' : '0374_bobriha' entered and joined the game
+[2025-08-08T22:48:17.518Z] [INFO] [Main] 'system' : '0374_bobriha' entered and joined the game
+[2025-08-08T22:48:22.269Z] [INFO] [Main] Received message: {"team":1,"client_id":17,"message":"иди нахуй","utilisateur":{"InformationDuBot":{"name":"D SWAGA","clan":"","country":-1,"skin":"kitty_x_ninja","use_custom_color":1,"color_body":2359296,"color_feet":16776960,"id":17},"InformationUtilisateur":{"local":0,"client_id":17,"team":0,"score":-536,"latency":0}}}
+[2025-08-08T22:48:22.270Z] [INFO] [Main] 'D SWAGA' : иди нахуй
+[2025-08-08T22:48:22.271Z] [INFO] [Main] Received message: {"team":1,"client_id":17,"message":"иди нахуй","utilisateur":{"InformationDuBot":{"name":"D SWAGA","clan":"","country":-1,"skin":"kitty_x_ninja","use_custom_color":1,"color_body":2359296,"color_feet":16776960,"id":17},"InformationUtilisateur":{"local":0,"client_id":17,"team":0,"score":-536,"latency":0}}}
+[2025-08-08T22:48:22.272Z] [INFO] [Main] 'D SWAGA' : иди нахуй
+[2025-08-08T22:48:32.916Z] [INFO] [Main] Received message: {"team":0,"client_id":8,"message":"ок","utilisateur":{"InformationDuBot":{"name":"яйца арт","clan":"","country":-1,"skin":"default","use_custom_color":0,"color_body":65408,"color_feet":65408,"id":8},"InformationUtilisateur":{"local":0,"client_id":8,"team":0,"score":-60,"latency":0}}}
+[2025-08-08T22:48:32.910Z] [INFO] [Main] Received message: {"team":0,"client_id":8,"message":"ок","utilisateur":{"InformationDuBot":{"name":"яйца арт","clan":"","country":-1,"skin":"default","use_custom_color":0,"color_body":65408,"color_feet":65408,"id":8},"InformationUtilisateur":{"local":0,"client_id":8,"team":0,"score":-60,"latency":0}}}
+[2025-08-08T22:48:32.911Z] [INFO] [Main] 'яйца арт' : ок
+[2025-08-08T22:48:32.917Z] [INFO] [Main] 'яйца арт' : ок
+[2025-08-08T22:48:37.641Z] [INFO] [MapDownloader] Fetched map type: novice
+[2025-08-08T22:48:37.647Z] [INFO] [MapDownloader] Map "Linear" is already cached.
+[2025-08-08T22:48:37.649Z] [INFO] [map-core] Map already parsed and loaded
+[2025-08-08T22:48:37.744Z] [INFO] [MapDownloader] Fetched map type: novice
+[2025-08-08T22:48:37.747Z] [INFO] [MapDownloader] Map "Linear" is already cached.
+[2025-08-08T22:48:37.749Z] [INFO] [map-core] Map already parsed and loaded
+[2025-08-08T22:48:37.752Z] [INFO] [MapDownloader] Fetched map type: novice
+[2025-08-08T22:48:37.754Z] [INFO] [MapDownloader] Map "Linear" is already cached.
+[2025-08-08T22:48:37.756Z] [INFO] [map-core] Map already parsed and loaded
+[2025-08-08T22:48:37.913Z] [INFO] [MapDownloader] Fetched map type: novice
+[2025-08-08T22:48:37.915Z] [INFO] [MapDownloader] Map "Linear" is already cached.
+[2025-08-08T22:48:37.916Z] [INFO] [map-core] Map already parsed and loaded
+[2025-08-08T22:48:38.228Z] [INFO] [Main] Received message: {"team":0,"client_id":17,"message":"не ти","utilisateur":{"InformationDuBot":{"name":"D SWAGA","clan":"","country":-1,"skin":"kitty_x_ninja","use_custom_color":1,"color_body":2359296,"color_feet":16776960,"id":17},"InformationUtilisateur":{"local":0,"client_id":17,"team":0,"score":-536,"latency":0}}}
+[2025-08-08T22:48:38.229Z] [INFO] [Main] Received message: {"team":0,"client_id":17,"message":"не ти","utilisateur":{"InformationDuBot":{"name":"D SWAGA","clan":"","country":-1,"skin":"kitty_x_ninja","use_custom_color":1,"color_body":2359296,"color_feet":16776960,"id":17},"InformationUtilisateur":{"local":0,"client_id":17,"team":0,"score":-536,"latency":0}}}
+[2025-08-08T22:48:38.230Z] [INFO] [Main] 'D SWAGA' : не ти
+[2025-08-08T22:48:38.229Z] [INFO] [Main] 'D SWAGA' : не ти
+[2025-08-08T22:48:40.245Z] [INFO] [Main] Received message: {"team":0,"client_id":17,"message":"а това","utilisateur":{"InformationDuBot":{"name":"D SWAGA","clan":"","country":-1,"skin":"kitty_x_ninja","use_custom_color":1,"color_body":2359296,"color_feet":16776960,"id":17},"InformationUtilisateur":{"local":0,"client_id":17,"team":0,"score":-536,"latency":0}}}
+[2025-08-08T22:48:40.246Z] [INFO] [Main] 'D SWAGA' : а това
+[2025-08-08T22:48:40.248Z] [INFO] [Main] Received message: {"team":0,"client_id":17,"message":"а това","utilisateur":{"InformationDuBot":{"name":"D SWAGA","clan":"","country":-1,"skin":"kitty_x_ninja","use_custom_color":1,"color_body":2359296,"color_feet":16776960,"id":17},"InformationUtilisateur":{"local":0,"client_id":17,"team":0,"score":-536,"latency":0}}}
+[2025-08-08T22:48:40.249Z] [INFO] [Main] 'D SWAGA' : а това
+[2025-08-08T22:48:45.429Z] [INFO] [Main] Received message: {"team":0,"client_id":19,"message":"4 43","utilisateur":{"InformationDuBot":{"name":"спермоп","clan":"","country":-1,"skin":"cursemoji","use_custom_color":1,"color_body":1835008,"color_feet":0,"id":19},"InformationUtilisateur":{"local":0,"client_id":19,"team":0,"score":-65,"latency":0}}}
+[2025-08-08T22:48:45.430Z] [INFO] [Main] 'спермоп' : 4 43
+[2025-08-08T22:48:45.431Z] [INFO] [Main] Received message: {"team":0,"client_id":19,"message":"4 43","utilisateur":{"InformationDuBot":{"name":"спермоп","clan":"","country":-1,"skin":"cursemoji","use_custom_color":1,"color_body":1835008,"color_feet":0,"id":19},"InformationUtilisateur":{"local":0,"client_id":19,"team":0,"score":-65,"latency":0}}}
+[2025-08-08T22:48:45.432Z] [INFO] [Main] 'спермоп' : 4 43
+[2025-08-08T22:48:46.629Z] [INFO] [Main] Received message: {"team":0,"client_id":8,"message":"ок","utilisateur":{"InformationDuBot":{"name":"яйца арт","clan":"","country":-1,"skin":"default","use_custom_color":0,"color_body":65408,"color_feet":65408,"id":8},"InformationUtilisateur":{"local":0,"client_id":8,"team":0,"score":-60,"latency":0}}}
+[2025-08-08T22:48:46.630Z] [INFO] [Main] 'яйца арт' : ок
+[2025-08-08T22:48:46.633Z] [INFO] [Main] 'яйца арт' : ок
+[2025-08-08T22:48:46.632Z] [INFO] [Main] Received message: {"team":0,"client_id":8,"message":"ок","utilisateur":{"InformationDuBot":{"name":"яйца арт","clan":"","country":-1,"skin":"default","use_custom_color":0,"color_body":65408,"color_feet":65408,"id":8},"InformationUtilisateur":{"local":0,"client_id":8,"team":0,"score":-60,"latency":0}}}
+[2025-08-08T22:48:47.153Z] [INFO] [Main] Received message: {"team":0,"client_id":19,"message":"4 43","utilisateur":{"InformationDuBot":{"name":"спермоп","clan":"","country":-1,"skin":"cursemoji","use_custom_color":1,"color_body":1835008,"color_feet":0,"id":19},"InformationUtilisateur":{"local":0,"client_id":19,"team":0,"score":-65,"latency":0}}}
+[2025-08-08T22:48:47.157Z] [INFO] [Main] Received message: {"team":0,"client_id":19,"message":"4 43","utilisateur":{"InformationDuBot":{"name":"спермоп","clan":"","country":-1,"skin":"cursemoji","use_custom_color":1,"color_body":1835008,"color_feet":0,"id":19},"InformationUtilisateur":{"local":0,"client_id":19,"team":0,"score":-65,"latency":0}}}
+[2025-08-08T22:48:47.154Z] [INFO] [Main] 'спермоп' : 4 43
+[2025-08-08T22:48:47.158Z] [INFO] [Main] 'спермоп' : 4 43
+[2025-08-08T22:48:48.788Z] [INFO] [Main] Received message: {"team":0,"client_id":19,"message":"4 3","utilisateur":{"InformationDuBot":{"name":"спермоп","clan":"","country":-1,"skin":"cursemoji","use_custom_color":1,"color_body":1835008,"color_feet":0,"id":19},"InformationUtilisateur":{"local":0,"client_id":19,"team":0,"score":-65,"latency":0}}}
+[2025-08-08T22:48:48.789Z] [INFO] [Main] 'спермоп' : 4 3
+[2025-08-08T22:48:48.791Z] [INFO] [Main] Received message: {"team":0,"client_id":19,"message":"4 3","utilisateur":{"InformationDuBot":{"name":"спермоп","clan":"","country":-1,"skin":"cursemoji","use_custom_color":1,"color_body":1835008,"color_feet":0,"id":19},"InformationUtilisateur":{"local":0,"client_id":19,"team":0,"score":-65,"latency":0}}}
+[2025-08-08T22:48:48.791Z] [INFO] [Main] 'спермоп' : 4 3
+[2025-08-08T22:49:14.709Z] [INFO] [Main] 'system' : 'KREWETKA' has left the game
+[2025-08-08T22:49:14.708Z] [INFO] [Main] Received message: {"team":0,"client_id":-1,"message":"'KREWETKA' has left the game"}
+[2025-08-08T22:49:14.709Z] [INFO] [Main] Received message: {"team":0,"client_id":-1,"message":"'KREWETK_A' has left the game"}
+[2025-08-08T22:49:14.710Z] [INFO] [Main] 'system' : 'KREWETK_A' has left the game
+[2025-08-08T22:49:14.712Z] [INFO] [Main] Received message: {"team":0,"client_id":-1,"message":"'KREWETKA' has left the game"}
+[2025-08-08T22:49:14.715Z] [INFO] [Main] 'system' : 'KREWETK_A' has left the game
+[2025-08-08T22:49:14.714Z] [INFO] [Main] Received message: {"team":0,"client_id":-1,"message":"'KREWETK_A' has left the game"}
+[2025-08-08T22:49:14.713Z] [INFO] [Main] 'system' : 'KREWETKA' has left the game
+[2025-08-08T22:57:18.318Z] [INFO] [Main] Main started
+[2025-08-08T22:57:18.324Z] [INFO] [BotManager] Creating bot: Towa1 on 45.141.57.31:8308
+[2025-08-08T22:57:38.392Z] [INFO] [BotManager] Bot Towa1 disconnected from server, reason: Timed Out. (no packets received for 18911ms)
+[2025-08-08T22:57:38.393Z] [INFO] [BotManager] Bot Towa1 will reconnect in 6000ms
+[2025-08-08T22:58:20.377Z] [INFO] [Main] Main started
+[2025-08-08T22:58:20.393Z] [INFO] [BotManager] Creating bot: Towa1 on 45.141.57.31:8308
+[2025-08-08T22:58:40.501Z] [INFO] [BotManager] Bot Towa1 disconnected from server, reason: Timed Out. (no packets received for 18890ms)
+[2025-08-08T22:58:40.503Z] [INFO] [BotManager] Bot Towa1 will reconnect in 6000ms
+[2025-08-08T22:58:47.405Z] [INFO] [Main] Received message: {"team":0,"client_id":-1,"message":"'(1)Towa' entered and joined the game"}
+[2025-08-08T22:58:47.408Z] [INFO] [Main] 'system' : '(1)Towa' entered and joined the game
+[2025-08-08T22:58:47.410Z] [INFO] [Main] Received message: {"team":0,"client_id":-1,"message":"DDraceNetwork Mod. Version: 0.6.4, 19.4"}
+[2025-08-08T22:58:47.413Z] [INFO] [Main] Received message: {"team":0,"client_id":-1,"message":"please visit DDNet.org or say /info and make sure to read our /rules"}
+[2025-08-08T22:58:47.422Z] [INFO] [Main] Ignored duplicate message: '(1)Towa' entered and joined the game
+[2025-08-08T22:58:47.424Z] [INFO] [Main] Ignored duplicate message: DDraceNetwork Mod. Version: 0.6.4, 19.4
+[2025-08-08T22:58:47.426Z] [INFO] [Main] Ignored duplicate message: please visit DDNet.org or say /info and make sure to read our /rules
+[2025-08-08T22:58:47.416Z] [INFO] [Main] 'system' : please visit DDNet.org or say /info and make sure to read our /rules
+[2025-08-08T22:58:47.411Z] [INFO] [Main] 'system' : DDraceNetwork Mod. Version: 0.6.4, 19.4
+[2025-08-08T22:58:47.435Z] [INFO] [Main] Received message: {"team":0,"client_id":3,"message":"Do you know someone who uses a bot? Please report them to the moderators.","utilisateur":{}}
+[2025-08-08T22:58:47.445Z] [INFO] [Main] Ignored duplicate message: Do you know someone who uses a bot? Please report them to the moderators.
+[2025-08-08T22:58:47.446Z] [INFO] [Main] Ignored duplicate message: Welcome to DDraceNetwork!
+[2025-08-08T22:58:47.437Z] [INFO] [Main] 'system' : Do you know someone who uses a bot? Please report them to the moderators.
+[2025-08-08T22:58:47.440Z] [INFO] [Main] Received message: {"team":0,"client_id":-1,"message":"Welcome to DDraceNetwork!"}
+[2025-08-08T22:58:47.441Z] [INFO] [Main] 'system' : Welcome to DDraceNetwork!
+[2025-08-08T22:58:47.473Z] [INFO] [BotManager] Bot Towa1 connected successfully
+[2025-08-08T22:58:47.590Z] [INFO] [Main] Received message: {"team":0,"client_id":2,"message":"hii! :3","utilisateur":{"InformationDuBot":{"name":"(1)Towa","clan":"Towa Team","country":-1,"skin":"Astolfofinho","use_custom_color":1,"color_body":16711680,"color_feet":16711680,"id":2},"InformationUtilisateur":{"local":1,"client_id":2,"team":0,"score":-9999,"latency":0}}}
+[2025-08-08T22:58:47.596Z] [INFO] [Main] Ignored duplicate message: hii! :3
+[2025-08-08T22:58:47.591Z] [INFO] [Main] '(1)Towa' : hii! :3
+[2025-08-08T22:58:48.068Z] [INFO] [Main] Received message: {"team":0,"client_id":-1,"message":"яйца арт finished in: 5 minute(s) 26.38 second(s)"}
+[2025-08-08T22:58:48.069Z] [INFO] [Main] 'system' : яйца арт finished in: 5 minute(s) 26.38 second(s)
+[2025-08-08T22:58:48.073Z] [INFO] [Main] Ignored duplicate message: яйца арт finished in: 5 minute(s) 26.38 second(s)
+[2025-08-08T22:58:48.308Z] [INFO] [Main] Received message: {"team":0,"client_id":-1,"message":"спермоп finished in: 5 minute(s) 56.72 second(s)"}
+[2025-08-08T22:58:48.309Z] [INFO] [Main] 'system' : спермоп finished in: 5 minute(s) 56.72 second(s)
+[2025-08-08T22:58:48.313Z] [INFO] [Main] Ignored duplicate message: спермоп finished in: 5 minute(s) 56.72 second(s)
+[2025-08-08T22:58:53.509Z] [INFO] [Main] Received message: {"team":0,"client_id":17,"message":"това","utilisateur":{"InformationDuBot":{"name":"D SWAGA","clan":"","country":-1,"skin":"kitty_x_ninja","use_custom_color":1,"color_body":2359296,"color_feet":16776960,"id":17},"InformationUtilisateur":{"local":0,"client_id":17,"team":0,"score":-536,"latency":0}}}
+[2025-08-08T22:58:53.511Z] [INFO] [Main] 'D SWAGA' : това
+[2025-08-08T22:58:53.513Z] [INFO] [Main] Ignored duplicate message: това
+[2025-08-08T22:58:57.630Z] [INFO] [Main] 'D SWAGA' : иди нахуй
+[2025-08-08T22:58:57.629Z] [INFO] [Main] Received message: {"team":0,"client_id":17,"message":"иди нахуй","utilisateur":{"InformationDuBot":{"name":"D SWAGA","clan":"","country":-1,"skin":"kitty_x_ninja","use_custom_color":1,"color_body":2359296,"color_feet":16776960,"id":17},"InformationUtilisateur":{"local":0,"client_id":17,"team":0,"score":-536,"latency":0}}}
+[2025-08-08T22:58:57.633Z] [INFO] [Main] Ignored duplicate message: иди нахуй
+[2025-08-08T22:59:01.121Z] [INFO] [Main] Received message: {"team":0,"client_id":17,"message":"и привет","utilisateur":{"InformationDuBot":{"name":"D SWAGA","clan":"","country":-1,"skin":"kitty_x_ninja","use_custom_color":1,"color_body":2359296,"color_feet":16776960,"id":17},"InformationUtilisateur":{"local":0,"client_id":17,"team":0,"score":-536,"latency":0}}}
+[2025-08-08T22:59:01.122Z] [INFO] [Main] 'D SWAGA' : и привет
+[2025-08-08T22:59:01.124Z] [INFO] [Main] Ignored duplicate message: и привет
+[2025-08-08T22:59:13.114Z] [INFO] [Main] Received message: {"team":3,"client_id":17,"message":"bro, check out this client: *** client.​xyｚ","utilisateur":{"InformationDuBot":{"name":"D SWAGA","clan":"","country":-1,"skin":"kitty_x_ninja","use_custom_color":1,"color_body":2359296,"color_feet":16776960,"id":17},"InformationUtilisateur":{"local":0,"client_id":17,"team":0,"score":-536,"latency":0}}}
+[2025-08-08T22:59:13.115Z] [INFO] [Main] 'D SWAGA' : bro, check out this client: *** client.​xyｚ
+[2025-08-08T22:59:13.115Z] [INFO] [Main] Ignored duplicate message: bro, check out this client: *** client.​xyｚ
+[2025-08-08T22:59:25.268Z] [INFO] [Main] Received message: {"team":0,"client_id":-1,"message":"'Towa' has left the game (Too weak connection (not acked for 100 seconds))"}
+[2025-08-08T22:59:25.268Z] [INFO] [Main] 'system' : 'Towa' has left the game (Too weak connection (not acked for 100 seconds))
+[2025-08-08T22:59:25.269Z] [INFO] [Main] Ignored duplicate message: 'Towa' has left the game (Too weak connection (not acked for 100 seconds))
+[2025-08-08T22:59:27.934Z] [INFO] [Main] Received message: {"team":0,"client_id":17,"message":"на мид","utilisateur":{"InformationDuBot":{"name":"D SWAGA","clan":"","country":-1,"skin":"kitty_x_ninja","use_custom_color":1,"color_body":2359296,"color_feet":16776960,"id":17},"InformationUtilisateur":{"local":0,"client_id":17,"team":0,"score":-536,"latency":0}}}
+[2025-08-08T22:59:27.934Z] [INFO] [Main] 'D SWAGA' : на мид
+[2025-08-08T22:59:27.935Z] [INFO] [Main] Ignored duplicate message: на мид
+[2025-08-08T22:59:29.828Z] [INFO] [Main] Received message: {"team":0,"client_id":-1,"message":"'добби' entered and joined the game"}
+[2025-08-08T22:59:29.829Z] [INFO] [Main] 'system' : 'добби' entered and joined the game
+[2025-08-08T22:59:29.830Z] [INFO] [Main] Ignored duplicate message: 'добби' entered and joined the game
+[2025-08-08T22:59:38.906Z] [INFO] [Main] Main started
+[2025-08-08T22:59:38.911Z] [INFO] [BotManager] Creating bot: Towa1 on 45.141.57.31:8308
+[2025-08-08T22:59:58.981Z] [INFO] [BotManager] Bot Towa1 disconnected from server, reason: Timed Out. (no packets received for 18913ms)
+[2025-08-08T22:59:58.982Z] [INFO] [BotManager] Bot Towa1 will reconnect in 6000ms
+[2025-08-08T23:00:05.885Z] [INFO] [Main] 'system' : 'Towa' entered and joined the game
+[2025-08-08T23:00:05.886Z] [INFO] [Main] 'system' : DDraceNetwork Mod. Version: 0.6.4, 19.4
+[2025-08-08T23:00:05.888Z] [INFO] [Main] 'system' : please visit DDNet.org or say /info and make sure to read our /rules
+[2025-08-08T23:00:05.900Z] [INFO] [Main] 'system' : Do you know someone who uses a bot? Please report them to the moderators.
+[2025-08-08T23:00:05.902Z] [INFO] [Main] 'system' : Welcome to DDraceNetwork!
+[2025-08-08T23:00:06.068Z] [INFO] [BotManager] Bot Towa1 connected successfully
+[2025-08-08T23:00:06.290Z] [INFO] [Main] 'Towa' : hii! :3
+[2025-08-08T23:00:18.279Z] [INFO] [Main] 'D SWAGA' : ну
+[2025-08-08T23:00:21.027Z] [INFO] [Main] 'D SWAGA' : идеш
+[2025-08-08T23:00:26.386Z] [INFO] [Main] 'D SWAGA' : спермо
+[2025-08-08T23:00:46.889Z] [INFO] [Main] 'system' : 'Ne.Swagolet' has left the game
+[2025-08-08T23:00:46.889Z] [INFO] [Main] 'system' : 'D SWAGA' has left the game
+[2025-08-08T23:00:53.988Z] [INFO] [Main] 'system' : 'Remzz' entered and joined the game
+[2025-08-08T23:00:54.347Z] [INFO] [Main] 'system' : добби finished in: 1 minute(s)  9.82 second(s)
+[2025-08-08T23:01:00.268Z] [INFO] [Main] 'system' : 'спермоп' has left the game
+[2025-08-08T23:02:10.688Z] [INFO] [BotManager] Creating bot: Towa1 on 45.141.57.31:8308
+[2025-08-08T23:02:10.683Z] [INFO] [Main] Main started
+[2025-08-08T23:02:11.084Z] [INFO] [Main] 'system' : '(1)Towa' entered and joined the game
+[2025-08-08T23:02:11.085Z] [INFO] [Main] 'system' : DDraceNetwork Mod. Version: 0.6.4, 19.4
+[2025-08-08T23:02:11.085Z] [INFO] [Main] 'system' : please visit DDNet.org or say /info and make sure to read our /rules
+[2025-08-08T23:02:11.095Z] [INFO] [Main] 'system' : Do you know someone who uses a bot? Please report them to the moderators.
+[2025-08-08T23:02:11.095Z] [INFO] [Main] 'system' : Welcome to DDraceNetwork!
+[2025-08-08T23:02:11.270Z] [INFO] [BotManager] Bot Towa1 connected successfully
+[2025-08-08T23:02:11.349Z] [INFO] [Main] '(1)Towa' : hii! :3
+[2025-08-08T23:02:24.109Z] [INFO] [Main] 'system' : 'Remzz' entered and joined the game
+[2025-08-08T23:02:45.668Z] [INFO] [Main] 'system' : 'Towa' has left the game (Timeout)
+[2025-08-08T23:02:53.228Z] [INFO] [Main] 'system' : 'Пахан' entered and joined the game
+[2025-08-08T23:02:53.629Z] [INFO] [Main] 'system' : Happy DDNet birthday to Пахан for finishing their first map 1 year ago!
+[2025-08-08T23:02:54.508Z] [INFO] [Main] 'system' : '[D] добби' has left the game
+[2025-08-08T23:04:47.964Z] [INFO] [BotManager] Creating bot: Towa1 on 45.141.57.31:8308
+[2025-08-08T23:04:47.958Z] [INFO] [Main] Main started
+[2025-08-08T23:05:08.011Z] [INFO] [BotManager] Bot Towa1 disconnected from server, reason: Timed Out. (no packets received for 18884ms)
+[2025-08-08T23:05:08.013Z] [INFO] [BotManager] Bot Towa1 will reconnect in 6000ms
+[2025-08-08T23:05:14.905Z] [INFO] [Main] 'system' : 'Towa' entered and joined the game
+[2025-08-08T23:05:14.906Z] [INFO] [Main] 'system' : DDraceNetwork Mod. Version: 0.6.4, 19.4
+[2025-08-08T23:05:14.908Z] [INFO] [Main] 'system' : please visit DDNet.org or say /info and make sure to read our /rules
+[2025-08-08T23:05:14.922Z] [INFO] [Main] 'system' : Do you know someone who uses a bot? Please report them to the moderators.
+[2025-08-08T23:05:14.923Z] [INFO] [Main] 'system' : Welcome to DDraceNetwork!
+[2025-08-08T23:05:15.073Z] [INFO] [BotManager] Bot Towa1 connected successfully
+[2025-08-08T23:05:15.190Z] [INFO] [Main] 'Towa' : hii! :3

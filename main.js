@@ -31,22 +31,47 @@ bot.botCore.botManager.on(`${botName}:connect`, () => {
     }, 5000);
     bot.botCore.botManager.on(`${botName}:disconnect`, () => {
         clearInterval(interval);
+        clearInterval(intervalMove);
     });
 });
 
-map.Automaploader(botName, map.mapLoader);
+const lastMessages = new Map();
+
+try{
+    map.Automaploader(botName, map.mapLoader)
+} catch (e) {
+    logger.error(e)
+}
 
 bot.botCore.botManager.on(`${botName}:message`, (msg) => {
-    logger.info(`Received message: ${JSON.stringify(msg)}`)
-    const utilisateur = msg.utilisateur?.InformationDuBot;
-    let autormsg = utilisateur?.name || false;
-    const text = msg.message.trim();
-    if (msg && typeof msg.message === 'string') {
-        if (!autormsg) autormsg = "system";
-        logger.info(`'${autormsg}' : ${text}`)
-    } else {
+    if (!msg || typeof msg.message !== 'string') {
         return;
     }
+
+    const text = msg.message.trim();
+    const clientId = msg.client_id;
+    const team = msg.team;
+    const key = `${clientId}:${team}:${text}`;
+    const now = Date.now();
+
+    const lastMessage = lastMessages.get(key);
+    if (lastMessage && now - lastMessage.timestamp < 100) {
+        return;
+    }
+
+    lastMessages.set(key, { timestamp: now });
+
+    const utilisateur = msg.utilisateur?.InformationDuBot;
+    let autormsg = utilisateur?.name || "system";
+    logger.info(`'${autormsg}' : ${text}`);
+
+    setTimeout(() => {
+        for (const [k, v] of lastMessages) {
+            if (now - v.timestamp > 1000) {
+                lastMessages.delete(k);
+            }
+        }
+    }, 10000);
 });
 
 let x = 100;
