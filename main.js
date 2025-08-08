@@ -7,7 +7,7 @@ const { connectAIToBot, disconnectAIFromBot } = require('./src/AI/core/BotConnec
 async function main() {
 let botName;
 async function botNameprint() {
-    const botName2 = await bot.botCore.botManager.createAndConnectBot('45.141.57.22:8309', 'Towa', {
+    const botName2 = await bot.botCore.botManager.createAndConnectBot('45.141.57.31:8308', 'Towa', {
         identity: {
             clan: "Towa Team",
             skin: "Astolfofinho",
@@ -40,6 +40,7 @@ bot.botCore.botManager.on(`${botName}:connect`, () => {
 map.Automaploader(botName, map.mapLoader);
 
 bot.botCore.botManager.on(`${botName}:message`, (msg) => {
+    logger.info(`Received message: ${JSON.stringify(msg)}`)
     const utilisateur = msg.utilisateur?.InformationDuBot;
     let autormsg = utilisateur?.name || false;
     const text = msg.message.trim();
