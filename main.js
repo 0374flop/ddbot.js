@@ -38,7 +38,7 @@ bot.botCore.botManager.on(`${botName}:connect`, () => {
 const lastMessages = new Map();
 
 try{
-    map.Automaploader(botName, map.mapLoader)
+    // map.Automaploader(botName, map.mapLoader)
 } catch (e) {
     logger.error(e)
 }
