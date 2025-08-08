@@ -5,9 +5,7 @@ const logger = require('./src/logger').getLogger('Main');
 const { connectAIToBot, disconnectAIFromBot } = require('./src/AI/core/BotConnectpy');
 
 async function main() {
-let botName;
-async function botNameprint() {
-    const botName2 = await bot.botCore.botManager.createAndConnectBot('45.141.57.31:8308', 'Towa', {
+const botName = await bot.botCore.botManager.createAndConnectBot('45.141.57.31:8308', 'Towa', {
         identity: {
             clan: "Towa Team",
             skin: "Astolfofinho",
@@ -17,11 +15,8 @@ async function botNameprint() {
             country: -1
         },
         reconnect: true
-    });
-    botName = botName2;
-}
-
-await botNameprint();
+    }
+)
 
 const botMovement = new bot.botCore.BotMovement(bot.botCore.botManager.getBotClient(botName));
 const botChatEmote = new bot.botCore.BotChatEmote(bot.botCore.botManager.getBotClient(botName));
