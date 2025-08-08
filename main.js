@@ -18,8 +18,10 @@ const botName = await bot.botCore.botManager.createAndConnectBot('45.141.57.31:8
     }
 )
 
-const botMovement = new bot.botCore.BotMovement(bot.botCore.botManager.getBotClient(botName));
-const botChatEmote = new bot.botCore.BotChatEmote(bot.botCore.botManager.getBotClient(botName));
+const botClient = bot.botCore.botManager.getBotClient(botName)
+
+const botMovement = new bot.botCore.BotMovement(botClient);
+const botChatEmote = new bot.botCore.BotChatEmote(botClient);
 
 bot.botFeatures.autoSendConnect(botName, "hii! :3");
 
@@ -49,7 +51,7 @@ bot.botCore.botManager.on(`${botName}:message`, (msg) => {
 
 let x = 100;
 let direction = -1;
-setInterval(() => {
+const intervalMove = setInterval(() => {
     x += direction * 10;
     if (x <= -100) {
         direction = 1;
@@ -57,7 +59,6 @@ setInterval(() => {
         direction = -1;
     }
     if (bot.botCore.botManager.isBotConnected(botName) && bot.botCore.botManager.isFreezeBot(botName)) {
-        const botClient = bot.botCore.botManager.getBotClient(botName);
         if (botClient && botClient.movement) {
             botClient.movement.FlagHookline(true);
             setTimeout(() => {
