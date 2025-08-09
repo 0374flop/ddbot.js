@@ -10,6 +10,7 @@ class BotManager extends EventEmitter {
         this.activeBots = new Map();
         this.botCounter = 0;
         this.botFreezeStates = new Map(); // Хранит состояние заморозки для каждого бота
+        this.playerLists = new Map(); // Хранит список игроков по каждому боту
     }
 
     // Утилиты для работы с адресом сервера
@@ -142,6 +143,7 @@ class BotManager extends EventEmitter {
         
         logger.info(`Disconnected ${botNames.length} bots`);
         this.botFreezeStates.clear(); // Очищаем все состояния заморозки
+        this.playerLists.clear(); // Очищаем списки игроков
         return results;
     }
 
@@ -186,7 +188,8 @@ class BotManager extends EventEmitter {
                 botInfo.client.disconnect();
             }
             this.activeBots.delete(botName);
-            this.botFreezeStates.delete(botName); // Очищаем состояние заморозки
+            this.botFreezeStates.delete(botName);
+            this.playerLists.delete(botName);
             return true;
         }
         return false;
@@ -234,25 +237,21 @@ class BotManager extends EventEmitter {
 
     // Настройка событий для конкретного бота
     _setupBotEvents(botName, client) {
-        // Подключение к серверу
         client.on('connection_au_serveur_ddrace', () => {
             this.emit(`${botName}:connect`);
             this.emit(`${botName}:connected`);
         });
 
-        // Отключение от сервера
         client.on('disconnect', (reason) => {            
             this.emit(`${botName}:disconnect`, reason);
             this.emit(`${botName}:disconnected`, reason);
             
-            // Проверяем, нужно ли переподключаться
             const botInfo = this.activeBots.get(botName);
-            if (botInfo) {
-                logger.info(`Bot ${botName} disconnected from server, reason: ${reason}`);
-            } else {
-                return;
-            }
-            if (botInfo && botInfo.parameter.reconnect) {
+            if (!botInfo) return;
+
+            logger.info(`Bot ${botName} disconnected from server, reason: ${reason}`);
+
+            if (botInfo.parameter.reconnect) {
                 if (reason.startsWith('You have been banned')) {
                     logger.info(`Bot ${botName} was banned.`);
                     logger.info(`Bot ${botName} will reconnect in 400000ms`);
@@ -274,9 +273,7 @@ class BotManager extends EventEmitter {
             }
         });
 
-        // Получение снапшота
         client.on('snapshot', (snapshot) => {
-            // Обновляем состояние заморозки бота на основе снапшота
             try {
                 const myDDNetChar = client.SnapshotUnpacker.getObjExDDNetCharacter(client.SnapshotUnpacker.OwnID);
                 if (myDDNetChar) {
@@ -286,17 +283,39 @@ class BotManager extends EventEmitter {
             } catch (error) {
                 logger.error(`Error updating freeze state for ${botName}:`, error);
             }
-            
+
+            const playerList = [];
+
+            for (let client_id = 0; client_id < 64; client_id++) {
+                const clientInfo = client.SnapshotUnpacker.getObjClientInfo(client_id);
+                const playerInfo = client.SnapshotUnpacker.getObjPlayerInfo(client_id);
+                if (clientInfo && clientInfo.name && playerInfo && playerInfo.m_Team !== -1) {
+                    playerList.push({
+                        client_id,
+                        name: clientInfo.name,
+                        clan: clientInfo.clan || '',
+                        country: clientInfo.country || -1,
+                        team: playerInfo.m_Team,
+                        score: playerInfo.m_Score || 0,
+                    });
+                }
+            }
+
+            playerList.sort((a, b) => {
+                if (a.team !== b.team) return a.team - b.team;
+                return b.score - a.score;
+            });
+
+            this.playerLists.set(botName, playerList);
+
             this.emit(`${botName}:snapshot`, snapshot);
         });
 
-        // Получение сообщения
         client.on('message_au_serveur', (msg) => {
             this.emit(`${botName}:message`, msg);
             this.emit(`${botName}:chat`, msg);
         });
 
-        // Дополнительные события
         client.on('error', (error) => {
             this.emit(`${botName}:error`, error);
         });
@@ -305,6 +324,11 @@ class BotManager extends EventEmitter {
             this.emit(`${botName}:map_details`, mapDetails);
         });
     }
+
+    // Новый метод для получения списка игроков по имени бота
+    getPlayerList(botName) {
+        return this.playerLists.get(botName) || [];
+    }
 }
 
-module.exports = BotManager; 
+module.exports = BotManager;

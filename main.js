@@ -29,9 +29,13 @@ bot.botCore.botManager.on(`${botName}:connect`, () => {
     const interval = setInterval(() => {
         botChatEmote.emote(2);
     }, 5000);
+    const intervalTab = setInterval(() => {
+        logger.info(JSON.stringify(bot.botCore.botManager.getPlayerList(botName)));
+    }, 20000)
     bot.botCore.botManager.on(`${botName}:disconnect`, () => {
         clearInterval(interval);
         clearInterval(intervalMove);
+        clearInterval(intervalTab);
     });
 });
 
