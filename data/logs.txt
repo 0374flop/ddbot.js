@@ -779,3 +779,20 @@
 [2025-08-09T06:01:53.316Z] [INFO] [BotManager] Bot Towa1 disconnected successfully
 [2025-08-09T06:01:53.317Z] [INFO] [BotManager] Disconnected 1 bots
 [2025-08-09T06:01:53.317Z] [INFO] [Electron] Elecnton stopped
+[2025-08-09T16:45:09.273Z] [INFO] [Main] Main started
+[2025-08-09T16:45:09.278Z] [INFO] [BotManager] Creating bot: Towa1 on 45.141.57.22:8375
+[2025-08-09T16:45:29.343Z] [INFO] [BotManager] Bot Towa1 disconnected from server, reason: Timed Out. (no packets received for 18886ms)
+[2025-08-09T16:45:29.345Z] [INFO] [BotManager] Bot Towa1 will reconnect in 6000ms
+[2025-08-09T16:48:59.240Z] [INFO] [Main] Main started
+[2025-08-09T16:48:59.246Z] [INFO] [BotManager] Creating bot: Towa1 on 45.141.57.22:8375
+[2025-08-09T16:49:19.312Z] [INFO] [BotManager] Bot Towa1 disconnected from server, reason: Timed Out. (no packets received for 18905ms)
+[2025-08-09T16:49:19.314Z] [INFO] [BotManager] Bot Towa1 will reconnect in 6000ms
+[2025-08-09T16:49:26.175Z] [INFO] [Main] 'system' : 'Towa' entered and joined the game
+[2025-08-09T16:49:26.176Z] [INFO] [Main] 'system' : DDraceNetwork Mod. Version: 0.6.4, 19.4
+[2025-08-09T16:49:26.177Z] [INFO] [Main] 'system' : please visit DDNet.org or say /info and make sure to read our /rules
+[2025-08-09T16:49:26.190Z] [INFO] [Main] 'system' : Do you know someone who uses a bot? Please report them to the moderators.
+[2025-08-09T16:49:26.192Z] [INFO] [Main] 'system' : Welcome to DDraceNetwork!
+[2025-08-09T16:49:26.193Z] [INFO] [Main] 'system' : You can see other players. To disable this use DDNet client and type /showothers
+[2025-08-09T16:49:26.322Z] [INFO] [Main] 'system' : You can jump 0 times
+[2025-08-09T16:49:26.334Z] [INFO] [BotManager] Bot Towa1 connected successfully
+[2025-08-09T16:49:26.442Z] [INFO] [Main] 'Towa' : hii! :3

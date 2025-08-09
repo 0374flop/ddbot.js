@@ -7,6 +7,7 @@ const { connectAIToBot, disconnectAIFromBot } = require('./src/AI/core/BotConnec
 async function main() {
 const botName = await bot.botCore.botManager.createAndConnectBot('45.141.57.22:8375', 'Towa', {
         identity: {
+            name: "Towa",
             clan: "Towa Team",
             skin: "Astolfofinho",
             use_custom_color: 1,
