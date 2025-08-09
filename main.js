@@ -5,7 +5,7 @@ const logger = require('./src/logger').getLogger('Main');
 const { connectAIToBot, disconnectAIFromBot } = require('./src/AI/core/BotConnectpy');
 
 async function main() {
-const botName = await bot.botCore.botManager.createAndConnectBot('45.141.57.31:8308', 'Towa', {
+const botName = await bot.botCore.botManager.createAndConnectBot('45.141.57.22:8375', 'Towa', {
         identity: {
             clan: "Towa Team",
             skin: "Astolfofinho",
@@ -97,6 +97,11 @@ const intervalMove = setInterval(() => {
         }
     }
 }, Math.random() * 100);
+
+async function SayChat(message) {
+    const client = bot.botCore.botManager.getBotClient(botName);
+    client.game.Say(message)
+}
 
 async function exit() {
     logger.info('Shutting down...');
