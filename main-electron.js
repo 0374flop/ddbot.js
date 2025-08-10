@@ -36,7 +36,7 @@ async function main() {
         bot.botCore.botManager.on(`${botName}:disconnect`, () => {
             clearInterval(interval);
             clearInterval(intervalMove);
-            clearInterval(intervalTab);
+            // clearInterval(intervalTab);
         });
     });
 
