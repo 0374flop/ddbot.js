@@ -2,10 +2,11 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const bot = require('./src/bot/index');
 const map = require('./src/map/index');
+const { connectAIToBot, disconnectAIFromBot } = require('./src/AI/core/BotConnectpy');
 const logger = require('./src/logger').getLogger('Electron');
 
 async function main() {
-    const botName = await bot.botCore.botManager.createAndConnectBot('45.141.57.22:8375', 'Towa', {
+    const botName = await bot.botCore.botManager.createAndConnectBot('45.141.57.31:8308', 'Towa', {
         identity: {
             name: "Towa",
             clan: "Towa Team",
@@ -28,9 +29,9 @@ async function main() {
             botChatEmote.emote(2);
         }, 5000);
 
-        const intervalTab = setInterval(() => {
-            logger.info(JSON.stringify(bot.botCore.botManager.getPlayerList(botName)));
-        }, 20000);
+        // const intervalTab = setInterval(() => {
+        //     logger.info(JSON.stringify(bot.botCore.botManager.getPlayerList(botName)));
+        // }, 20000);
 
         bot.botCore.botManager.on(`${botName}:disconnect`, () => {
             clearInterval(interval);

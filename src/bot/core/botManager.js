@@ -273,7 +273,12 @@ class BotManager extends EventEmitter {
             }
         });
 
+
+        let da;
         client.on('snapshot', (snapshot) => {
+            if (!da) {
+                
+            }
             try {
                 const myDDNetChar = client.SnapshotUnpacker.getObjExDDNetCharacter(client.SnapshotUnpacker.OwnID);
                 if (myDDNetChar) {
@@ -296,7 +301,11 @@ class BotManager extends EventEmitter {
                         clan: clientInfo.clan || '',
                         country: clientInfo.country || -1,
                         team: playerInfo.m_Team,
-                        score: playerInfo.m_Score || 0,
+                        kords: {
+                            x: "",
+                            y: "",
+                            aim: ""
+                        }
                     });
                 }
             }
