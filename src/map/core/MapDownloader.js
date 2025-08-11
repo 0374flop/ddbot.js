@@ -1,14 +1,9 @@
 const fs = require("fs");
 const path = require("path");
 const https = require("https");
-const logger = require('../../logger').getLogger('MapDownloader');
 
 const MAPS_DIR = path.join(__dirname, "..", "..", "..", "data", "maps");
 const PARSED_DIR = path.join(__dirname, "..", "..", "..", "data", "parsed");
-
-function log(message) {
-  logger.info(message);
-}
 
 function ensureDirExists(dir) {
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
@@ -30,7 +25,6 @@ function fetchMapType(mapName) {
           const json = JSON.parse(rawData);
           const type = json.type.toLowerCase();
           if (json && type) {
-            log(`Fetched map type: ${type}`);
             resolve(type);
           } else {
             reject(new Error("Map type not found in response"));
@@ -46,14 +40,12 @@ function fetchMapType(mapName) {
 function downloadMap(mapName, type, MAPS_DIR_DM) {
   const filePath = path.join(MAPS_DIR_DM, `${mapName}.map`);
   if (fs.existsSync(filePath)) {
-    log(`Map "${mapName}" is already cached.`);
     return Promise.resolve(filePath);
   }
 
   const url = `https://raw.githubusercontent.com/ddnet/ddnet-maps/master/types/${type}/maps/${mapName}.map`;
 
   return new Promise((resolve, reject) => {
-    log(`Downloading map from: ${url}`);
     ensureDirExists(MAPS_DIR_DM);
     const fileStream = fs.createWriteStream(filePath);
     https.get(url, (res) => {
@@ -65,7 +57,6 @@ function downloadMap(mapName, type, MAPS_DIR_DM) {
       res.pipe(fileStream);
       fileStream.on("finish", () => {
         fileStream.close();
-        log(`Map "${mapName}" downloaded and cached.`);
         resolve(filePath);
       });
     }).on("error", (err) => {
@@ -98,13 +89,11 @@ function deleteMapFromCache(mapName) {
   const filePath = path.join(MAPS_DIR, `${mapName}.map`);
   if (fs.existsSync(filePath)) {
     fs.unlinkSync(filePath);
-    log(`Map "${mapName}" deleted from cache.`);
-  } else {
-    log(`Map "${mapName}" was not found in cache.`);
   }
 }
 
 module.exports = {
+  fetchMapType,
   loadMap,
   deleteMapFromCache,
   MAPS_DIR,

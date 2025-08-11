@@ -1,7 +1,5 @@
-// const map = require('../index');
 const bot = require('../../bot');
 
-// Хранилище для отслеживания уже зарегистрированных обработчиков
 const registeredHandlers = new Set();
 
 async function Automaploader(botName, mapLoader) {

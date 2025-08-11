@@ -1,16 +1,9 @@
 const { spawn } = require('child_process');
 const path = require('path');
 const fs = require('fs');
-const logger = require('../../logger').getLogger('pyFatherMap');
 
 function main(inputPath, outputPath) {
-    logger.info(`Parsing map from ${inputPath} to ${outputPath}`);
-
     const py = spawn('python', [path.join(__dirname, 'MapParser.py'), inputPath, outputPath]);
-
-    py.stderr.on('data', (data) => {
-        console.error(`[Python error]: ${data}`);
-    });
 }
 
 function ParseMap(inputPath, outputPath) {

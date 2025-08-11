@@ -2,7 +2,6 @@ const DDRaceBot = require('neiky-ddracebot.js');
 const EventEmitter = require('events');
 const BotMovement = require('./BotMovement');
 const BotChatEmote = require('./BotChat-emote');
-const logger = require('../../logger').getLogger('BotManager');
 
 class BotManager extends EventEmitter {
     constructor() {
@@ -36,13 +35,10 @@ class BotManager extends EventEmitter {
         const serverPort = this.getPort(fulladdress);
         
         if (!serverIp || !serverPort) {
-            logger.error('IP or port not specified');
             return null;
         }
 
         const uniqueBotName = this.generateUniqueBotName(botName);
-        logger.info(`Creating bot: ${uniqueBotName} on ${fulladdress}`);
-
         try {
             const identity = parameter.identity || {
                 clan: "",
@@ -88,7 +84,7 @@ class BotManager extends EventEmitter {
 
             return uniqueBotName;
         } catch (error) {
-            logger.error(`Failed to create bot ${uniqueBotName}:`, error);
+            // logger.error(`Failed to create bot ${uniqueBotName}:`, error);
             return null;
         }
     }
@@ -105,11 +101,9 @@ class BotManager extends EventEmitter {
             botInfo.client.joinDDRaceServer();
             botInfo.client.on('connection_au_serveur_ddrace', () => {
                 botInfo.isConnected = true;
-                logger.info(`Bot ${botName} connected successfully`);
             });
             return true;
         } catch (error) {
-            logger.error(`Failed to connect bot ${botName}:`, error);
             return false;
         }
     }
@@ -118,18 +112,15 @@ class BotManager extends EventEmitter {
     async disconnectBot(botName) {
         const botInfo = this.activeBots.get(botName);
         if (!botInfo) {
-            logger.error(`Bot ${botName} not found`);
             return false;
         }
 
         try {
             botInfo.client.Disconnect();
             botInfo.isConnected = false;
-            logger.info(`Bot ${botName} disconnected successfully`);
             this.removeBot(botName);
             return true;
         } catch (error) {
-            logger.error(`Failed to disconnect bot ${botName}:`, error);
             return false;
         }
     }
@@ -140,8 +131,6 @@ class BotManager extends EventEmitter {
         const results = await Promise.allSettled(
             botNames.map(botName => this.disconnectBot(botName))
         );
-        
-        logger.info(`Disconnected ${botNames.length} bots`);
         this.botFreezeStates.clear(); // Очищаем все состояния заморозки
         this.playerLists.clear(); // Очищаем списки игроков
         return results;
@@ -199,7 +188,6 @@ class BotManager extends EventEmitter {
     getBot(botName) {
         const botInfo = this.activeBots.get(botName);
         if (!botInfo) {
-            logger.error(`Bot ${botName} not found`);
             return null;
         }
 
@@ -249,8 +237,6 @@ class BotManager extends EventEmitter {
             const botInfo = this.activeBots.get(botName);
             if (!botInfo) return;
 
-            logger.info(`Bot ${botName} disconnected from server, reason: ${reason}`);
-
             if (botInfo.parameter.reconnect) {
                 if (reason.startsWith('You have been banned')) {
                     logger.info(`Bot ${botName} was banned.`);
@@ -259,13 +245,12 @@ class BotManager extends EventEmitter {
                         client.joinDDRaceServer();
                     }, 400000);
                 } else {
-                    let reconnectTime = 6000;
+                    let reconnectTime = 100;
                     if (reason.startsWith('Too many connections in a short time')) {
                         reconnectTime = 20000;
                     } else if (reason.startsWith('This server is full')) {
                         reconnectTime = 40000;
                     }
-                    logger.info(`Bot ${botName} will reconnect in ${reconnectTime}ms`);
                     setTimeout(() => {
                         client.joinDDRaceServer();
                     }, reconnectTime);
@@ -273,28 +258,32 @@ class BotManager extends EventEmitter {
             }
         });
 
-
-        let da;
         client.on('snapshot', (snapshot) => {
-            if (!da) {
-                
-            }
             try {
                 const myDDNetChar = client.SnapshotUnpacker.getObjExDDNetCharacter(client.SnapshotUnpacker.OwnID);
                 if (myDDNetChar) {
                     const isFrozen = myDDNetChar.m_FreezeEnd !== 0;
                     this.botFreezeStates.set(botName, isFrozen);
                 }
-            } catch (error) {
-                logger.error(`Error updating freeze state for ${botName}:`, error);
-            }
+            } catch (error) {}
 
             const playerList = [];
 
             for (let client_id = 0; client_id < 64; client_id++) {
                 const clientInfo = client.SnapshotUnpacker.getObjClientInfo(client_id);
                 const playerInfo = client.SnapshotUnpacker.getObjPlayerInfo(client_id);
+                const ddnetChar = client.SnapshotUnpacker.getObjExDDNetCharacter
+                    ? client.SnapshotUnpacker.getObjExDDNetCharacter(client_id)
+                    : null;
                 if (clientInfo && clientInfo.name && playerInfo && playerInfo.m_Team !== -1) {
+                    let x = "";
+                    let y = "";
+                    let aim = "";
+                    if (ddnetChar) {
+                        x = ddnetChar.m_X !== undefined ? ddnetChar.m_X : "";
+                        y = ddnetChar.m_Y !== undefined ? ddnetChar.m_Y : "";
+                        aim = ddnetChar.m_Angle !== undefined ? ddnetChar.m_Angle : "";
+                    }
                     playerList.push({
                         client_id,
                         name: clientInfo.name,
@@ -302,9 +291,9 @@ class BotManager extends EventEmitter {
                         country: clientInfo.country || -1,
                         team: playerInfo.m_Team,
                         kords: {
-                            x: "",
-                            y: "",
-                            aim: ""
+                            x,
+                            y,
+                            aim
                         }
                     });
                 }
@@ -333,8 +322,6 @@ class BotManager extends EventEmitter {
             this.emit(`${botName}:map_details`, mapDetails);
         });
     }
-
-    // Новый метод для получения списка игроков по имени бота
     getPlayerList(botName) {
         return this.playerLists.get(botName) || [];
     }

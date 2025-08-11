@@ -12,7 +12,7 @@ function loadParsedMap(mapName) {
     try {
       return JSON.parse(fs.readFileSync(parsedPath, 'utf8'));
     } catch (e) {
-      console.error(`[BotConnectpy] Ошибка чтения карты ${parsedPath}:`, e);
+      // removed console.error
     }
   }
   return null;
@@ -33,11 +33,7 @@ function connectAIToBot(botName) {
   const mapDetailsHandler = (mapDetails) => {
     if (!mapDetails || !mapDetails.name) return;
     parsedMap = loadParsedMap(mapDetails.name);
-    if (parsedMap) {
-      console.log(`[BotConnectpy] Parsed map loaded for bot ${botName}: ${mapDetails.name}`);
-    } else {
-      console.warn(`[BotConnectpy] Parsed map NOT FOUND for bot ${botName}: ${mapDetails.name}`);
-    }
+    // removed console.log and console.warn
   };
   bot.on('map_details', mapDetailsHandler);
   unsubFns.push(() => bot.off('map_details', mapDetailsHandler));
@@ -65,7 +61,7 @@ function connectAIToBot(botName) {
     try {
       cmd = JSON.parse(data);
     } catch (e) {
-      console.warn(`[BotConnectpy][${botName}] Не удалось распарсить ответ:`, data);
+      // removed console.warn
       return;
     }
     if (!cmd.action) return;
@@ -103,7 +99,7 @@ function connectAIToBot(botName) {
         actionMap[action]();
       }
     } else {
-      console.warn(`[BotConnectpy][${botName}] Неизвестная команда от ai.py:`, cmd);
+      // removed console.warn
     }
   });
 
