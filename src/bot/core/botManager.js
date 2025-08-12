@@ -1,5 +1,7 @@
 const DDRaceBot = require('neiky-ddracebot.js');
 const EventEmitter = require('events');
+const BotMovement = require('./BotMovement');
+const BotChatEmote = require('./BotChat-emote');
 
 class BotManager extends EventEmitter {
     constructor() {
@@ -39,7 +41,6 @@ class BotManager extends EventEmitter {
         const uniqueBotName = this.generateUniqueBotName(botName);
         try {
             const identity = parameter.identity || {
-                name: botName,
                 clan: "",
                 skin: "default",
                 use_custom_color: 0,
@@ -58,6 +59,10 @@ class BotManager extends EventEmitter {
 
             // Настраиваем события для бота
             this._setupBotEvents(uniqueBotName, client);
+
+            // Создаем объекты для управления движением и чатом
+            const movement = new BotMovement(client);
+            const chatEmote = new BotChatEmote(client);
 
             // Сохраняем информацию о боте
             this.activeBots.set(uniqueBotName, {
