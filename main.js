@@ -21,52 +21,68 @@ async function main() {
     const botClient = bot.getBotClient(botName);
 
     bot.on(`${botName}:connect`, () => {
-        const intervalemote = setInterval(() => {
-            botClient.game.Emote(2);
-        }, 5000);
+        function startemote(botClient, Emotenumber) {
+            const intervalemote = setInterval(() => {
+                botClient.game.Emote(Emotenumber);
+            }, 5000);
+            return intervalemote;
+        }
 
-        const intervalnameset = setInterval(() => {
-            const myclientid = botClient.SnapshotUnpacker.OwnID;
-            const me = bot.getPlayerList(botName).find(p => p.client_id === myclientid);
-            const mycurrentname = me.name;
-            if (mycurrentname !== identitybot.name) botClient.game.ChangePlayerInfo({...identitybot, name: identitybot.name});
-        }, 10000);
+        function startnameset(botClient, bot, identitybot) {
+            const intervalnameset = setInterval(() => {
+                const myclientid = botClient.SnapshotUnpacker.OwnID;
+                const me = bot.getPlayerList(botName).find(p => p.client_id === myclientid);
 
-        const lastMessages = new Map();
-        bot.on(`${botName}:message`, (msg) => {
-            if (!msg || typeof msg.message !== 'string') {
-                return;
-            }
+                if (!me) return;
 
-            const text = msg.message.trim();
-            const clientId = msg.client_id;
-            const team = msg.team;
-            const key = `${clientId}:${team}:${text}`;
-            const now = Date.now();
-
-            const utilisateur = msg.utilisateur?.InformationDuBot;
-            let autormsg = utilisateur?.name;
-            const lastMessage = lastMessages.get(key);
-            if (lastMessage && now - lastMessage.timestamp < 100) {
-                return;
-            }
-
-            lastMessages.set(key, { timestamp: now });
-
-            setTimeout(() => {
-                for (const [k, v] of lastMessages) {
-                    if (now - v.timestamp > 1000) {
-                        lastMessages.delete(k);
-                    }
+                 if (me.name !== identitybot.name) {
+                    botClient.game.ChangePlayerInfo({ ...identitybot, name: identitybot.name });
                 }
             }, 10000);
+            return intervalnameset;
+        }
 
-            let client_id = msg.client_id;
-            if (client_id === -1) {
-                autormsg = "system";
-            }
-            console.log(`'${autormsg}' : ${text}`);
-        });
+        async function startchatlistener(bot, botName) {
+            const lastMessages = new Map();
+            bot.on(`${botName}:message`, (msg) => {
+                if (!msg || typeof msg.message !== 'string') {
+                    return;
+                }
+
+                const text = msg.message.trim();
+                const clientId = msg.client_id;
+                const team = msg.team;
+                const key = `${clientId}:${team}:${text}`;
+                const now = Date.now();
+
+                const utilisateur = msg.utilisateur?.InformationDuBot;
+                let autormsg = utilisateur?.name;
+                const lastMessage = lastMessages.get(key);
+                if (lastMessage && now - lastMessage.timestamp < 100) {
+                    return;
+                }
+
+                lastMessages.set(key, { timestamp: now });
+
+                setTimeout(() => {
+                    for (const [k, v] of lastMessages) {
+                        if (now - v.timestamp > 1000) {
+                            lastMessages.delete(k);
+                        }
+                    }
+                }, 10000);
+
+                let client_id = msg.client_id;
+                if (client_id === -1) {
+                    autormsg = "system";
+                }
+                console.log(`'${autormsg}' : ${text}`);
+            });
+        }
+
+        const intervalemote = startemote(botClient, 12);
+        const intervalnameset = startnameset(botClient, bot, identitybot);
+        startchatlistener(bot, botName);
 
         bot.on(`${botName}:disconnect`, () => {
             clearInterval(intervalemote);
