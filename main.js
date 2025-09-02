@@ -41,6 +41,10 @@ async function main() {
             }, 10000);
             return intervalnameset;
         }
+        
+        let sync = false;
+        let intervalemote = startemote(botClient, 2);
+        let intervalnameset = startnameset(botClient, bot, identitybot);
 
         async function startchatlistener(bot, botName) {
             const lastMessages = new Map();
@@ -77,11 +81,15 @@ async function main() {
                     autormsg = "system";
                 }
                 console.log(`'${autormsg}' : ${text}`);
+
+                if (text.includes(identitybot.name) && text.includes('%syncE')) {
+                    sync = true;
+                    if (intervalemote) clearInterval(intervalemote);
+                    intervalemote = startemote(botClient, 2);
+                }
             });
         }
 
-        const intervalemote = startemote(botClient, 12);
-        const intervalnameset = startnameset(botClient, bot, identitybot);
         startchatlistener(bot, botName);
 
         bot.on(`${botName}:disconnect`, () => {
@@ -89,6 +97,25 @@ async function main() {
             clearInterval(intervalMove);
             clearInterval(intervalnameset);
         });
+
+        function findbot2(botName, identitybot) {
+            const players = bot.getPlayerList(botName);
+
+            return players.some(player =>
+                player.clan === identitybot.clan &&
+                player.skin === identitybot.skin &&
+                player.name.includes(identitybot.name) &&
+                player.name !== identitybot.name
+            );
+        }
+        
+        setInterval(() => {
+            if (findbot2(botName, identitybot) && !sync) {
+                botClient.game.Say(botName+'%syncE');
+            } if (!findbot2(botName, identitybot)) {
+                sync = false;
+            }
+        }, 60000);
     });
 
     let x = 100;
