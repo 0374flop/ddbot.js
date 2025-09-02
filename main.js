@@ -3,16 +3,18 @@ const { bot, autosendmessage } = require('./src/bot/index');
 async function main() {
     console.log('Main started');
 
+    const identitybot = {
+        name: "Towa",
+        clan: "Towa Team",
+        skin: "Astolfofinho",
+        use_custom_color: 1,
+        color_body: 16711680,
+        color_feet: 16711680,
+        country: -1
+    };
+
     const botName = await bot.createAndConnectBot('57.128.201.180:8316', 'Towa', {
-        identity: {
-            name: "Towa",
-            clan: "Towa Team",
-            skin: "Astolfofinho",
-            use_custom_color: 1,
-            color_body: 16711680,
-            color_feet: 16711680,
-            country: -1
-        },
+        identity: identitybot,
         reconnect: true
     });
 
@@ -22,6 +24,13 @@ async function main() {
         const intervalemote = setInterval(() => {
             botClient.game.Emote(2);
         }, 5000);
+
+        const intervalnameset = setInterval(() => {
+            const myclientid = botClient.SnapshotUnpacker.OwnID;
+            const me = bot.getPlayerList(botName).find(p => p.client_id === myclientid);
+            const mycurrentname = me.name;
+            if (mycurrentname !== identitybot.name) botClient.game.ChangePlayerInfo({...identitybot, name: identitybot.name});
+        }, 10000);
 
         const lastMessages = new Map();
         bot.on(`${botName}:message`, (msg) => {
@@ -62,6 +71,7 @@ async function main() {
         bot.on(`${botName}:disconnect`, () => {
             clearInterval(intervalemote);
             clearInterval(intervalMove);
+            clearInterval(intervalnameset);
         });
     });
 
@@ -91,6 +101,7 @@ async function main() {
 
     async function exit() {
         console.log('Shutting down...');
+        console.log('disconnecting...');
         await bot.disconnectAllBots();
         console.log('Main stopped');
         process.exit(0);
@@ -99,7 +110,6 @@ async function main() {
     process.on('SIGINT', () => {
         exit();
     });
-
 }
 
 main();
