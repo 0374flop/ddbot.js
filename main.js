@@ -1,11 +1,7 @@
-const bot = require('./src/bot/index');
-const map = require('./src/map/index');
-const path = require('path');
-const logger = require('./src/logger').getLogger('Main');
-const { connectAIToBot, disconnectAIFromBot } = require('./src/AI/core/BotConnectpy');
+const { bot, autosendmessage } = require('./src/bot/index');
 
 async function main() {
-const botName = await bot.botCore.botManager.createAndConnectBot('45.141.57.22:8375', 'Towa', {
+const botName = await bot.createAndConnectBot('45.141.57.31:8333', 'Towa', {
         identity: {
             name: "Towa",
             clan: "Towa Team",
@@ -19,36 +15,22 @@ const botName = await bot.botCore.botManager.createAndConnectBot('45.141.57.22:8
     }
 )
 
-const botClient = bot.botCore.botManager.getBotClient(botName)
+const botClient = bot.getBotClient(botName)
 
-const botMovement = new bot.botCore.BotMovement(botClient);
-const botChatEmote = new bot.botCore.BotChatEmote(botClient);
-
-bot.botFeatures.autoSendConnect(botName, "hii! :3");
-
-bot.botCore.botManager.on(`${botName}:connect`, () => {
-    const interval = setInterval(() => {
-        botChatEmote.emote(2);
+bot.on(`${botName}:connect`, () => {
+    const intervalemote = setInterval(() => {
+        botClient.game.Emote(2);
     }, 5000);
-    const intervalTab = setInterval(() => {
-        logger.info(JSON.stringify(bot.botCore.botManager.getPlayerList(botName)));
-    }, 20000)
-    bot.botCore.botManager.on(`${botName}:disconnect`, () => {
-        clearInterval(interval);
+    bot.on(`${botName}:disconnect`, () => {
+        clearInterval(intervalemote);
         clearInterval(intervalMove);
-        clearInterval(intervalTab);
+        clearInterval(intervalTab2);
     });
 });
 
 const lastMessages = new Map();
 
-try{
-    // map.Automaploader(botName, map.mapLoader)
-} catch (e) {
-    logger.error(e)
-}
-
-bot.botCore.botManager.on(`${botName}:message`, (msg) => {
+bot.on(`${botName}:message`, (msg) => {
     if (!msg || typeof msg.message !== 'string') {
         return;
     }
@@ -68,7 +50,7 @@ bot.botCore.botManager.on(`${botName}:message`, (msg) => {
 
     const utilisateur = msg.utilisateur?.InformationDuBot;
     let autormsg = utilisateur?.name || "system";
-    logger.info(`'${autormsg}' : ${text}`);
+    console.log(`'${autormsg}' : ${text}`);
 
     setTimeout(() => {
         for (const [k, v] of lastMessages) {
@@ -79,6 +61,13 @@ bot.botCore.botManager.on(`${botName}:message`, (msg) => {
     }, 10000);
 });
 
+const intervalTab2 = setInterval(() => {
+    const playerList = bot.getPlayerList(botName);
+    const playerListnames = playerList.map(p => p.name);
+    autosendmessage.setlist(playerListnames);
+}, 1000);
+
+autosendmessage.OnMessage(bot, botName)
 let x = 100;
 let direction = -1;
 const intervalMove = setInterval(() => {
@@ -88,7 +77,7 @@ const intervalMove = setInterval(() => {
     } else if (x >= 100) {
         direction = -1;
     }
-    if (bot.botCore.botManager.isBotConnected(botName) && bot.botCore.botManager.isFreezeBot(botName)) {
+    if (bot.isBotConnected(botName) && bot.isFreezeBot(botName)) {
         if (botClient && botClient.movement) {
             botClient.movement.FlagHookline(true);
             setTimeout(() => {
@@ -100,14 +89,13 @@ const intervalMove = setInterval(() => {
 }, Math.random() * 100);
 
 async function SayChat(message) {
-    const client = bot.botCore.botManager.getBotClient(botName);
-    client.game.Say(message)
+    botClient.game.Say(message)
 }
 
 async function exit() {
-    logger.info('Shutting down...');
-    await bot.botCore.botManager.disconnectAllBots();
-    logger.info('Main stopped');
+    console.log('Shutting down...');
+    await bot.disconnectAllBots();
+    console.log('Main stopped');
     process.exit(0);
 }
 
@@ -117,5 +105,5 @@ process.on('SIGINT', () => {
 
 }
 
-logger.info('Main started');
+console.log('Main started');
 main();

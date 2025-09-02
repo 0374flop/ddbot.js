@@ -1,7 +1,5 @@
 const DDRaceBot = require('neiky-ddracebot.js');
 const EventEmitter = require('events');
-const BotMovement = require('./BotMovement');
-const BotChatEmote = require('./BotChat-emote');
 
 class BotManager extends EventEmitter {
     constructor() {
@@ -52,23 +50,12 @@ class BotManager extends EventEmitter {
                 identity: identity
             });
 
-            // Увеличиваем лимит слушателей
-            if (client.socket) {
-                client.socket.setMaxListeners(20);
-            }
-
             // Настраиваем события для бота
             this._setupBotEvents(uniqueBotName, client);
-
-            // Создаем объекты для управления движением и чатом
-            const movement = new BotMovement(client);
-            const chatEmote = new BotChatEmote(client);
 
             // Сохраняем информацию о боте
             this.activeBots.set(uniqueBotName, {
                 client,
-                movement,
-                chatEmote,
                 fulladdress,
                 originalName: botName,
                 parameter,
@@ -84,7 +71,6 @@ class BotManager extends EventEmitter {
 
             return uniqueBotName;
         } catch (error) {
-            // logger.error(`Failed to create bot ${uniqueBotName}:`, error);
             return null;
         }
     }
@@ -93,7 +79,6 @@ class BotManager extends EventEmitter {
     async connectBot(botName) {
         const botInfo = this.activeBots.get(botName);
         if (!botInfo) {
-            logger.error(`Bot ${botName} not found`);
             return false;
         }
 
@@ -233,28 +218,24 @@ class BotManager extends EventEmitter {
         client.on('disconnect', (reason) => {            
             this.emit(`${botName}:disconnect`, reason);
             this.emit(`${botName}:disconnected`, reason);
-            
             const botInfo = this.activeBots.get(botName);
             if (!botInfo) return;
 
             if (botInfo.parameter.reconnect) {
+                let reconnectTime = 10000;
                 if (reason.startsWith('You have been banned')) {
-                    logger.info(`Bot ${botName} was banned.`);
-                    logger.info(`Bot ${botName} will reconnect in 400000ms`);
-                    setTimeout(() => {
-                        client.joinDDRaceServer();
-                    }, 400000);
-                } else {
-                    let reconnectTime = 100;
-                    if (reason.startsWith('Too many connections in a short time')) {
-                        reconnectTime = 20000;
-                    } else if (reason.startsWith('This server is full')) {
-                        reconnectTime = 40000;
+                    if (reason.startsWith('You have been banned for 5 minutes (Banned by vote)')) {
+                        reconnectTime = 300000;
+                    } else {
+                        reconnectTime = 1000000;
                     }
-                    setTimeout(() => {
-                        client.joinDDRaceServer();
-                    }, reconnectTime);
+                } 
+                if (reason.startsWith('Too many connections in a short time')) {
+                    reconnectTime = 20000;
                 }
+                setTimeout(() => {
+                    client.joinDDRaceServer();
+                }, reconnectTime);
             }
         });
 
@@ -275,36 +256,22 @@ class BotManager extends EventEmitter {
                 const ddnetChar = client.SnapshotUnpacker.getObjExDDNetCharacter
                     ? client.SnapshotUnpacker.getObjExDDNetCharacter(client_id)
                     : null;
+            
                 if (clientInfo && clientInfo.name && playerInfo && playerInfo.m_Team !== -1) {
-                    let x = "";
-                    let y = "";
-                    let aim = "";
-                    if (ddnetChar) {
-                        x = ddnetChar.m_X !== undefined ? ddnetChar.m_X : "";
-                        y = ddnetChar.m_Y !== undefined ? ddnetChar.m_Y : "";
-                        aim = ddnetChar.m_Angle !== undefined ? ddnetChar.m_Angle : "";
-                    }
                     playerList.push({
                         client_id,
-                        name: clientInfo.name,
-                        clan: clientInfo.clan || '',
-                        country: clientInfo.country || -1,
-                        team: playerInfo.m_Team,
-                        kords: {
-                            x,
-                            y,
-                            aim
-                        }
+                        name: clientInfo.name, // имя
+                        clan: clientInfo.clan || '', // клан
+                        country: clientInfo.country || -1, // страна
+                        team: playerInfo.m_Team, // тима
+                        skin: clientInfo.skin || 'default', // имя скина игрока
+                        x: ddnetChar ? ddnetChar.m_X : null, // координата X
+                        y: ddnetChar ? ddnetChar.m_Y : null  // координата Y
                     });
                 }
             }
-
-            playerList.sort((a, b) => {
-                if (a.team !== b.team) return a.team - b.team;
-                return b.score - a.score;
-            });
-
-            this.playerLists.set(botName, playerList);
+            
+            this.playerLists.set(botName, playerList);            
 
             this.emit(`${botName}:snapshot`, snapshot);
         });

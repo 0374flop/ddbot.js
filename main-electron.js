@@ -1,12 +1,8 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
-const bot = require('./src/bot/index');
-const map = require('./src/map/index');
-const { connectAIToBot, disconnectAIFromBot } = require('./src/AI/core/BotConnectpy');
-const logger = require('./src/logger').getLogger('Electron');
 
 async function main() {
-    const botName = await bot.botCore.botManager.createAndConnectBot('45.141.57.31:8308', 'Towa', {
+    const botName = await bot.createAndConnectBot('45.141.57.31:8333', 'Towa', {
         identity: {
             name: "Towa",
             clan: "Towa Team",
@@ -19,36 +15,35 @@ async function main() {
         reconnect: true
     });
 
-    const botClient = bot.botCore.botManager.getBotClient(botName);
-    const botChatEmote = new bot.botCore.BotChatEmote(botClient);
+    const botClient = bot.getBotClient(botName);
 
-    bot.botFeatures.autoSendConnect(botName, "hii! :3");
-
-    bot.botCore.botManager.on(`${botName}:connect`, () => {
+    bot.on(`${botName}:connect`, () => {
+        const players = JSON.stringify(bot.getPlayerList(botName));
+        const players2 = JSON.stringify(JSON.parse(players, null, 2))
+        console.log('подключился, игроки: ' + players2)
         const interval = setInterval(() => {
-            botChatEmote.emote(2);
+            botClient.game.Emote(3);
         }, 5000);
 
         // const intervalTab = setInterval(() => {
-        //     logger.info(JSON.stringify(bot.botCore.botManager.getPlayerList(botName)));
+        //     logger.info(JSON.stringify(bot.getPlayerList(botName)));
         // }, 20000);
 
-        bot.botCore.botManager.on(`${botName}:disconnect`, () => {
+        bot.on(`${botName}:disconnect`, () => {
             clearInterval(interval);
             clearInterval(intervalMove);
             // clearInterval(intervalTab);
         });
     });
 
+    bot.on(`${botName}:disconnect`, (response) => {
+        console.log('одключился ' + response)
+    });
+    autosendmessage.OnMessage(bot, botName, ['PENIS', 'HUI']);
+
     const lastMessages = new Map();
 
-    try {
-        // map.Automaploader(botName, map.mapLoader)
-    } catch (e) {
-        logger.error(e);
-    }
-
-    bot.botCore.botManager.on(`${botName}:message`, (msg) => {
+    bot.on(`${botName}:message`, (msg) => {
         if (!msg || typeof msg.message !== 'string') {
             return;
         }
@@ -68,7 +63,7 @@ async function main() {
 
         const utilisateur = msg.utilisateur?.InformationDuBot;
         let autormsg = utilisateur?.name || "system";
-        logger.info(`'${autormsg}' : ${text}`);
+        console.log(`'${autormsg}' : ${text}`);
 
         setTimeout(() => {
             for (const [k, v] of lastMessages) {
@@ -89,8 +84,8 @@ async function main() {
             direction = -1;
         }
         if (
-            bot.botCore.botManager.isBotConnected(botName) &&
-            bot.botCore.botManager.isFreezeBot(botName)
+            bot.isBotConnected(botName) &&
+            bot.isFreezeBot(botName)
         ) {
             if (botClient && botClient.movement) {
                 botClient.movement.FlagHookline(true);
@@ -103,14 +98,12 @@ async function main() {
     }, Math.random() * 100);
 
     async function SayChat(message) {
-        const client = bot.botCore.botManager.getBotClient(botName);
+        const client = bot.getBotClient(botName);
         client.game.Say(message);
     }
 
     async function exit() {
-        logger.info('Shutting down...');
-        await bot.botCore.botManager.disconnectAllBots();
-        logger.info('Elecnton stopped');
+        await bot.disconnectAllBots();
         process.exit(0);
     }
 
@@ -136,5 +129,4 @@ async function main() {
     app.whenReady().then(createWindow);
 }
 
-logger.info('Electron started')
 main();

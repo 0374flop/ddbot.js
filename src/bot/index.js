@@ -1,7 +1,5 @@
-const botCore = require('./index-core');
-const botFeatures = require('./index-features');
+const BotManager = require('./bot');
+const bot = new BotManager();
+const autosendmessage = require('./autosendmessage');
 
-module.exports = {
-    botCore,
-    botFeatures
-};
+module.exports = { bot, autosendmessage };
