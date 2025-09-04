@@ -215,9 +215,7 @@ class BotManager extends EventEmitter {
             this.emit(`${botName}:connected`);
         });
 
-        client.on('disconnect', (reason) => {            
-            this.emit(`${botName}:disconnect`, reason);
-            this.emit(`${botName}:disconnected`, reason);
+        client.on('disconnect', (reason) => {
             const botInfo = this.activeBots.get(botName);
             if (!botInfo) return;
 
@@ -229,10 +227,14 @@ class BotManager extends EventEmitter {
                     } else {
                         reconnectTime = 1000000;
                     }
-                } 
-                if (reason.startsWith('Too many connections in a short time')) {
+                } else if (reason.startsWith('Too many connections in a short time')) {
                     reconnectTime = 20000;
+                } else if (reason.startsWith('Timed Out. (no packets received for ')) {
+                    reconnectTime = 1000;
                 }
+                
+                this.emit(`${botName}:disconnect`, reason, reconnectTime);
+                this.emit(`${botName}:disconnected`, reason, reconnectTime);
                 setTimeout(() => {
                     client.joinDDRaceServer();
                 }, reconnectTime);
