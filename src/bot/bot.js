@@ -241,45 +241,48 @@ class BotManager extends EventEmitter {
             }
         });
 
-        client.on('snapshot', (snapshot) => {
-            try {
-                const myDDNetChar = client.SnapshotUnpacker.getObjExDDNetCharacter(client.SnapshotUnpacker.OwnID);
-                if (myDDNetChar) {
-                    const isFrozen = myDDNetChar.m_FreezeEnd !== 0;
-                    this.botFreezeStates.set(botName, isFrozen);
-                }
-            } catch (error) {}
+client.on('snapshot', (snapshot) => {
+    try {
+        const myDDNetChar = client.SnapshotUnpacker.getObjExDDNetCharacter(client.SnapshotUnpacker.OwnID);
+        if (myDDNetChar) {
+            const isFrozen = myDDNetChar.m_FreezeEnd !== 0;
+            this.botFreezeStates.set(botName, isFrozen);
+        }
+    } catch (error) {}
+    const oldList = this.playerLists.get(botName) || [];
+    const playerMap = new Map(oldList.map(p => [p.client_id, p]));
 
-            const playerList = [];
+    // Обновляем данные по каждому игроку
+    for (let client_id = 0; client_id < 64; client_id++) {
+        const clientInfo = client.SnapshotUnpacker.getObjClientInfo(client_id);
+        const playerInfo = client.SnapshotUnpacker.getObjPlayerInfo(client_id);
+        const ddnetChar = client.SnapshotUnpacker.getObjExDDNetCharacter
+            ? client.SnapshotUnpacker.getObjExDDNetCharacter(client_id)
+            : null;
 
-            for (let client_id = 0; client_id < 64; client_id++) {
-                const clientInfo = client.SnapshotUnpacker.getObjClientInfo(client_id);
-                const playerInfo = client.SnapshotUnpacker.getObjPlayerInfo(client_id);
-                const ddnetChar = client.SnapshotUnpacker.getObjExDDNetCharacter
-                    ? client.SnapshotUnpacker.getObjExDDNetCharacter(client_id)
-                    : null;
-            
-                if (clientInfo && clientInfo.name && playerInfo && playerInfo.m_Team !== -1) {
-                    playerList.push({
-                        client_id,
-                        name: clientInfo.name, // имя
-                        clan: clientInfo.clan || '', // клан
-                        country: clientInfo.country || -1, // страна
-                        team: playerInfo.m_Team, // тима
-                        skin: clientInfo.skin || 'default', // имя скина игрока
-                        x: ddnetChar ? ddnetChar.m_X : null, // координата X
-                        y: ddnetChar ? ddnetChar.m_Y : null  // координата Y
-                    });
-                }
-            }
-            
-            this.playerLists.set(botName, playerList);            
+        if (clientInfo && clientInfo.name && playerInfo && playerInfo.m_Team !== -1) {
+            playerMap.set(client_id, {
+                client_id,
+                name: clientInfo.name,
+                clan: clientInfo.clan || '',
+                country: clientInfo.country || -1,
+                team: playerInfo.m_Team,
+                skin: clientInfo.skin || 'default',
+                x: ddnetChar ? ddnetChar.m_X : null,
+                y: ddnetChar ? ddnetChar.m_Y : null
+            });
+        }
+    }
 
-            this.emit(`${botName}:snapshot`, snapshot);
-        });
+    // Обновляем общий список
+    this.playerLists.set(botName, Array.from(playerMap.values()));
+
+    this.emit(`${botName}:snapshot`, snapshot);
+});
+
 
         let s = new Set(); // сет
-        const chatinterval = setInterval(() => s.clear(), 5000); // чистка
+        const chatinterval = setInterval(() => s.clear(), 1000); // чистка
         client.on('message_au_serveur', (msg) => {
             this.emit(`${botName}:message`, msg); // Сырое сообщение, без фильтрации
 
