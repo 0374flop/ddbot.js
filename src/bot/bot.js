@@ -200,7 +200,6 @@ class BotManager extends EventEmitter {
 
     // Получение объекта бота с событиями
     getBot(botName) {
-        logDebug('getBot called with botName:', botName);
         const botInfo = this.activeBots.get(botName);
         if (!botInfo) {
             return null;
@@ -210,8 +209,6 @@ class BotManager extends EventEmitter {
         const bot = {
             name: botName,
             client: botInfo.client,
-            movement: botInfo.movement,
-            chat: botInfo.chatEmote,
             info: botInfo,
             
             // Методы для работы с событиями
@@ -264,13 +261,13 @@ class BotManager extends EventEmitter {
                 clearInterval(chatinterval);
             }
 
-            if (botInfo.parameter.reconnect && reason && botInfo.parameter.reconnectamperts>0 || botInfo.parameter.reconnectamperts===-1) {
-                if (botInfo.parameter.reconnectamperts!==-1)botInfo.parameter.reconnectamperts--;
+            if (botInfo.parameter.reconnect && reason && (botInfo.parameter.reconnectAttempts>0 || botInfo.parameter.reconnectAttempts===-1)) {
+                if (botInfo.parameter.reconnectAttempts!==-1)botInfo.parameter.reconnectAttempts--;
 
                 let reconnectTime = 10000;
                 if (reason.startsWith('You have been banned')) {
                     if (reason.startsWith('You have been banned for 5 minutes (Banned by vote)')) {
-                        reconnectTime = 301000;
+                        reconnectTime = 300000;
                     } else {
                         reconnectTime = 1000000;
                     }
@@ -280,7 +277,11 @@ class BotManager extends EventEmitter {
                     reconnectTime = 500;
                 }
 
-                if (botInfo.randreconnect) reconnectTime = random(reconnectTime, reconnectTime + 1000);
+                if (botInfo.parameter.randreconnect) {
+                    const randomtime = random(reconnectTime, reconnectTime+random(100, 1000));
+                    reconnectTime = randomtime;
+                    logDebug('Randomized reconnect time to:', reconnectTime);
+                }
 
                 this.emit(`${botName}:disconnect`, reason, reconnectTime);
                 this.emit(`${botName}:disconnected`, reason, reconnectTime);
@@ -304,29 +305,36 @@ class BotManager extends EventEmitter {
                 const isFrozen = myDDNetChar.m_FreezeEnd !== 0;
                 this.botFreezeStates.set(botName, isFrozen);
             }
-            } catch (error) {}
-            const oldList = this.playerLists.get(botName) || [];
-            const playerMap = new Map(oldList.map(p => [p.client_id, p]));
+            } catch (error) {
+                logDebug('Error processing snapshot for botName:', botName, error);
+            }
 
-            for (let client_id = 0; client_id < 64; client_id++) {
-                const clientInfo = client.SnapshotUnpacker.getObjClientInfo(client_id);
-                const playerInfo = client.SnapshotUnpacker.getObjPlayerInfo(client_id);
-                const ddnetChar = client.SnapshotUnpacker.getObjExDDNetCharacter
-                    ? client.SnapshotUnpacker.getObjExDDNetCharacter(client_id)
-                    : null;
+            try {
+                const oldList = this.playerLists.get(botName) || [];
+                const playerMap = new Map(oldList.map(p => [p.client_id, p]));
 
-                if (clientInfo && clientInfo.name && playerInfo && playerInfo.m_Team !== -1) {
-                    playerMap.set(client_id, {
-                        client_id,
-                        name: clientInfo.name,
-                        clan: clientInfo.clan || '',
-                        country: clientInfo.country || -1,
-                        team: playerInfo.m_Team,
-                        skin: clientInfo.skin || 'default',
-                        x: ddnetChar ? ddnetChar.m_X : null,
-                        y: ddnetChar ? ddnetChar.m_Y : null
-                    });
+                for (let client_id = 0; client_id < 64; client_id++) {
+                    const clientInfo = client.SnapshotUnpacker.getObjClientInfo(client_id);
+                    const playerInfo = client.SnapshotUnpacker.getObjPlayerInfo(client_id);
+                    const ddnetChar = client.SnapshotUnpacker.getObjExDDNetCharacter
+                        ? client.SnapshotUnpacker.getObjExDDNetCharacter(client_id)
+                        : null;
+
+                    if (clientInfo && clientInfo.name && playerInfo && playerInfo.m_Team !== -1) {
+                        playerMap.set(client_id, {
+                            client_id,
+                            name: clientInfo.name,
+                            clan: clientInfo.clan || '',
+                            country: clientInfo.country || -1,
+                            team: playerInfo.m_Team,
+                            skin: clientInfo.skin || 'default',
+                            x: ddnetChar ? ddnetChar.m_X : null,
+                            y: ddnetChar ? ddnetChar.m_Y : null
+                        });
+                    }
                 }
+            } catch (error) {
+                logDebug('Error updating player list for botName:', botName, error);
             }
 
             this.playerLists.set(botName, Array.from(playerMap.values()));
