@@ -352,7 +352,7 @@ class BotManager extends EventEmitter {
             const msgraw = msg; // ориг для чата на всякий
             const text = msg.message; // само сообщение
             const client_id = msg.client_id; // айди отправителя
-            const autormsg = msg.client_id === -1 ? "system" : this.getPlayerName(botName, client_id) || msg.utilisateur.InformationDuBot.name; // имя отправителя
+            const autormsg = msg.client_id === -1 ? "system" : this.getPlayerName(botName, client_id) || (msg.utilisateur?.InformationDuBot?.name || null) // имя отправителя
             const team = msg.team; // команда отправителя
 
             // фильтрация дубликатов сообщений
