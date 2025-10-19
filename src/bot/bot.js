@@ -278,14 +278,25 @@ class BotManager extends EventEmitter {
             this.emit(`${botName}:snapshot`, snapshot);
         });
 
-        let s = new Set();
-        const chatinterval = setInterval(() => s.clear(), 5000);
+        let s = new Set(); // сет
+        const chatinterval = setInterval(() => s.clear(), 5000); // чистка
         client.on('message_au_serveur', (msg) => {
-            this.emit(`${botName}:message`, msg);
-            const key = `${msg.client_id}:${msg.message}:${msg.team}`;
+            this.emit(`${botName}:message`, msg); // Сырое сообщение, без фильтрации
+
+            const msgraw = msg; // ориг для чата на всякий
+            const text = msg.message; // само сообщение
+            const client_id = msg.client_id; // айди отправителя
+            const autormsg = msg.client_id === -1 ? "system" : this.getPlayerName(msg.client_id); // имя отправителя
+            const team = msg.team; // команда отправителя
+
+            // фильтрация дубликатов сообщений
+            const key = `${client_id}:${text}:${team}`;
             if (s.has(key)) return;
             s.add(key);
-            this.emit(`${botName}:chat`, msg);
+
+            // емитим.
+            if (client_id !== -1) this.emit(`${botName}:ChatNoSystem`, msgraw, autormsg, text, team, client_id); // все только без системы или сервера
+            this.emit(`${botName}:ChatRaw`, msgraw, autormsg, text, team, client_id); // все сообщения
         });
 
         client.on('error', (error) => {
@@ -298,6 +309,11 @@ class BotManager extends EventEmitter {
     }
     getPlayerList(botName) {
         return this.playerLists.get(botName) || [];
+    }
+    getPlayerName(botName, clientId) {
+        const playerList = this.getPlayerList(botName);
+        const player = playerList.find(p => p.client_id === clientId);
+        return player ? player.name : null;
     }
 }
 
