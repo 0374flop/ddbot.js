@@ -5,7 +5,7 @@
   "name": "ddbot",
   "version": "1.0.0",
   "description": "ddbot.js — это Node.js проект для автоматизации и управления ботами, а также работы с картами и логами.",
-  "main": "main.js",
+  "main": "./src/bot/bot.js",
   "scripts": {
     "run-electron": "node main-electron.js",
     "start": "node main.js",
