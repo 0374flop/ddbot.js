@@ -1,6 +1,23 @@
 const DDRaceBot = require('neiky-ddracebot.js');
 const EventEmitter = require('events');
 
+let isDebug = false;
+let islog = true;
+function logDebug(...args) {
+    const prefix = '[BotManager] ';
+    if (isDebug) {
+        if (islog) {
+            console.log(prefix, ...args);
+        } else {
+            console.debug(prefix, ...args);
+        }
+    }
+}
+
+function random(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 class BotManager extends EventEmitter {
     constructor() {
         super();
@@ -8,6 +25,11 @@ class BotManager extends EventEmitter {
         this.botCounter = 0;
         this.botFreezeStates = new Map(); // Хранит состояние заморозки для каждого бота
         this.playerLists = new Map(); // Хранит список игроков по каждому боту
+    }
+
+    setDebugMode(status) {
+        isDebug = status;
+        return isDebug;
     }
 
     // Утилиты для работы с адресом сервера
@@ -23,12 +45,16 @@ class BotManager extends EventEmitter {
 
     // Генерация уникального имени бота
     generateUniqueBotName(baseName) {
+        logDebug('generateUniqueBotName called with baseName:', baseName);
         this.botCounter++;
-        return `${baseName}${this.botCounter}`;
+        const name = `${baseName}${this.botCounter}`;
+        logDebug('Generated unique bot name:', name);
+        return name;
     }
 
     // Создание и подключение бота
     async createAndConnectBot(fulladdress, botName, parameter = {}) {
+        logDebug('createAndConnectBot called with:', fulladdress, botName, parameter);
         const serverIp = this.getIP(fulladdress);
         const serverPort = this.getPort(fulladdress);
         
@@ -46,6 +72,7 @@ class BotManager extends EventEmitter {
                 color_feet: 0,
                 country: 0
             };
+            logDebug('creating bot client');
             const client = new DDRaceBot.Client(serverIp, serverPort, botName, { 
                 identity: identity
             });
@@ -54,6 +81,7 @@ class BotManager extends EventEmitter {
             this._setupBotEvents(uniqueBotName, client);
 
             // Сохраняем информацию о боте
+            logDebug('storing bot info');
             this.activeBots.set(uniqueBotName, {
                 client,
                 fulladdress,
@@ -64,6 +92,7 @@ class BotManager extends EventEmitter {
             });
 
             // Инициализируем состояние заморозки
+            logDebug('initializing freeze state');
             this.botFreezeStates.set(uniqueBotName, false);
 
             // Подключаемся к серверу
@@ -77,16 +106,13 @@ class BotManager extends EventEmitter {
 
     // Подключение бота
     async connectBot(botName) {
+        logDebug('connectBot called with botName:', botName);
         const botInfo = this.activeBots.get(botName);
         if (!botInfo) {
             return false;
         }
-
         try {
             botInfo.client.joinDDRaceServer();
-            botInfo.client.on('connection_au_serveur_ddrace', () => {
-                botInfo.isConnected = true;
-            });
             return true;
         } catch (error) {
             return false;
@@ -95,6 +121,7 @@ class BotManager extends EventEmitter {
 
     // Отключение бота
     async disconnectBot(botName) {
+        logDebug('disconnectBot called with botName:', botName);
         const botInfo = this.activeBots.get(botName);
         if (!botInfo) {
             return false;
@@ -112,6 +139,7 @@ class BotManager extends EventEmitter {
 
     // Отключение всех ботов
     async disconnectAllBots() {
+        logDebug('disconnectAllBots called');
         const botNames = Array.from(this.activeBots.keys());
         const results = await Promise.allSettled(
             botNames.map(botName => this.disconnectBot(botName))
@@ -155,6 +183,7 @@ class BotManager extends EventEmitter {
 
     // Удаление бота из менеджера
     removeBot(botName) {
+        logDebug('removeBot called with botName:', botName);
         const botInfo = this.activeBots.get(botName);
         if (botInfo) {
             // Отключаем если подключен
@@ -171,6 +200,7 @@ class BotManager extends EventEmitter {
 
     // Получение объекта бота с событиями
     getBot(botName) {
+        logDebug('getBot called with botName:', botName);
         const botInfo = this.activeBots.get(botName);
         if (!botInfo) {
             return null;
@@ -210,86 +240,111 @@ class BotManager extends EventEmitter {
 
     // Настройка событий для конкретного бота
     _setupBotEvents(botName, client) {
+        logDebug('_setupBotEvents called for botName:', botName);
+        let chatinterval = null;
+
         client.on('connection_au_serveur_ddrace', () => {
+            const botInfo = this.activeBots.get(botName);
+            if (!botInfo) { 
+                return;
+            } else {
+                botInfo.isConnected = true;
+            }
             this.emit(`${botName}:connect`);
             this.emit(`${botName}:connected`);
+            logDebug(`${botName} connected to server`);
         });
 
         client.on('disconnect', (reason) => {
-            const botInfo = this.activeBots.get(botName);
-            if (!botInfo) return;
+            let botInfo = this.activeBots.get(botName);
+            if (!botInfo) { 
+                return;
+            } else {
+                botInfo.isConnected = false;
+                clearInterval(chatinterval);
+            }
 
-            if (botInfo.parameter.reconnect) {
+            if (botInfo.parameter.reconnect && reason && botInfo.parameter.reconnectamperts>0 || botInfo.parameter.reconnectamperts===-1) {
+                if (botInfo.parameter.reconnectamperts!==-1)botInfo.parameter.reconnectamperts--;
+
                 let reconnectTime = 10000;
                 if (reason.startsWith('You have been banned')) {
                     if (reason.startsWith('You have been banned for 5 minutes (Banned by vote)')) {
-                        reconnectTime = 300000;
+                        reconnectTime = 301000;
                     } else {
                         reconnectTime = 1000000;
                     }
                 } else if (reason.startsWith('Too many connections in a short time')) {
                     reconnectTime = 20000;
                 } else if (reason.startsWith('Timed Out. (no packets received for ')) {
-                    reconnectTime = 1000;
+                    reconnectTime = 500;
                 }
-                
+
+                if (botInfo.randreconnect) reconnectTime = random(reconnectTime, reconnectTime + 1000);
+
                 this.emit(`${botName}:disconnect`, reason, reconnectTime);
                 this.emit(`${botName}:disconnected`, reason, reconnectTime);
+                logDebug(`${botName} disconnected due to:`, reason, '\nand reconnecting in', reconnectTime, 'ms');
                 setTimeout(() => {
                     client.joinDDRaceServer();
+                    this.emit(`${botName}:reconnect`, reconnectTime);
+                    logDebug(`${botName} reconnect now`);
                 }, reconnectTime);
+            } else {
+                this.emit(`${botName}:disconnect`, reason);
+                this.emit(`${botName}:disconnected`, reason);
+                logDebug(`${botName} disconnected due to:`, reason);
             }
         });
 
-client.on('snapshot', (snapshot) => {
-    try {
-        const myDDNetChar = client.SnapshotUnpacker.getObjExDDNetCharacter(client.SnapshotUnpacker.OwnID);
-        if (myDDNetChar) {
-            const isFrozen = myDDNetChar.m_FreezeEnd !== 0;
-            this.botFreezeStates.set(botName, isFrozen);
-        }
-    } catch (error) {}
-    const oldList = this.playerLists.get(botName) || [];
-    const playerMap = new Map(oldList.map(p => [p.client_id, p]));
+        client.on('snapshot', (snapshot) => {
+            try {
+                const myDDNetChar = client.SnapshotUnpacker.getObjExDDNetCharacter(client.SnapshotUnpacker.OwnID);
+            if (myDDNetChar) {
+                const isFrozen = myDDNetChar.m_FreezeEnd !== 0;
+                this.botFreezeStates.set(botName, isFrozen);
+            }
+            } catch (error) {}
+            const oldList = this.playerLists.get(botName) || [];
+            const playerMap = new Map(oldList.map(p => [p.client_id, p]));
 
-    // Обновляем данные по каждому игроку
-    for (let client_id = 0; client_id < 64; client_id++) {
-        const clientInfo = client.SnapshotUnpacker.getObjClientInfo(client_id);
-        const playerInfo = client.SnapshotUnpacker.getObjPlayerInfo(client_id);
-        const ddnetChar = client.SnapshotUnpacker.getObjExDDNetCharacter
-            ? client.SnapshotUnpacker.getObjExDDNetCharacter(client_id)
-            : null;
+            for (let client_id = 0; client_id < 64; client_id++) {
+                const clientInfo = client.SnapshotUnpacker.getObjClientInfo(client_id);
+                const playerInfo = client.SnapshotUnpacker.getObjPlayerInfo(client_id);
+                const ddnetChar = client.SnapshotUnpacker.getObjExDDNetCharacter
+                    ? client.SnapshotUnpacker.getObjExDDNetCharacter(client_id)
+                    : null;
 
-        if (clientInfo && clientInfo.name && playerInfo && playerInfo.m_Team !== -1) {
-            playerMap.set(client_id, {
-                client_id,
-                name: clientInfo.name,
-                clan: clientInfo.clan || '',
-                country: clientInfo.country || -1,
-                team: playerInfo.m_Team,
-                skin: clientInfo.skin || 'default',
-                x: ddnetChar ? ddnetChar.m_X : null,
-                y: ddnetChar ? ddnetChar.m_Y : null
-            });
-        }
-    }
+                if (clientInfo && clientInfo.name && playerInfo && playerInfo.m_Team !== -1) {
+                    playerMap.set(client_id, {
+                        client_id,
+                        name: clientInfo.name,
+                        clan: clientInfo.clan || '',
+                        country: clientInfo.country || -1,
+                        team: playerInfo.m_Team,
+                        skin: clientInfo.skin || 'default',
+                        x: ddnetChar ? ddnetChar.m_X : null,
+                        y: ddnetChar ? ddnetChar.m_Y : null
+                    });
+                }
+            }
 
-    // Обновляем общий список
-    this.playerLists.set(botName, Array.from(playerMap.values()));
+            this.playerLists.set(botName, Array.from(playerMap.values()));
 
-    this.emit(`${botName}:snapshot`, snapshot);
-});
-
+            this.emit(`${botName}:snapshot`, snapshot);
+        });
 
         let s = new Set(); // сет
-        const chatinterval = setInterval(() => s.clear(), 1000); // чистка
+        chatinterval = setInterval(() => {
+            s.clear();
+        }, 1000); // чистка
         client.on('message_au_serveur', (msg) => {
             this.emit(`${botName}:message`, msg); // Сырое сообщение, без фильтрации
 
             const msgraw = msg; // ориг для чата на всякий
             const text = msg.message; // само сообщение
             const client_id = msg.client_id; // айди отправителя
-            const autormsg = msg.client_id === -1 ? "system" : this.getPlayerName(botName, client_id); // имя отправителя
+            const autormsg = msg.client_id === -1 ? "system" : this.getPlayerName(botName, client_id) || msg.utilisateur.InformationDuBot.name; // имя отправителя
             const team = msg.team; // команда отправителя
 
             // фильтрация дубликатов сообщений
@@ -303,10 +358,12 @@ client.on('snapshot', (snapshot) => {
         });
 
         client.on('error', (error) => {
+            logDebug('error event for botName:', botName, error);
             this.emit(`${botName}:error`, error);
         });
 
         client.on('map_details', (mapDetails) => {
+            logDebug('map_details event for botName:', botName, mapDetails);
             this.emit(`${botName}:map_details`, mapDetails);
         });
     }
