@@ -278,8 +278,13 @@ class BotManager extends EventEmitter {
             this.emit(`${botName}:snapshot`, snapshot);
         });
 
+        let s = new Set();
+        const chatinterval = setInterval(() => s.clear(), 5000);
         client.on('message_au_serveur', (msg) => {
             this.emit(`${botName}:message`, msg);
+            const key = `${msg.client_id}:${msg.message}:${msg.team}`;
+            if (s.has(key)) return;
+            s.add(key);
             this.emit(`${botName}:chat`, msg);
         });
 
