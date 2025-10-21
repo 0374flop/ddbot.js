@@ -1,7 +1,7 @@
 "use strict";
 class DebugLogger {
     /**
-     * Конструктор класса DebugLogger
+     * Класс DebugLogger
      * @param {string} prefix - Префикс для сообщений отладки
      * @param {boolean} isDebug - Флаг для включения/выключения режима отладки
      * @param {boolean} islog - Флаг для использования console.log вместо console.debug
@@ -45,11 +45,11 @@ class DebugLogger {
     }
 }
 
-module.exports = { DebugLogger }; // Экспортируем класс DebugLogger
+module.exports = DebugLogger; // Экспортируем класс DebugLogger
 
 // Пример использования класса DebugLogger
 if (require.main === module) {
-    const test = new DebugLogger('test', true, true); // Создаем экземпляр класса с префиксом 'test', режим отладки включен и использованием console.log
+    const test = new DebugLogger('test', true, true); // Создаем экземпляр класса с префиксом 'test', режим отладки включен и используем console.log
     test.logDebug('cum.'); // Логируем сообщение
     test.setDebugMode(false); // Выключаем режим отладки
     test.logDebug('ето не выведется.'); // Это сообщение не будет выведено
