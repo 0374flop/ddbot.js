@@ -333,11 +333,10 @@ class BotManager extends EventEmitter {
                         });
                     }
                 }
+                this.playerLists.set(botName, Array.from(playerMap.values()));
             } catch (error) {
                 logDebug('Error updating player list for botName:', botName, error);
             }
-
-            this.playerLists.set(botName, Array.from(playerMap.values()));
 
             this.emit(`${botName}:snapshot`, snapshot);
         });
