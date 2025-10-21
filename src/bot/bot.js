@@ -148,10 +148,12 @@ class BotManager extends EventEmitter {
         }
 
         try {
-            botInfo.client.disconnect(); // отключаемся
+            botInfo.client.Disconnect(); // отключаемся
             botInfo.isConnected = false; // обновляем статус
+            logDebug('disconnectedBot', botName)
             return true; // да
         } catch (error) { // фак
+            logDebug(error)
             return false; // нет
         }
     }
@@ -451,7 +453,7 @@ class BotManager extends EventEmitter {
      */
     getPlayerName(botName, clientId) {
         if (clientId === -1) return null;
-        if ((botName === null || botName === undefined)) return null;
+        if (botName === null || botName === undefined) return null;
         if (Array.isArray(botName)) {
             const name = botName.find(bot => bot.client_id === clientId)?.name || null;
             return name;

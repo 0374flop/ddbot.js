@@ -1,4 +1,6 @@
-const { bot, autosendmessage } = require('./src/bot/index');
+const { bot } = require('./index');
+const botdebug = bot.getDebugLogger();
+botdebug.setDebugMode(true, true)
 
 async function main() {
     console.log('Main started');
@@ -15,7 +17,8 @@ async function main() {
 
     const botName = await bot.createAndConnectBot('57.128.201.180:8316', 'Towa', {
         identity: identitybot,
-        reconnect: true
+        reconnect: true,
+        reconnectAttempts: -1
     });
 
     const botClient = bot.getBotClient(botName);
@@ -92,10 +95,11 @@ async function main() {
 
         startchatlistener(bot, botName);
 
-        bot.on(`${botName}:disconnect`, () => {
+        bot.on(`${botName}:disconnect`, (reason) => {
             clearInterval(intervalemote);
             clearInterval(intervalMove);
             clearInterval(intervalnameset);
+            console.log(reason)
         });
 
         function findbot2(botName, identitybot) {
@@ -153,6 +157,11 @@ async function main() {
     process.on('SIGINT', () => {
         exit();
     });
+
+    module.exports.exit = exit;
+    module.exports.SayChat = SayChat;
 }
 
-main();
+if (require.main === module) main();
+
+module.exports.main = main;
