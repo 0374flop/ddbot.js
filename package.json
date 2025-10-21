@@ -15,8 +15,8 @@
     "type": "git",
     "url": "git+https://github.com/0374flop/ddbot.js.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["ddracebot", "DDNet", "DDraceNetwork", "ddbot", "bot", "automation", "maps"],
+  "author": "0374flop",
   "license": "MIT",
   "type": "commonjs",
   "bugs": {
