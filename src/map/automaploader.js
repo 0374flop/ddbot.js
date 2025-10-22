@@ -3,14 +3,14 @@ const { bot } = require('../bot');
 const mapLoader = require('./maploader');
 const DebugLogger = require('../debug');
 const logDebuger = new DebugLogger('Automaploader', false, true);
-const logdebug = logDebuger.logdebug;
+const logdebug = logDebuger.logDebug;
 
 const EventEmitter = require('events');
 const eventEmitter = new EventEmitter();
 
 
 
-const registeredHandlers = new Set();
+const registeredHandlers = new Set(); // чтобы не срать обработчиками
 
 
 /** * Функция для работы с Automaploader
@@ -53,7 +53,7 @@ const Automaploader = {
 
     /**
      * Подписка на события Automaploader
-     * @param {string} event - Имя события
+     * @param {string} event - Имя события (Пока что только одно, "automaploader:map_loaded")
      * @param {function(Object): void} callback - Колбэк для события с объектом { loaded, mapDetails, botName, dir }
      */
     on: eventEmitter.on.bind(eventEmitter)

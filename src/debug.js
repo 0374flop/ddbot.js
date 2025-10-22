@@ -43,6 +43,7 @@ class DebugLogger {
     }
 
     /**
+     * (Для внутреннего изпользования)
      * Формат, ПфП1, префикс, ПфП2, Аргументы.
      * @param {string} prefix - Префикс
      * @param {object} prefixforprefix - ПфП, то что по бокам префикса.

@@ -3,8 +3,8 @@ const fs = require("fs"); // фс
 const path = require("path"); // патх
 const https = require("https"); // хттпс
 const DebugLogger = require("../debug"); // дебаглоггер
-const logDebuger = new DebugLogger("MapLoader", false, true);
-const logdebug = logDebuger.logDebug.bind(logDebuger);
+const logDebuger = new DebugLogger("MapLoader", false, true); // создаем дебагер
+const logdebug = logDebuger.logDebug.bind(logDebuger); // закидываем сюда чтобы писать короче
 
 /**
  * Получает тип карты с ddnet.org
@@ -82,7 +82,8 @@ function downloadMap(mapName, type, MAP_DIR_DM) {
       });
     }).on("error", (err) => {
       logdebug("Error downloading map:", err.message);
-      fs.unlink(filePath, () => reject(err)); // пропердоливаемся6 и удаляем файл
+      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);// пропердоливаемся6 и удаляем файл, если он есть конечно
+      reject(err); 
     });
   });
 }
@@ -126,7 +127,7 @@ const advanced = {
   logDebuger // экспортируем дебаглоггер
 }
 
-// Экспортируем функции для использования в других модулях
+// Экспортируем функции
 module.exports = {
   fetchMapType, // получитьТипКарты
   loadMap, // загрузитьКарту
