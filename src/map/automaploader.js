@@ -36,7 +36,7 @@ async function work(botName, dir) {
             .then((loaded) => {
                 eventEmitter.emit(`automaploader:map_loaded`, { loaded, mapDetails, botName, dir});
                 logdebug(`Automaploader`, `Map "${mapName}" loaded: ${loaded}, for bot "${botName}"`);
-            })
+            });
     });
 }
 
