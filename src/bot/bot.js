@@ -2,7 +2,7 @@
 const DDRaceBot = require('neiky-ddracebot.js');
 const EventEmitter = require('events');
 const DebugLogger = require('../debug');
-const DebugLogger2 = new DebugLogger('BotManager', false, true);
+const DebugLogger2 = new DebugLogger('BotManager', false, true, null, true);
 const logDebug = ( ...args) => {
     DebugLogger2.logDebug(...args);
 }

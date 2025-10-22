@@ -23,24 +23,38 @@ class DebugLogger {
         /**
          * @var {boolean} isDebug - Флаг для включения/выключения режима отладки
          */
-        this.isDebug = isDebug;
+        if (typeof isDebug === "boolean") this.isDebug = isDebug; else this.isDebug = false;
         /** 
          * @var {boolean} islog - Флаг для использования console.log вместо console.debug
          */
-        this.islog = islog;
+        if (typeof islog === "boolean") this.islog = islog; else this.islog = true;
         /**
          * @var {string} prefix - Префикс для сообщений отладки
          */
-        this.prefix = prefix;
+        if (typeof prefix === "string") this.prefix = prefix; else this.prefix = "null";
         /**
          * @var {object} prefixforprefix - Array Массив из двух строк, которые будут по бокам обычного префикса.
          */
-        this.prefixforprefix = prefixforprefix;
+        if (Array.isArray(prefixforprefix)) this.prefixforprefix = prefixforprefix; else this.prefixforprefix = ['[',']'];    
         /**
          * @var {boolean} chalk - Изпользовать ли цветные тексты.
          */
-        this.chalk = chalk;
+        if (typeof chalk === "boolean") this.chalk = chalk; else this.chalk = hasChalk;
     }
+
+    /**
+     * Формат, ПфП1, префикс, ПфП2, Аргументы.
+     * @param {string} prefix - Префикс
+     * @param {object} prefixforprefix - ПфП, то что по бокам префикса.
+     * @param  {...any} args - Данные.
+     * @returns {string} Цветовой текст в формате.
+     */
+    _format(prefix, prefixforprefix, ...args) {
+        if (this.chalk && hasChalk)
+            return [chalklib.grey(prefixforprefix[0]), chalklib.green(prefix), chalklib.grey(prefixforprefix[1]), chalklib.blue(...args)];
+        return [prefixforprefix[0], prefix, prefixforprefix[1], ...args];
+    }
+
     /**
      * Функция для логирования отладочной информации
      * @param {...*} args - Аргументы для логирования
@@ -50,36 +64,21 @@ class DebugLogger {
         const prefixforprefix = this.prefixforprefix; // префикс для префикса
         if (this.isDebug) { // Проверяем, включен ли режим отладки
             if (this.islog) { // Проверяем, использовать ли console.log
-                if (this.chalk && hasChalk) { // Проверяем есть ли chalk
-                    console.log(
-                        chalklib.grey(prefixforprefix[0]),
-                        chalklib.green(prefix),
-                        chalklib.grey(prefixforprefix[1]),
-                        chalklib.blue(...args)
-                    );
-                } else {
-                    console.log(prefixforprefix[0], prefix, prefixforprefix[1], ...args);
-                } // Используем console.log с префиксом
+                console.log(...this._format(prefix, prefixforprefix, ...args));
             } else { // Иначе
-                if (this.chalk && hasChalk) {
-                    console.debug(
-                        chalklib.grey(prefixforprefix[0]),
-                        chalklib.green(prefix),
-                        chalklib.grey(prefixforprefix[1]),
-                        chalklib.blue(...args)
-                    ); 
-                } else {
-                    console.debug(prefixforprefix[0], prefix, prefixforprefix[1], ...args); // Используем console.debug с префиксом
-                }
+                console.debug(...this._format(prefix, prefixforprefix, ...args));
             }
         }
     }
 
-    /** * Функция для установки режима отладки и использования console.log
+    /** 
+     * Функция для установки режима отладки и использования console.log
      * @param {boolean} debugMode - Включить или выключить режим отладки
      * @param {boolean} useLog - Использовать console.log вместо console.debug
+     * @param {boolean} chalk - Изпользовать ли цветной текст или нет
      */
-    setDebugMode(debugMode, useLog = true) { // лог по умолчанию, потому что мне так удобнее
+    setDebugMode(debugMode, useLog = true, chalk = this.chalk) { // лог по умолчанию, потому что мне так удобнее
+        this.chalk = chalk
         this.isDebug = debugMode; // Устанавливаем режим отладки
         this.islog = useLog; // Устанавливаем использование console.log
     }
@@ -103,6 +102,6 @@ if (require.main === module) {
     log();
     test = new DebugLogger('говно', true, true, ['1','Какашечка'], false);
     log();
-    test = new DebugLogger('говно', true, true, ['Абоба','2'], true);
+    test = new DebugLogger('кал', true, true, ['Абоба','2'], true);
     log();
 }

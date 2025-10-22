@@ -51,39 +51,8 @@ async function main() {
 
         async function startchatlistener(bot, botName) {
             const lastMessages = new Map();
-            bot.on(`${botName}:message`, (msg) => {
-                if (!msg || typeof msg.message !== 'string') {
-                    return;
-                }
-
-                const text = msg.message.trim();
-                const clientId = msg.client_id;
-                const team = msg.team;
-                const key = `${clientId}:${team}:${text}`;
-                const now = Date.now();
-
-                const utilisateur = msg.utilisateur?.InformationDuBot;
-                let autormsg = utilisateur?.name;
-                const lastMessage = lastMessages.get(key);
-                if (lastMessage && now - lastMessage.timestamp < 100) {
-                    return;
-                }
-
-                lastMessages.set(key, { timestamp: now });
-
-                setTimeout(() => {
-                    for (const [k, v] of lastMessages) {
-                        if (now - v.timestamp > 1000) {
-                            lastMessages.delete(k);
-                        }
-                    }
-                }, 10000);
-
-                let client_id = msg.client_id;
-                if (client_id === -1) {
-                    autormsg = "system";
-                }
-                console.log(`'${autormsg}' : ${text}`);
+            bot.on(`${botName}:ChatNoSystem`, (msg, autormsg, text, team, client_id) => {
+                console.log(`${client_id} ${team} '${autormsg}' : ${text}`);
 
                 if (text.includes(identitybot.name) && text.includes('%syncE')) {
                     sync = true;
