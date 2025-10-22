@@ -8,8 +8,6 @@ const logdebug = logDebuger.logDebug;
 const EventEmitter = require('events');
 const eventEmitter = new EventEmitter();
 
-
-
 const registeredHandlers = new Set(); // чтобы не срать обработчиками
 
 

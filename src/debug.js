@@ -91,7 +91,7 @@ module.exports.DebugLogger = DebugLogger; // ну чтобы можно было
 
 
 // Пример использования класса DebugLogger
-if (require.main === module) {
+if (require.main === module) { // Только если запускаеться напрямую
     let test = new DebugLogger('test', true, true, ["[","]"], true); // Создаем экземпляр класса с префиксом 'test', режим отладки включен и используем console.log
     function log() {
         test.logDebug('cum.'); // Логируем сообщение
@@ -100,9 +100,9 @@ if (require.main === module) {
         test.setDebugMode(true, false); // Включаем режим отладки и используем console.debug
         test.logDebug('ето выведется в console.debug.'); // Логируем сообщение
     }
-    log();
-    test = new DebugLogger('говно', true, true, ['1','Какашечка'], false);
-    log();
-    test = new DebugLogger('кал', true, true, ['Абоба','2'], true);
-    log();
+    log(); // тестовая функция
+    test = new DebugLogger('говно', true, true, ['1','Какашечка'], false); // создаем новый екземпляр с другими настройками
+    log(); // тестовая функция 2
+    test = new DebugLogger('кал', true, true, ['Абоба','2'], true); // снова создаем новый екземпляр с другими настройками
+    log(); // тестовая функция 3
 }

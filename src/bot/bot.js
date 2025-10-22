@@ -2,9 +2,9 @@
 const DDRaceBot = require('neiky-ddracebot.js');
 const EventEmitter = require('events');
 const DebugLogger = require('../debug');
-const DebugLogger2 = new DebugLogger('BotManager', false, true, null, true);
+const logDebuger = new DebugLogger('BotManager', false, true, null, true);
 const logDebug = ( ...args) => {
-    DebugLogger2.logDebug(...args);
+    logDebuger.logDebug(...args);
 }
 
 function random(min, max) {
@@ -457,4 +457,4 @@ class BotManager extends EventEmitter {
     }
 }
 
-module.exports = { BotManager, DebugLogger2 }; // экспортируем BotManager и дебагер
+module.exports = { BotManager, logDebuger }; // экспортируем BotManager и дебагер
