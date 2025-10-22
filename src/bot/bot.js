@@ -24,14 +24,6 @@ class BotManager extends EventEmitter {
     }
 
     /**
-     * Получение объекта DebugLogger для BotManager
-     * @returns {DebugLogger} - Объект DebugLogger
-     */
-    getDebugLogger() {
-        return DebugLogger2;
-    }
-
-    /**
      * Извлечение IP и порта из полного адреса
      * @param {string} address - Полный адрес в формате "IP:порт"
      * @returns {object} IP адрес и порт { address: string, port: number }
@@ -465,4 +457,4 @@ class BotManager extends EventEmitter {
     }
 }
 
-module.exports = BotManager; // экспортируем BotManager
+module.exports = { BotManager, DebugLogger2 }; // экспортируем BotManager и дебагер
