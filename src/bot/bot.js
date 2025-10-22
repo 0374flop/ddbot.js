@@ -49,14 +49,18 @@ class BotManager extends EventEmitter {
     }
 
     /**
-     * Создание и подключение бота к серверу
+     * Создание бота
      * @param {string} fulladdress - Полный адрес сервера (IP:порт)
      * @param {string} botName - Имя бота
      * @param {Object} parameter - Параметры бота
+     * parameter может иметь в себе: identity со скином и другими косметическими деталями,
+     * reconnect переподключаеться бот или нет,
+     * reconnectAttempts количество возможных реконектов (-1 для безконечного),
+     * randreconnect будет ли бот переключаться с чуть разной задержкой или нет (в районе 0 - 1 сек)
      * @returns {Promise<string|null>} - Уникальное имя бота или null в случае ошибки
      */
-    async createAndConnectBot(fulladdress, botName, parameter = {}) {
-        logDebug('createAndConnectBot called with:', fulladdress, botName, parameter); // логируем вызов функции
+    async createBot(fulladdress, botName, parameter = {}) {
+        logDebug('createBot called with:', fulladdress, botName, parameter); // логируем вызов функции
         const { address, port } = this.getIPsplitPort(fulladdress); // разбираем адрес
         const serverIp = address; // айпи
         const serverPort = port; // порт
@@ -98,9 +102,6 @@ class BotManager extends EventEmitter {
             // Инициализируем состояние заморозки
             logDebug('initializing freeze state');
             this.botFreezeStates.set(uniqueBotName, false);
-
-            // Подключаемся к серверу
-            await this.connectBot(uniqueBotName);
 
             return uniqueBotName;
         } catch (error) {
@@ -424,7 +425,7 @@ class BotManager extends EventEmitter {
         });
 
         client.on('map_details', (mapDetails) => {
-            logDebug('map_details event for botName:', botName, mapDetails);
+            logDebug('map_details event for botName:', botName, mapDetails.map_url, mapDetails.map_name);
             this.emit(`${botName}:map_details`, mapDetails);
         });
     }

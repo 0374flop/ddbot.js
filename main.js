@@ -1,6 +1,5 @@
-const { bot } = require('./index');
-const botdebug = bot.getDebugLogger();
-botdebug.setDebugMode(true, true)
+const { bot, botClassAndLoger } = require('./index');
+botClassAndLoger.logDebuger.setDebugMode(true, true);
 
 async function main() {
     console.log('Main started');
@@ -15,11 +14,13 @@ async function main() {
         country: -1
     };
 
-    const botName = await bot.createAndConnectBot('57.128.201.180:8316', 'Towa', {
+    const botName = await bot.createBot('45.141.57.22:8375', 'Towa', {
         identity: identitybot,
         reconnect: true,
         reconnectAttempts: -1
     });
+
+    bot.connectBot(botName);
 
     const botClient = bot.getBotClient(botName);
 
@@ -50,7 +51,6 @@ async function main() {
         let intervalnameset = startnameset(botClient, bot, identitybot);
 
         async function startchatlistener(bot, botName) {
-            const lastMessages = new Map();
             bot.on(`${botName}:ChatNoSystem`, (msg, autormsg, text, team, client_id) => {
                 console.log(`${client_id} ${team} '${autormsg}' : ${text}`);
 
