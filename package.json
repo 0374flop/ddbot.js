@@ -3,7 +3,7 @@
     "chalk": "^4.1.2",
     "neiky-ddracebot.js": "^2.4.0"
   },
-  "name": "ddbot",
+  "name": "ddbot.js-0374",
   "version": "1.0.0",
   "description": "ddbot.js — это Node.js проект для автоматизации и управления ботами, а также работы с картами и логами.",
   "main": "./src/bot/index.js",
