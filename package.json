@@ -31,5 +31,6 @@
   "bugs": {
     "url": "https://github.com/0374flop/ddbot.js/issues"
   },
-  "homepage": "https://github.com/0374flop/ddbot.js#readme"
+  "homepage": "https://github.com/0374flop/ddbot.js#readme",
+  "types": "ddbot.js-0374.d.ts"
 }
