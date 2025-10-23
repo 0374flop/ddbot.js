@@ -1,4 +1,4 @@
-const { bot, botClassAndLoger } = require('./index');
+const { bot, botClassAndLoger } = require('../../index');
 botClassAndLoger.logDebuger.setDebugMode(true, true);
 
 async function main() {
@@ -136,3 +136,4 @@ if (require.main === module) main();
 module.exports.main = main;
 
 // можете щитать ето примером, ето просто как тест
+// тут нет коментариев но если хотите то сами поймите как работает
