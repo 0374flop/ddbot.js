@@ -176,9 +176,9 @@ declare module 'ddbot.js-0374' {
     on(event: `${string}:disconnected`, listener: (reason: string, reconnectTime?: number) => void): this;
     on(event: `${string}:reconnect`, listener: (reconnectTime: number) => void): this;
     on(event: `${string}:snapshot`, listener: (snapshot: any) => void): this;
-    on(event: `${string}:message`, listener: (msg: any) => void): this;
-    on(event: `${string}:ChatNoSystem`, listener: (msgraw: any, autormsg: string, text: string, team: number, client_id: number) => void): this;
-    on(event: `${string}:ChatRaw`, listener: (msgraw: any, autormsg: string, text: string, team: number, client_id: number) => void): this;
+    on(event: `${string}:message`, listener: (msg: object) => void): this;
+    on(event: `${string}:ChatNoSystem`, listener: (msgraw: object, autormsg: string, text: string, team: number, client_id: number) => void): this;
+    on(event: `${string}:ChatRaw`, listener: (msgraw: object, autormsg: string, text: string, team: number, client_id: number) => void): this;
     on(event: `${string}:error`, listener: (error: Error) => void): this;
     on(event: `${string}:map_details`, listener: (mapDetails: MapDetails) => void): this;
     on(event: string, listener: (...args: any[]) => void): this;
