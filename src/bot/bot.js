@@ -295,6 +295,14 @@ class BotManager extends EventEmitter {
         logDebug('_setupBotEvents called for botName:', botName); // логируем вызов функции
         let chatinterval = null; // интервал для чата
 
+        this.on(`${botName}:disconnected`, (reason) => {
+            clearInterval(chatinterval);
+        });
+
+        this.on(`${botName}:disconnect`, (reason) => {
+            clearInterval(chatinterval);
+        });
+
         client.on('connection_au_serveur_ddrace', () => { // Шок контент бот зашел на сервер
             const botInfo = this.activeBots.get(botName); // получаем инфу о боте
             if (!botInfo) { 
