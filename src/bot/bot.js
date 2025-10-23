@@ -1,5 +1,5 @@
 "use strict";
-const DDRaceBot = require('neiky-ddracebot.js');
+const DDRaceBot = require('teeworlds');
 const EventEmitter = require('events');
 const DebugLogger = require('../debug');
 const logDebuger = new DebugLogger('BotManager', false, true, null, true);
@@ -121,7 +121,7 @@ class BotManager extends EventEmitter {
             return false; // бот не найден
         }
         try {
-            botInfo.client.joinDDRaceServer(); // то самое место подключения
+            botInfo.client.connect(); // то самое место подключения
             return true; // да
         } catch (error) { // фак
             logDebug(JSON.stringify(error, null, 2));
@@ -303,7 +303,7 @@ class BotManager extends EventEmitter {
             clearInterval(chatinterval);
         });
 
-        client.on('connection_au_serveur_ddrace', () => { // Шок контент бот зашел на сервер
+        client.on('connect', () => { // Шок контент бот зашел на сервер
             const botInfo = this.activeBots.get(botName); // получаем инфу о боте
             if (!botInfo) { 
                 return; // бот не найден фак
@@ -354,7 +354,7 @@ class BotManager extends EventEmitter {
                 this.emit(`${botName}:disconnected`, reason, reconnectTime);
                 logDebug(`${botName} disconnected due to: `, reason, '\nand reconnecting in ', reconnectTime, 'ms');
                 setTimeout(() => {
-                    client.joinDDRaceServer();
+                    client.connect();
                     this.emit(`${botName}:reconnect`, reconnectTime);
                     logDebug(`${botName} reconnect now`);
                 }, reconnectTime);
@@ -412,7 +412,7 @@ class BotManager extends EventEmitter {
         chatinterval = setInterval(() => {
             s.clear();
         }, 1000); // чистка
-        client.on('message_au_serveur', (msg) => {
+        client.on('message', (msg) => {
             this.emit(`${botName}:message`, msg); // Сырое сообщение, без фильтрации
 
             const msgraw = msg; // ориг для чата на всякий

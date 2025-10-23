@@ -14,7 +14,7 @@ async function main() {
         country: -1
     };
 
-    const botName = await bot.createBot('45.141.57.22:8375', 'Towa', {
+    const botName = await bot.createBot('45.141.57.22:8331', 'Towa', {
         identity: identitybot,
         reconnect: true,
         reconnectAttempts: -1
@@ -68,7 +68,6 @@ async function main() {
             clearInterval(intervalemote);
             clearInterval(intervalMove);
             clearInterval(intervalnameset);
-            console.log(reason)
         });
 
         function findbot2(botName, identitybot) {

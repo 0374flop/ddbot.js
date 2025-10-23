@@ -3,6 +3,7 @@
 Окей...
 Сейчас я вам разкажу как работает bot/BotManager.
 
+teeworlds
 neiky-ddracebot.js
 ## Базовые методы
 У нас есть :
