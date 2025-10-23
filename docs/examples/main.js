@@ -68,7 +68,7 @@ async function main() {
             clearInterval(intervalemote);
             clearInterval(intervalMove);
             clearInterval(intervalnameset);
-            console.log(reason)
+            if (reason !== null) console.log(reason);
         });
 
         function findbot2(botName, identitybot) {

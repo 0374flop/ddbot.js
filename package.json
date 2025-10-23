@@ -8,9 +8,8 @@
   "description": "ddbot.js — это Node.js проект для автоматизации и управления ботами, а также работы с картами и логами.",
   "main": "./index.js",
   "scripts": {
-    "electron": "npx electron ./main-electron.js",
-    "start": "node main.js",
-    "test": "node main.js"
+    "start": "node ./docs/examples/main.js",
+    "test": "node ./docs/examples/echo-bot.js"
   },
   "repository": {
     "type": "git",
