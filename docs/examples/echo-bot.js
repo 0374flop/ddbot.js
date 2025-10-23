@@ -24,7 +24,7 @@ async function main() {
         identity: identitybot,
         reconnect: true,
         reconnectAttempts: -1,
-        pandreconnect: true
+        randreconnect: true
     });
 
     bot.connectBot(botName); // подкюлчаем
