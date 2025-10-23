@@ -134,3 +134,5 @@ async function main() {
 if (require.main === module) main();
 
 module.exports.main = main;
+
+// можете щитать ето примером, ето просто как тест
