@@ -145,6 +145,8 @@ class BotManager extends EventEmitter {
             botInfo.client.Disconnect(); // отключаемся
             botInfo.isConnected = false; // обновляем статус
             logDebug('disconnectedBot', botName)
+            this.emit(`${botName}:disconnect`, null);
+            this.emit(`${botName}:disconnected`, null);
             return true; // да
         } catch (error) { // фак
             logDebug(error)
@@ -306,6 +308,7 @@ class BotManager extends EventEmitter {
         });
 
         client.on('disconnect', (reason) => { // бот отключился от сервера
+            if (!reason) return; // На всякий случай, потому что если специально отключаеться то может не быть
             let botInfo = this.activeBots.get(botName); // получаем инфу о боте
             if (!botInfo) { 
                 return; // бот не найден фак
