@@ -1,7 +1,6 @@
 // Пример писался под комит c453b96f9fd717375f5ff70525603b7e1491c290.
 
 const { bot, botClassAndLoger, DebugLogger } = require('../../index');
-const { logDebuger } = require('../../src/bot');
 const botdebug = botClassAndLoger.logDebuger;
 botdebug.setDebugMode(true, true, true);
 
