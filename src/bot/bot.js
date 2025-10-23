@@ -112,7 +112,7 @@ class BotManager extends EventEmitter {
     /**
      * Подключение бота к серверу
      * @param {string} botName
-     * @returns
+     * @returns {boolean} (Да если ошибок не возникло)
      */
     async connectBot(botName) {
         logDebug('connectBot called with botName:', botName); // логируем вызов функции
@@ -124,6 +124,7 @@ class BotManager extends EventEmitter {
             botInfo.client.joinDDRaceServer(); // то самое место подключения
             return true; // да
         } catch (error) { // фак
+            logDebug(JSON.stringify(error, null, 2));
             return false; // нет
         }
     }
