@@ -101,7 +101,7 @@ async function tryDownloadMap(mapName, type, MAP_DIR) {
     await downloadMap(mapName, type, MAP_DIR);  // ждемс
     return true; // да
   } catch (e) { // фак, провалились
-    logdebug("Failed to download map:", e.message);
+    logdebug("Failed to download map:", JSON.stringify(e.message, null, 2));
     return false; // нет
   }
 }
