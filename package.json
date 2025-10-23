@@ -1,16 +1,14 @@
 {
   "dependencies": {
+    "chalk": "^4.1.2",
     "neiky-ddracebot.js": "^2.4.0"
   },
   "name": "ddbot",
   "version": "1.0.0",
   "description": "ddbot.js — это Node.js проект для автоматизации и управления ботами, а также работы с картами и логами.",
-  "main": "main.js",
-  "devDependencies": {
-    "electron": "^37.2.6"
-  },
+  "main": "./src/bot/index.js",
   "scripts": {
-    "run-electron": "node main-electron.js",
+    "electron": "npx electron ./main-electron.js",
     "start": "node main.js",
     "test": "node main.js"
   },
@@ -18,8 +16,16 @@
     "type": "git",
     "url": "git+https://github.com/0374flop/ddbot.js.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "ddracebot",
+    "DDNet",
+    "DDraceNetwork",
+    "ddbot",
+    "bot",
+    "automation",
+    "maps"
+  ],
+  "author": "0374flop",
   "license": "MIT",
   "type": "commonjs",
   "bugs": {
