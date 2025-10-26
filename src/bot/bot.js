@@ -120,8 +120,9 @@ class BotManager extends EventEmitter {
         if (!botInfo) {
             return false; // бот не найден
         }
+        const client = botInfo.client;
         try {
-            botInfo.client.connect(); // то самое место подключения
+            client.connect(); // то самое место подключения
             return true; // да
         } catch (error) { // фак
             logDebug(JSON.stringify(error, null, 2));
@@ -303,7 +304,7 @@ class BotManager extends EventEmitter {
             clearInterval(chatinterval);
         });
 
-        client.on('connect', () => { // Шок контент бот зашел на сервер
+        client.on('connected', () => { // Шок контент бот зашел на сервер
             const botInfo = this.activeBots.get(botName); // получаем инфу о боте
             if (!botInfo) { 
                 return; // бот не найден фак
@@ -436,9 +437,13 @@ class BotManager extends EventEmitter {
             this.emit(`${botName}:error`, error);
         });
 
+        let map_namekey;
         client.on('map_details', (mapDetails) => {
-            logDebug('map_details event for botName:', botName, mapDetails.map_url, mapDetails.map_name);
-            this.emit(`${botName}:map_details`, mapDetails);
+            if (map_namekey !== mapDetails.map_name) {
+                logDebug('map_details event for botName:', botName, mapDetails.map_url, mapDetails.map_name);
+                this.emit(`${botName}:map_details`, mapDetails);
+                map_namekey = mapDetails.map_name;
+            }
         });
     }
     /**

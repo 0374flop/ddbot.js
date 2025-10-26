@@ -1,4 +1,4 @@
-// Пример писался под комит c453b96f9fd717375f5ff70525603b7e1491c290.
+// Пример писался под комит c453b96f9fd717375f5ff70525603b7e1491c290. По моему я его случайно трогал, ой. 
 
 const { bot, botClassAndLoger, DebugLogger } = require('../../index');
 const botdebug = botClassAndLoger.logDebuger;
@@ -10,7 +10,7 @@ async function main() {
     logDebuger.logDebug('Main started');
 
     const identitybot = {
-        name: "Towa",
+        name: "zopa",
         clan: "Towa Team",
         skin: "Astolfofinho",
         use_custom_color: 1,
@@ -19,7 +19,7 @@ async function main() {
         country: -1
     };
 
-    const botName = await bot.createBot('45.141.57.22:8375', 'Towa', {
+    const botName = await bot.createBot('45.141.57.22:8375', 'zopa', {
         identity: identitybot,
         reconnect: true,
         reconnectAttempts: -1,
