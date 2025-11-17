@@ -16,10 +16,10 @@ async function main() {
         use_custom_color: 1,
         color_body: 16711680,
         color_feet: 16711680,
-        country: -1
+        country: 804
     };
 
-    const botName = await bot.createBot('45.141.57.22:8375', 'Towa', {
+    const botName = await bot.createBot('45.141.57.22:8311', 'Towa', {
         identity: identitybot,
         reconnect: true,
         reconnectAttempts: -1,
@@ -33,6 +33,10 @@ async function main() {
     // Подписка на событие подключения
     bot.on(`${botName}:connect`, () => {
         let timemsg = 0; // время
+
+        setTimeout(() => {
+            botClient.game.Say('Ку всем');
+        }, 1251);
 
         // подписка на чат
         bot.on(`${botName}:ChatNoSystem`, (msgraw, autormsg, text, team, client_id) => {

@@ -66,7 +66,7 @@ class BotManager extends EventEmitter {
         const serverPort = port; // порт
         
         if (!serverIp || !serverPort) {
-            return new Error('и где мы возьмём айпи или порт? ты можешь нормально ввести адрес?');
+            throw new Error('и где мы возьмём айпи или порт? ты можешь нормально ввести адрес?');
         }
 
         const uniqueBotName = this.generateUniqueBotName(botName);
