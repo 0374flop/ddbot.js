@@ -4,7 +4,7 @@
     "neiky-ddracebot.js": "^2.4.0"
   },
   "name": "ddbot.js-0374",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "ddbot.js — это Node.js проект для автоматизации и управления ботами, а также работы с картами и логами.",
   "main": "./index.js",
   "scripts": {
