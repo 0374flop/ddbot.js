@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "chalk": "^4.1.2",
+    "loger0374": "^0.0.2",
     "neiky-ddracebot.js": "^2.4.0"
   },
   "name": "ddbot.js-0374",

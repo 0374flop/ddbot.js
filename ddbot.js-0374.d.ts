@@ -185,131 +185,15 @@ declare module 'ddbot.js-0374' {
   }
 
   /**
-   * Класс для логирования с настройками отладки
-   */
-  export class DebugLogger {
-    /**
-     * Создает новый логгер
-     * @param prefix - Префикс для сообщений
-     * @param isDebug - Включить режим отладки
-     * @param islog - Использовать console.log вместо console.debug
-     * @param prefixforprefix - Префикс для префикса [начало, конец]
-     * @param chalk - Использовать цветной текст
-     */
-    constructor(
-      prefix: string,
-      isDebug?: boolean,
-      islog?: boolean,
-      prefixforprefix?: [string, string] | null,
-      chalk?: boolean
-    );
-
-    /**
-     * Логирует отладочную информацию
-     * @param args - Аргументы для логирования
-     */
-    logDebug(...args: any[]): void;
-
-    /**
-     * Устанавливает режим отладки
-     * @param debugMode - Включить/выключить отладку
-     * @param useLog - Использовать console.log
-     * @param chalk - Использовать цветной текст
-     */
-    setDebugMode(debugMode: boolean, useLog?: boolean, chalk?: boolean): void;
-  }
-
-  /**
-   * Функции для загрузки карт
-   */
-  export interface MapLoader {
-    /**
-     * Получает тип карты с ddnet.org
-     * @param mapName - Имя карты
-     * @returns Тип карты (novice, moderate и т.д.)
-     */
-    fetchMapType(mapName: string): Promise<string>;
-
-    /**
-     * Загружает карту по имени
-     * @param mapName - Имя карты
-     * @param MAP_DIR - Директория для загрузки
-     * @returns true если загрузка успешна
-     */
-    loadMap(mapName: string, MAP_DIR: string): Promise<boolean>;
-
-    /**
-     * Расширенные функции для работы с картами
-     */
-    advanced: {
-      /**
-       * Загружает карту по имени и типу
-       * @param mapName - Имя карты
-       * @param type - Тип карты
-       * @param MAP_DIR_DM - Директория для загрузки
-       * @returns Путь к загруженной карте
-       */
-      downloadMap(mapName: string, type: string, MAP_DIR_DM: string): Promise<string>;
-
-      /**
-       * Пытается загрузить карту
-       * @param mapName - Имя карты
-       * @param type - Тип карты
-       * @param MAP_DIR - Директория для загрузки
-       * @returns true если успешно
-       */
-      tryDownloadMap(mapName: string, type: string, MAP_DIR: string): Promise<boolean>;
-
-      /** Логгер для MapLoader */
-      logDebuger: DebugLogger;
-    };
-  }
-
-  /**
-   * Событие загрузки карты
-   */
-  export interface AutoMapLoadedEvent {
-    loaded: boolean;
-    mapDetails: MapDetails;
-    botName: string;
-    dir: string;
-  }
-
-  /**
-   * Автоматический загрузчик карт
-   */
-  export interface AutomapLoader {
-    /**
-     * Запускает автоматическую загрузку карт для бота
-     * @param botName - Имя бота
-     * @param dir - Директория для загрузки карт
-     */
-    work(botName: string, dir: string): Promise<void>;
-
-    /**
-     * Подписка на события автозагрузки
-     * @param event - Имя события
-     * @param callback - Обработчик события
-     */
-    on(event: 'automaploader:map_loaded', callback: (data: AutoMapLoadedEvent) => void): void;
-  }
-
-  /**
-   * Объект с классом BotManager и логгером
+   * Объект с классом BotManager и логгером из модуля Loger0374
    */
   export interface BotClassAndLogger {
     BotManager: typeof BotManager;
-    logDebuger: DebugLogger;
+    logDebuger: any;
   }
 
   /** Экземпляр BotManager */
   export const bot: BotManager;
-
-  /** Загрузчик карт */
-  export const mapLoader: MapLoader;
-
-  /** Автоматический загрузчик карт */
-  export const Automaploader: AutomapLoader;
 
   /** Класс BotManager и логгер */
   export const botClassAndLoger: BotClassAndLogger;

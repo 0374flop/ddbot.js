@@ -1,7 +1,7 @@
 "use strict";
 const DDRaceBot = require('neiky-ddracebot.js');
 const EventEmitter = require('events');
-const DebugLogger = require('../debug');
+const DebugLogger = require('Loger0374');
 const logDebuger = new DebugLogger('BotManager', false, true, null, true);
 const logDebug = ( ...args) => {
     logDebuger.logDebug(...args);
