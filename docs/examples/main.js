@@ -39,7 +39,7 @@ async function main() {
 
                 if (!me) return;
 
-                 if (me.name !== identitybot.name) {
+                if (me.name !== identitybot.name) {
                     botClient.game.ChangePlayerInfo({ ...identitybot, name: identitybot.name });
                 }
             }, 10000);
@@ -137,3 +137,4 @@ module.exports.main = main;
 
 // можете щитать ето примером, ето просто как тест
 // тут нет коментариев но если хотите то сами поймите как работает
+// если что то не понятно то спрашивайте ИИ может поможет, надеюсь...
