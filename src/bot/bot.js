@@ -235,7 +235,7 @@ class BotManager extends EventEmitter {
         if (botInfo) {
             // Отключаем если подключен
             if (botInfo.isConnected) {
-                botInfo.client.disconnect(); // отключаемся
+                this.disconnectBot(botName);
             }
             this.activeBots.delete(botName); // удаляем бота
             this.botFreezeStates.delete(botName); // удаляем состояние заморозки
