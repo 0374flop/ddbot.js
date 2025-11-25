@@ -134,7 +134,7 @@ class BotManager extends EventEmitter {
      * @param {string} botName 
      * @returns 
      */
-    async disconnectBot(botName) {
+    disconnectBot(botName) {
         logDebug('disconnectBot called with botName:', botName); // логируем вызов функции
         const botInfo = this.activeBots.get(botName); // получаем инфу о боте
         if (!botInfo) {
@@ -220,7 +220,7 @@ class BotManager extends EventEmitter {
      * @returns {object|null} - Объект клиента бота или null, если бот не найден
      */
     getBotClient(botName) {
-        const botInfo = this.activeBots.get(botName); // получаем инфу о боте
+        const botInfo = this.getBotInfo(botName); // получаем инфу о боте
         return botInfo ? botInfo.client : null; // возвращаем клиент или null
     }
 
@@ -231,7 +231,7 @@ class BotManager extends EventEmitter {
      */
     removeBot(botName) {
         logDebug('removeBot called with botName:', botName); // логируем вызов функции
-        const botInfo = this.activeBots.get(botName); // получаем инфу о боте
+        const botInfo = this.getBotInfo(botName); // получаем инфу о боте
         if (botInfo) {
             // Отключаем если подключен
             if (botInfo.isConnected) {
@@ -251,7 +251,7 @@ class BotManager extends EventEmitter {
      * @returns {object|null} - Объект бота с событиями или null, если бот не найден
      */
     getBot(botName) {
-        const botInfo = this.activeBots.get(botName); // получаем инфу о боте
+        const botInfo = this.getBotInfo(botName); // получаем инфу о боте
         if (!botInfo) {
             return null; // бот не найден
         }
@@ -467,6 +467,17 @@ class BotManager extends EventEmitter {
             const player = playerList.find(p => p.client_id === clientId);
             return player ? player.name : null;
         }
+    }
+
+    /**
+     * Получение ID клиента бота
+     * @param {string} botName - Имя бота
+     * @returns {number|null} ID клиента бота или null если не найден, или ошибка.
+    */
+    getBotClientId(botName) {
+        const client = this.getBotClient(botName);
+        if (!client) return null;
+        return client.SnapshotUnpacker.OwnID;
     }
 }
 
