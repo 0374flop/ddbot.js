@@ -81,11 +81,11 @@ class BotManager extends EventEmitter {
             };
             logDebug('creating bot client');
             // то самое место откуда создаеться клинт бота
-            const client = new DDRaceBot.Client(serverIp, serverPort, botName, { 
+            const client = new DDRaceBot.Client(serverIp, serverPort, botName, { // изпользуем имя без уникального суффикса чтобы было одно имя.
                 identity: identity // то самое индентити для скина и тд
             });
 
-            // Настраиваем события для бота или пиздеи будет
+            // Настраиваем события для бота
             this._setupBotEvents(uniqueBotName, client);
 
             // Сохраняем информацию о боте
@@ -105,18 +105,18 @@ class BotManager extends EventEmitter {
 
             return uniqueBotName;
         } catch (error) {
-            return null; // пиздеи
+            return null; // не получилось
         }
     }
 
     /**
      * Подключение бота к серверу
      * @param {string} botName
-     * @returns {boolean} (Да если ошибок не возникло)
+     * @returns {boolean} (Да, если ошибок не возникло)
      */
     async connectBot(botName) {
         logDebug('connectBot called with botName:', botName); // логируем вызов функции
-        const botInfo = this.activeBots.get(botName); // получаем инфу о боте
+        const botInfo = this.getBotInfo(botName); // получаем инфу о боте
         if (!botInfo) {
             return false; // бот не найден
         }
@@ -124,7 +124,7 @@ class BotManager extends EventEmitter {
             botInfo.client.joinDDRaceServer(); // то самое место подключения
             return true; // да
         } catch (error) { // фак
-            logDebug(JSON.stringify(error, null, 2));
+            logDebug(error);
             return false; // нет
         }
     }
@@ -136,7 +136,7 @@ class BotManager extends EventEmitter {
      */
     disconnectBot(botName) {
         logDebug('disconnectBot called with botName:', botName); // логируем вызов функции
-        const botInfo = this.activeBots.get(botName); // получаем инфу о боте
+        const botInfo = this.getBotInfo(botName); // получаем инфу о боте
         if (!botInfo) {
             return false; // бот не найден
         }
@@ -184,7 +184,7 @@ class BotManager extends EventEmitter {
      * @returns {boolean} - true если бот подключен, иначе false
      */
     isBotConnected(botName) {
-        const botInfo = this.activeBots.get(botName); // получаем инфу о боте
+        const botInfo = getBotInfo(botName); // получаем инфу о боте
         return botInfo ? botInfo.isConnected : false; // подключен? да или нет
     }
 
@@ -233,10 +233,8 @@ class BotManager extends EventEmitter {
         logDebug('removeBot called with botName:', botName); // логируем вызов функции
         const botInfo = this.getBotInfo(botName); // получаем инфу о боте
         if (botInfo) {
-            // Отключаем если подключен
-            if (botInfo.isConnected) {
-                this.disconnectBot(botName);
-            }
+            botInfo.client.removeAllListeners(); // удаляем все слушатели событий
+            this.disconnectBot(botName); // отключаем бота
             this.activeBots.delete(botName); // удаляем бота
             this.botFreezeStates.delete(botName); // удаляем состояние заморозки
             this.playerLists.delete(botName); // удаляем список игроков
