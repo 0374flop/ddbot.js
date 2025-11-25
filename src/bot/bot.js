@@ -472,7 +472,7 @@ class BotManager extends EventEmitter {
     /**
      * Получение ID клиента бота
      * @param {string} botName - Имя бота
-     * @returns {number|null} ID клиента бота или null если не найден, или ошибка.
+     * @returns {number|null|undefined} ID клиента бота или null если не найден, или ошибка.
     */
     getBotClientId(botName) {
         const client = this.getBotClient(botName);
