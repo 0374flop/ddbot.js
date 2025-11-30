@@ -1,3 +1,5 @@
+// 0374flop MIT
+
 "use strict";
 const DDRaceBot = require('neiky-ddracebot.js');
 const EventEmitter = require('events');
@@ -66,7 +68,7 @@ class BotManager extends EventEmitter {
         const serverPort = port; // порт
         
         if (!serverIp || !serverPort) {
-            throw new Error('и где мы возьмём айпи или порт? ты можешь нормально ввести адрес?');
+            throw new Error('Invalid server address or port'+': '+fulladdress+'\n, ip: '+serverIp+', port: '+serverPort);
         }
 
         const uniqueBotName = this.generateUniqueBotName(botName);
@@ -184,7 +186,7 @@ class BotManager extends EventEmitter {
      * @returns {boolean} - true если бот подключен, иначе false
      */
     isBotConnected(botName) {
-        const botInfo = getBotInfo(botName); // получаем инфу о боте
+        const botInfo = this.getBotInfo(botName); // получаем инфу о боте
         return botInfo ? botInfo.isConnected : false; // подключен? да или нет
     }
 
@@ -302,7 +304,7 @@ class BotManager extends EventEmitter {
         });
 
         client.on('connection_au_serveur_ddrace', () => { // Шок контент бот зашел на сервер
-            const botInfo = this.activeBots.get(botName); // получаем инфу о боте
+            const botInfo = this.getBotInfo(botName); // получаем инфу о боте
             if (!botInfo) { 
                 return; // бот не найден фак
             } else {
@@ -315,7 +317,7 @@ class BotManager extends EventEmitter {
 
         client.on('disconnect', (reason) => { // бот отключился от сервера
             if (!reason) return; // На всякий случай, потому что если специально отключаеться то может не быть
-            let botInfo = this.activeBots.get(botName); // получаем инфу о боте
+            let botInfo = this.getBotInfo(botName); // получаем инфу о боте
             if (!botInfo) { 
                 return; // бот не найден фак
             } else {
