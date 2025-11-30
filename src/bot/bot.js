@@ -21,9 +21,11 @@ class BotManager extends EventEmitter {
     constructor(teeWorlds = null) {
         super();
         if (teeWorlds !== null && typeof teeWorlds === "object") {
+            logDebug('Using an optional object');
             this.TW = teeWorlds;
         } else {
             this.TW = teeworlds;
+            logDebug('Using an default object');
         }
         this.activeBots = new Map();
         this.botCounter = 0;
