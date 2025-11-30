@@ -309,6 +309,7 @@ class BotManager extends EventEmitter {
     _setupBotEvents(botName, client) {
         logDebug('_setupBotEvents called for botName:', botName); // логируем вызов функции
         let chatinterval = null; // интервал для чата
+        let timeout = false;
 
         this.on(`${botName}:disconnected`, (reason) => {
             logDebug('internal "disconnected" event received for botName:', botName);
@@ -325,6 +326,7 @@ class BotManager extends EventEmitter {
             if (!botInfo) { 
                 return; // бот не найден фак
             } else {
+                timeout = false;
                 client.movement.FlagScoreboard(true); // для пинга
                 botInfo.isConnected = true; // обновляем статус
             }
@@ -343,8 +345,9 @@ class BotManager extends EventEmitter {
                 clearInterval(chatinterval); // очищаем интервал чата
             }
 
-            if (botInfo.parameter.reconnect && (botInfo.parameter.reconnectAttempts>0 || botInfo.parameter.reconnectAttempts===-1)) {
+            if (!timeout && (botInfo.parameter.reconnect && (botInfo.parameter.reconnectAttempts>0 || botInfo.parameter.reconnectAttempts===-1))) {
                 if (botInfo.parameter.reconnectAttempts!==-1)botInfo.parameter.reconnectAttempts--;
+                timeout = true;
 
                 let reconnectTime = 10000;
                 logDebug('base reconnect time is '+reconnectTime+'ms');
@@ -375,6 +378,7 @@ class BotManager extends EventEmitter {
                     client.connect();
                     this.emit(`${botName}:reconnect`, reconnectTime);
                     logDebug(`${botName} reconnect now`);
+                    timeout = false;
                 }, reconnectTime);
             } else {
                 this.emit(`${botName}:disconnect`, reason);
@@ -403,7 +407,7 @@ class BotManager extends EventEmitter {
                     const playerInfo = client.SnapshotUnpacker.getObjPlayerInfo(client_id);
                     const character = client.SnapshotUnpacker.getObjCharacter(client_id);
 
-                    if (clientInfo && clientInfo.name && playerInfo && playerInfo.m_Team !== -1) {
+                    if (clientInfo && clientInfo.name && playerInfo && playerInfo.team !== -1) {
                         playerMap.set(client_id, {
                             client_id,
                             name: clientInfo.name,
