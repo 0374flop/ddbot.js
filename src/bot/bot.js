@@ -1,7 +1,7 @@
 // 0374flop MIT
 
 "use strict";
-const TW = require('teeworlds');
+const teeworlds = require('teeworlds');
 const EventEmitter = require('events');
 const DebugLogger = require('Loger0374');
 const logDebuger = new DebugLogger('BotManager', false, true, null, true);
@@ -16,9 +16,15 @@ function random(min, max) {
 class BotManager extends EventEmitter {
     /**
      * Конструктор класса BotManager
+     * @param {Object|null} teeWorlds - Опциональный объект Teeworlds для использования вместо стандартного
      */
-    constructor() {
+    constructor(teeWorlds = null) {
         super();
+        if (typeof teeWorlds === Object) {
+            this.TW = teeWorlds;
+        } else {
+            this.TW = teeworlds;
+        }
         this.activeBots = new Map();
         this.botCounter = 0;
         this.botFreezeStates = new Map(); // Хранит состояние заморозки для каждого бота
@@ -82,6 +88,8 @@ class BotManager extends EventEmitter {
                 country: 0
             };
             logDebug('creating bot client');
+
+            let TW = this.TW; // teeworlds
             // то самое место откуда создаеться клинт бота
             const client = new TW.Client(serverIp, serverPort, botName, { // изпользуем имя без уникального суффикса чтобы было одно имя.
                 identity: identity // то самое индентити для скина и тд
