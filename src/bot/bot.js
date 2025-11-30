@@ -4,6 +4,7 @@
 const teeworlds = require('teeworlds');
 const EventEmitter = require('events');
 const DebugLogger = require('Loger0374');
+const { log } = require('console');
 const logDebuger = new DebugLogger('BotManager', false, true, null, true);
 const logDebug = ( ...args) => {
     logDebuger.logDebug(...args);
@@ -114,8 +115,11 @@ class BotManager extends EventEmitter {
             logDebug('initializing freeze state');
             this.botFreezeStates.set(uniqueBotName, false);
 
+            logDebug('bot create done', uniqueBotName)
             return uniqueBotName;
         } catch (error) {
+            logDebug('error bot create')
+            logDebug(error);
             return null; // не получилось
         }
     }
@@ -129,7 +133,7 @@ class BotManager extends EventEmitter {
         logDebug('connectBot called with botName:', botName); // логируем вызов функции
         const botInfo = this.getBotInfo(botName); // получаем инфу о боте
         if (!botInfo) {
-            logDebug('bot not found')
+            logDebug('bot not found');
             return false; // бот не найден
         }
         try {
