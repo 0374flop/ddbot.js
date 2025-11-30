@@ -2,7 +2,8 @@
   "dependencies": {
     "chalk": "^4.1.2",
     "loger0374": "^0.0.2",
-    "neiky-ddracebot.js": "^2.4.0"
+    "neiky-ddracebot.js": "^2.4.0",
+    "teeworlds": "^2.5.8"
   },
   "name": "ddbot.js-0374",
   "version": "2.1.3",
