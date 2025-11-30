@@ -44,7 +44,7 @@ async function main() {
 
     bot.connectBot(botName); // подкюлчаем
 
-    const botClient = bot.getBotClient(botName); // получаем оригинальный клиент neiky-ddracebot.js
+    const botClient = bot.getBotClient(botName); // получаем оригинальный клиент teeworlds
 
     // Подписка на событие подключения
     bot.on(`${botName}:connect`, () => {
