@@ -20,7 +20,7 @@ class BotManager extends EventEmitter {
      */
     constructor(teeWorlds = null) {
         super();
-        if (typeof teeWorlds === Object) {
+        if (typeof teeWorlds === "object") {
             this.TW = teeWorlds;
         } else {
             this.TW = teeworlds;
@@ -92,7 +92,8 @@ class BotManager extends EventEmitter {
             let TW = this.TW; // teeworlds
             // то самое место откуда создаеться клинт бота
             const client = new TW.Client(serverIp, serverPort, botName, { // изпользуем имя без уникального суффикса чтобы было одно имя.
-                identity: identity // то самое индентити для скина и тд
+                identity: identity, // то самое индентити для скина и тд
+                ...parameter.parameter
             });
 
             // Настраиваем события для бота
