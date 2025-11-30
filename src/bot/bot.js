@@ -305,10 +305,12 @@ class BotManager extends EventEmitter {
         let chatinterval = null; // интервал для чата
 
         this.on(`${botName}:disconnected`, (reason) => {
+            logDebug('internal "disconnected" event received for botName:', botName);
             clearInterval(chatinterval);
         });
 
         this.on(`${botName}:disconnect`, (reason) => {
+            logDebug('internal "disconnect" event received for botName:', botName);
             clearInterval(chatinterval);
         });
 
@@ -317,6 +319,7 @@ class BotManager extends EventEmitter {
             if (!botInfo) { 
                 return; // бот не найден фак
             } else {
+                client.movement.FlagScoreboard(true); // для пинга
                 botInfo.isConnected = true; // обновляем статус
             }
             this.emit(`${botName}:connect`); // емитим событие коннекта1
@@ -392,9 +395,7 @@ class BotManager extends EventEmitter {
                 for (let client_id = 0; client_id < 64; client_id++) {
                     const clientInfo = client.SnapshotUnpacker.getObjClientInfo(client_id);
                     const playerInfo = client.SnapshotUnpacker.getObjPlayerInfo(client_id);
-                    const ddnetChar = client.SnapshotUnpacker.getObjExDDNetCharacter
-                        ? client.SnapshotUnpacker.getObjExDDNetCharacter(client_id)
-                        : null;
+                    const character = client.SnapshotUnpacker.getObjCharacter(client_id);
 
                     if (clientInfo && clientInfo.name && playerInfo && playerInfo.m_Team !== -1) {
                         playerMap.set(client_id, {
@@ -402,10 +403,10 @@ class BotManager extends EventEmitter {
                             name: clientInfo.name,
                             clan: clientInfo.clan || '',
                             country: clientInfo.country || -1,
-                            team: playerInfo.m_Team,
+                            team: playerInfo.team,
                             skin: clientInfo.skin || 'default',
-                            x: ddnetChar ? ddnetChar.m_X : null,
-                            y: ddnetChar ? ddnetChar.m_Y : null
+                            x: character ? character.character_core.x : null,
+                            y: character ? character.character_core.y : null
                         });
                     }
                 }
@@ -427,7 +428,7 @@ class BotManager extends EventEmitter {
             const msgraw = msg; // ориг для чата на всякий
             const text = msg.message; // само сообщение
             const client_id = msg.client_id; // айди отправителя
-            const autormsg = msg.client_id === -1 ? "system" : this.getPlayerName(botName, client_id) || (msg.utilisateur?.InformationDuBot?.name || null) // имя отправителя
+            const autormsg = msg.client_id === -1 ? "system" : this.getPlayerName(botName, client_id) || (msg.author?.ClientInfo?.name || null) // имя отправителя
             const team = msg.team; // команда отправителя
 
             // фильтрация дубликатов сообщений
