@@ -4,7 +4,6 @@
 const teeworlds = require('teeworlds');
 const EventEmitter = require('events');
 const DebugLogger = require('Loger0374');
-const { log } = require('console');
 const logDebuger = new DebugLogger('BotManager', false, true, null, true);
 const logDebug = ( ...args) => {
     logDebuger.logDebug(...args);
@@ -21,7 +20,7 @@ class BotManager extends EventEmitter {
      */
     constructor(teeWorlds = null) {
         super();
-        if (typeof teeWorlds === "object") {
+        if (teeWorlds !== null && typeof teeWorlds === "object") {
             this.TW = teeWorlds;
         } else {
             this.TW = teeworlds;
