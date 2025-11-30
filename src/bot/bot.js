@@ -129,6 +129,7 @@ class BotManager extends EventEmitter {
         logDebug('connectBot called with botName:', botName); // логируем вызов функции
         const botInfo = this.getBotInfo(botName); // получаем инфу о боте
         if (!botInfo) {
+            logDebug('bot not found')
             return false; // бот не найден
         }
         try {
