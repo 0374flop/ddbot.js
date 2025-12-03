@@ -499,6 +499,10 @@ class BotManager extends EventEmitter {
         if (!client) return null;
         return client.SnapshotUnpacker.OwnID;
     }
+
+    getlogDebuger() {
+        return logDebuger;
+    }
 }
 
 module.exports = { BotManager, logDebuger }; // экспортируем BotManager и дебагер
