@@ -1,4 +1,5 @@
 // 0374flop MIT
+// npm i ddbot.js-0374
 
 "use strict";
 const teeworlds = require('teeworlds');
