@@ -83,6 +83,7 @@ class BotManager extends EventEmitter {
         const uniqueBotName = this.generateUniqueBotName(botName);
         try {
             const identity = parameter.identity || { // если нет индентити, создаём дефолтное
+                name: botName,
                 clan: "",
                 skin: "default",
                 use_custom_color: 0,
