@@ -4,7 +4,7 @@
 "use strict";
 const teeworlds = require('teeworlds');
 const EventEmitter = require('events');
-const DebugLogger = require('Loger0374');
+const DebugLogger = require('loger0374');
 const logDebuger = new DebugLogger('BotManager', false, true, null, true);
 const logDebug = ( ...args) => {
     logDebuger.logDebug(...args);

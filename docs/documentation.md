@@ -1,9 +1,19 @@
 # bot/BotManager
+
+установка
+"npm i ddbot.js-0374"
+
+
+Ето модуль для роботы с ДДНет (DDNet/teeworlds) ботами. внутри изпользует чистую библиотеку teeworlds (https://www.npmjs.com/package/teeworlds, https://www.npmjs.com/~swarfey) и просто делает рутинные вещи за вас. Например, может работать с кучей ботов на разных серверах, делает чат не повторяющимся без спамов. Убирает системные сообщения из чата. Можно получить весь список игроков одним методом.
+
+Вообще я делал его для себя, и по приколу. Но решил выложить чтобы проще работать с зависимостями и не качать с гита.
+
+
 Окей...
 Сейчас я вам разкажу как работает bot/BotManager.
 
 teeworlds
-## Базовые методы
+## методы
 У нас есть :
 1. bot.createBot()
 	1. fulladdress - Полный адрес сервера (IP:порт)
@@ -33,7 +43,7 @@ teeworlds
     1. Принимает уникальное имя бота.
     - Возвращает булевое значение.
 8. bot.setFreezeBot()
-    Просто меняет значение того заморожен ли бот.
+    Просто меняет значение того заморожен ли бот. (не влияет на игру)
 9. bot.getAllActiveBots()
 	Получение всех активных ботов
 	- Массив имен всех активных ботов
@@ -41,14 +51,14 @@ teeworlds
     1. Принимает уникальное имя бота.
     - Возвращает клиент teeworlds
 11. bot.removeBot()
-	Удаляет бота полностью.
+	Удаляет бота полностью. (и отключает)
     1. Принимает уникальное имя бота.
     - Возвращает булевое значение.
 12. bot.getBot()
     1. Принимает уникальное имя бота.
     - Возвращает прокси-объект бота.
-13. bot.(Тут нижнее подчеркивание, я не могу поставить из-за обсидиана, он ломается)setupBotEvents()
-    Заставляет ивенты работать. Изпользуеться в bot.createBot() чтобы вы могли делать все проще и вам не нужно было получать оригинальный клиент teeworlds
+13. bot._setupBotEvents()
+    Заставляет ивенты работать. Изпользуеться в bot.createBot() чтобы вы могли делать все проще и вам не нужно было получать оригинальный клиент teeworlds для ивентов.
     1. Принимает уникальное имя бота.
     2. Принимает клиент teeworlds
     Ничего не возвращает.
@@ -59,3 +69,73 @@ teeworlds
     1. Принимает уникальное имя бота/Array список игроков.
     2. clientid нужного игрока.
     - Имя нужного игрока.
+
+## пример ехо бота
+```js
+// Пример писался под комит c453b96f9fd717375f5ff70525603b7e1491c290.
+
+const DebugLogger = require('loger0374'); // мой логер (не обязательно изпользовать)
+const { bot, botClassAndLoger } = require('../../index');
+const botdebug = botClassAndLoger.logDebuger;
+botdebug.setDebugMode(true, true, true);
+
+const logDebuger = new DebugLogger('example', true, true, null, true);
+
+async function main() {
+    logDebuger.logDebug('Main started');
+
+    const identitybot = {
+        name: "Towa",
+        clan: "Towa Team",
+        skin: "Astolfofinho",
+        use_custom_color: 1,
+        color_body: 16711680,
+        color_feet: 16711680,
+        country: 804
+    };
+
+    const botName = await bot.createBot('45.141.57.22:8311', 'Towa', {
+        identity: identitybot,
+        reconnect: true,
+        reconnectAttempts: -1,
+        randreconnect: true
+    });
+
+    bot.connectBot(botName); // подкюлчаем
+
+    const botClient = bot.getBotClient(botName); // получаем оригинальный клиент teeworlds
+
+    // Подписка на событие подключения
+    bot.on(`${botName}:connect`, () => {
+        let timemsg = 0; // время
+
+        setTimeout(() => {
+            botClient.game.Say('Ку всем');
+        }, 1251);
+
+        // подписка на чат
+        bot.on(`${botName}:ChatNoSystem`, (msgraw, autormsg, text, team, client_id) => {
+            logDebuger.logDebug(`${client_id} ${team} '${autormsg}' : ${text}`); // вывод чата в консоль
+            if (text == 'exit') exit(); // выход
+
+            // Эхо-логика
+            if (Date.now() - timemsg > 6000) {
+                timemsg = Date.now(); // устанавливаем текущее время
+                if (text && autormsg) {
+                    botClient.game.Say(`${autormsg}: ${text}`); // отправка сообения (teeworlds)
+                }
+            }
+        });
+    });
+
+    // Выход через Ctrl+C
+    async function exit() {
+        logDebuger.logDebug('Shutting down...');
+        await bot.disconnectAllBots(); // отключаем всех ботов
+        process.exit(0); // завершаем процес
+    }
+    process.on('SIGINT', exit); // Ctrl+C
+}
+
+if (require.main === module) main();
+```
