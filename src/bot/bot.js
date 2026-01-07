@@ -451,6 +451,7 @@ class BotManager extends EventEmitter {
 
             // емитим.
             if (client_id !== -1) this.emit(`${botName}:ChatNoSystem`, msgraw, autormsg, text, team, client_id); // все только без системы или сервера
+            if (!(client_id == -1 && autormsg == null)) this.emit(`${botName}:ChatNoSystemnonullnames`, msgraw, autormsg, text, team, client_id);
             this.emit(`${botName}:ChatRaw`, msgraw, autormsg, text, team, client_id); // все сообщения
         });
 
