@@ -412,6 +412,7 @@ class BotManager extends EventEmitter {
                     if (clientInfo && clientInfo.name && playerInfo && playerInfo.team !== -1) {
                         playerMap.set(client_id, {
                             client_id,
+                            raw: { clientInfo, playerInfo, character },
                             name: clientInfo.name,
                             clan: clientInfo.clan || '',
                             country: clientInfo.country || -1,
