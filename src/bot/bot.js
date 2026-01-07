@@ -401,8 +401,7 @@ class BotManager extends EventEmitter {
             }
 
             try {
-                const oldList = this.playerLists.get(botName) || [];
-                const playerMap = new Map(oldList.map(p => [p.client_id, p]));
+                const playerMap = new Map();
 
                 for (let client_id = 0; client_id < 64; client_id++) {
                     const clientInfo = client.SnapshotUnpacker.getObjClientInfo(client_id);
@@ -451,7 +450,7 @@ class BotManager extends EventEmitter {
 
             // емитим.
             if (client_id !== -1) this.emit(`${botName}:ChatNoSystem`, msgraw, autormsg, text, team, client_id); // все только без системы или сервера
-            if (!(client_id == -1 && autormsg == null)) this.emit(`${botName}:ChatNoSystemnonullnames`, msgraw, autormsg, text, team, client_id);
+            if (!(client_id == -1 && autormsg == null)) this.emit(`${botName}:ChatNoSystemNoNullNames`, msgraw, autormsg, text, team, client_id);
             this.emit(`${botName}:ChatRaw`, msgraw, autormsg, text, team, client_id); // все сообщения
         });
 
