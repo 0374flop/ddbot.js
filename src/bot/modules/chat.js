@@ -24,7 +24,12 @@ class Chat extends EventEmitter {
             if (this.chatset.has(key)) return;
             this.chatset.add(key);
 
-            this.emit(`chat`, msgraw, autormsg, text, team, client_id);
+            this.emit(`anychat`, msgraw, autormsg, text, team, client_id);
+            if (autormsg) {
+                this.emit(`chat`, msgraw, autormsg, text, team, client_id);
+            } else {
+                this.emit(`systemchat`, msgraw, text);
+            }
         }
 
         this._onDisconnect = () => this.destroy();
