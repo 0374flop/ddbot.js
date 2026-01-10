@@ -61,7 +61,7 @@ class Chat extends EventEmitter {
     }
 
     /**
-     * stop
+     * stop (just clear)
      */
     stop() {
         this.clear();

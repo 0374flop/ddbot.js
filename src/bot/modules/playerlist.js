@@ -60,19 +60,32 @@ class PlayerList extends EventEmitter {
         this.bot.on('disconnect', this._onDisconnect);
     }
 
+    /**
+     *  [client_id, { client_id, clientInfo, playerInfo, character, DDNetCharacter }]
+     */
     get list() {
         return [...this.playermap]
     }
 
+    /**
+     * start
+     * @param {number} maxclients - max clients on the server.
+     */
     start(maxclients = 64) {
         this.maxclients = maxclients;
         this.bot.on('snapshot', this.snapshotlistener);
     }
 
+    /**
+     * stop
+     */
     stop() {
         this.bot.off('snapshot', this.snapshotlistener);
     }
 
+    /**
+     * Cleanup
+     */
     destroy() {
         this.stop()
         this.bot.off('disconnect', this._onDisconnect);
