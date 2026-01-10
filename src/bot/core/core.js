@@ -45,30 +45,62 @@ class Bot extends EventEmitter {
             if (clear) {
                 this.client = null;
             }
-        } catch {} // единственная ошибка которую он может словить, ето только тогда когда !this.client во время this.client.removeAllListeners(), хотя мы всеравно проверяем.
+        } catch (e) {
+            console.error(e);
+        } // единственная ошибка которую он может словить, ето только тогда когда !this.client во время this.client.removeAllListeners(), хотя мы всеравно проверяем.
     }
 
-    connect(addr, port, timeout) {
-        if (this.status.connected || this.status.connecting) return Promise.reject(new Error('Already connected or connecting'));
+    connect(addr, port = 8303, timeout = 5000) {
+        if (typeof addr !== 'string' || typeof port !== 'number') {
+            return Promise.reject(new Error('Invalid address or port'));
+        }
+        if (timeout <= 0) {
+            return Promise.reject(new Error('Timeout must be positive'));
+        }
+        if (this.status.connected || this.status.connecting) {
+            return Promise.reject(new Error('Already connected or connecting'));
+        }
         this.status.connecting = true;
 
         return new Promise((resolve, reject) => {
             this.create_client(addr, port);
+            
+            let settled = false;
+            
+            const cleanup = () => {
+                this.off('connect', onConnect);
+                this.off('disconnect', onDisconnect);
+            };
+            
+            const onConnect = () => {
+                if (settled) return;
+                settled = true;
+                clearTimeout(timer);
+                cleanup();
+                this.status.connecting = false;
+                resolve();
+            };
+            
+            const onDisconnect = (reason) => {
+                if (settled) return;
+                settled = true;
+                clearTimeout(timer);
+                cleanup();
+                this.status.connecting = false;
+                reject(new Error(`Disconnected during connect: ${reason}`));
+            };
+            
             const timer = setTimeout(() => {
+                if (settled) return;
+                settled = true;
+                cleanup();
                 this.status.connecting = false;
                 this.clean(true);
                 reject(new Error('Connection timeout'));
             }, timeout);
-            this.once('connect', () => {
-                this.status.connecting = false;
-                clearTimeout(timer);
-                resolve();
-            });
-            this.once('disconnect', (reason) => {
-                this.status.connecting = false;
-                clearTimeout(timer);
-                reject(new Error(`Disconnected during connect: ${reason}`));
-            });
+            
+            this.once('connect', onConnect);
+            this.once('disconnect', onDisconnect);
             this.client.connect();
         });
     }
@@ -180,6 +212,11 @@ class Bot extends EventEmitter {
         }
         
         return this._clientProxy;
+    }
+    destroy() {
+        this.disconnect();
+        this.removeAllListeners();
+        this._clientProxy = null;
     }
 }
 
