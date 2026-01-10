@@ -1,0 +1,174 @@
+const OriginalTeeworlds = require('teeworlds');
+const EventEmitter = require('events');
+const DDUtils = require('../utils/ddutils');
+
+class Bot extends EventEmitter {
+    constructor(identity, options, CustomTeeworlds = OriginalTeeworlds) {
+        super();
+        this.teeworlds = CustomTeeworlds;
+        this.client = new this.teeworlds.Client();
+
+        this.options = options;
+        this.identity = DDUtils.IsValidIdentity(identity) ? identity : DDUtils.DefaultIdentity('nameless tee');
+
+        this.status = {
+            connected: false
+        }
+        this._clientProxy = null;
+
+        this.clean(true)
+    }
+
+    get bot_identity() {
+        return this.identity;
+    }
+
+    create_client(addr, port) {
+        this.disconnect()
+        this.clean(true);
+        this.client = new this.teeworlds.Client(addr, port, this.identity.name, {
+            ...(this.options || {}),
+            identity: this.identity
+        });
+        this.client_events();
+    }
+
+    clean(clear = false) {
+        try {
+            if (!this.client) return;
+            this.client.removeAllListeners();
+            if (clear) {
+                this.client = null;
+            }
+        } catch {} // единственная ошибка которую он может словить, ето только тогда когда !this.client во время this.client.removeAllListeners(), хотя мы всеравно проверяем.
+    }
+
+    connect(addr, port, timeout) {
+        if (this.status.connected) return Promise.reject(new Error('Already connected'));
+
+        return new Promise((resolve, reject) => {
+            this.create_client(addr, port);
+            const timer = setTimeout(() => {
+                this.clean(true);
+                reject(new Error('Connection timeout'));
+            }, timeout);
+            this.once('connect', () => {
+                clearTimeout(timer);
+                resolve();
+            });
+            this.once('disconnect', (reason) => {
+                clearTimeout(timer);
+                reject(new Error(`Disconnected during connect: ${reason}`));
+            });
+            this.client.connect();
+        });
+    }
+
+    disconnect() {
+        if (this.client && this.status.connected) {
+            this.client.Disconnect();
+            this.status.connected = false;
+            this.emit('disconnect', null);
+        }
+        this.clean(true);
+    }
+
+    change_identity(identity) {
+        this.identity = DDUtils.IsValidIdentity(identity) ? identity : DDUtils.DefaultIdentity(this.identity.name);
+        if (this.client) this.client.game.ChangePlayerInfo(this.identity);
+    }
+
+    send_input(input) {
+        if (!this.client) return;
+        if (!DDUtils.IsValidInput(input)) return;
+        this.client.movement.input = { ...input }
+    }
+
+    client_events() {
+        this.clean(false)
+        this.client.on('connected', () => {
+            this.status.connected = true;
+            this.emit('connect');
+        });
+
+        this.client.on('disconnect', (reason) => {
+            this.status.connected = false;
+            this.clean(true);
+            this.emit('disconnect', reason);
+        });
+
+        this.client.on('broadcast', (message) => {
+            this.emit('broadcast', message);
+        });
+
+        this.client.on('capabilities', (message) => {
+            this.emit('capabilities', message);
+        });
+
+        this.client.on('emote', (message) => {
+            this.emit('emote', message);
+        });
+
+        this.client.on('kill', (message) => {
+            this.emit('kill', message);
+        });
+
+        this.client.on('snapshot', (message) => {
+            this.emit('snapshot', message);
+        });
+
+        this.client.on('map_change', (message) => {
+            this.emit('map_change', message);
+        });
+
+        this.client.on('motd', (message) => {
+            this.emit('motd', message);
+        });
+
+        this.client.on('message', (message) => {
+            this.emit('message', message);
+        });
+
+        this.client.on('teams', (message) => {
+            this.emit('teams', message);
+        });
+
+        this.client.on('teamkill', (message) => {
+            this.emit('teamkill', message);
+        });
+    }
+
+    get OwnID() {
+        if (!(this.client && this.status.connected)) return
+        return this.client.SnapshotUnpacker.OwnID;
+    }
+
+    get bot_client() {
+        if (!this._clientProxy) {
+            const self = this;
+            this._clientProxy = new Proxy({}, {
+                get(target, prop) {
+                    if (!self.client) {
+                        return undefined;
+                    }
+                    const value = self.client[prop];
+                    if (typeof value === 'function') {
+                        return value.bind(self.client);
+                    }
+                    return value;
+                },
+                set(target, prop, value) {
+                    if (!self.client) {
+                        return false;
+                    }
+                    self.client[prop] = value;
+                    return true;
+                }
+            });
+        }
+        
+        return this._clientProxy;
+    }
+}
+
+module.exports = Bot;
