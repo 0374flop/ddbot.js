@@ -3,9 +3,8 @@
 const EventEmitter = require('events');
 
 class Chat extends EventEmitter {
-
     /**
-     * @param {import('./core/core')} bot
+     * @param {import('../core/core')} bot
      */
     constructor(bot) {
         super();

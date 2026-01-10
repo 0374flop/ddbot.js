@@ -14,7 +14,8 @@ class Bot extends EventEmitter {
         this.identity = DDUtils.IsValidIdentity(identity) ? identity : DDUtils.DefaultIdentity('nameless tee');
 
         this.status = {
-            connected: false
+            connected: false,
+            connecting: false
         }
 
         this._clientProxy = null;
@@ -27,12 +28,13 @@ class Bot extends EventEmitter {
     }
 
     create_client(addr, port) {
-        this.disconnect()
+        this.disconnect();
         this.clean(true);
         this.client = new this.teeworlds.Client(addr, port, this.identity.name, {
             ...(this.options || {}),
             identity: this.identity
         });
+        this.client.movement.FlagScoreboard(true);
         this.client_events();
     }
 
@@ -47,19 +49,23 @@ class Bot extends EventEmitter {
     }
 
     connect(addr, port, timeout) {
-        if (this.status.connected) return Promise.reject(new Error('Already connected'));
+        if (this.status.connected || this.status.connecting) return Promise.reject(new Error('Already connected or connecting'));
+        this.status.connecting = true;
 
         return new Promise((resolve, reject) => {
             this.create_client(addr, port);
             const timer = setTimeout(() => {
+                this.status.connecting = false;
                 this.clean(true);
                 reject(new Error('Connection timeout'));
             }, timeout);
             this.once('connect', () => {
+                this.status.connecting = false;
                 clearTimeout(timer);
                 resolve();
             });
             this.once('disconnect', (reason) => {
+                this.status.connecting = false;
                 clearTimeout(timer);
                 reject(new Error(`Disconnected during connect: ${reason}`));
             });
@@ -68,6 +74,7 @@ class Bot extends EventEmitter {
     }
 
     disconnect() {
+        this.status.connecting = false;
         if (this.client && this.status.connected) {
             this.client.Disconnect();
             this.status.connected = false;
@@ -78,7 +85,7 @@ class Bot extends EventEmitter {
 
     change_identity(identity) {
         this.identity = DDUtils.IsValidIdentity(identity) ? identity : DDUtils.DefaultIdentity(this.identity.name);
-        if (this.client) this.client.game.ChangePlayerInfo(this.identity);
+        if (this.client && this.status.connected) this.client.game.ChangePlayerInfo(this.identity);
     }
 
     send_input(input) {
