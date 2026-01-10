@@ -1,5 +1,5 @@
 const Bot = require('./core/core');
-const Chat = require('./chat');
+const Chat = require('./modules/chat');
 
 (async () => {
     const bot = new Bot({
@@ -16,7 +16,23 @@ const Chat = require('./chat');
     await bot.connect('26.230.124.233', 8303, 1222222);
     const client = bot.bot_client;
     chat.on('chat', (msgraw, autormsg, text, team, client_id) => {
-        console.log(autormsg ? autormsg : 'system', text)
-        if (text == 'exit') bot.disconnect();
-    })
+        console.log(autormsg ? autormsg : 'system', ':', text)
+        if (text == 'exit') {
+            bot.disconnect();
+            setTimeout(() => {
+                process.exit();
+            }, 100);
+        }
+    });
+
+    process.stdin.on('data', (data) => {
+        client.game.Say(data.toString())
+    });
+
+    process.on('SIGINT', () => {
+        bot.disconnect();
+        setTimeout(() => {
+            process.exit();
+        }, 100);
+    });
 })();

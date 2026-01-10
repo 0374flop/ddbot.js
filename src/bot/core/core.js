@@ -16,6 +16,7 @@ class Bot extends EventEmitter {
         this.status = {
             connected: false
         }
+
         this._clientProxy = null;
 
         this.clean(true)
@@ -141,10 +142,12 @@ class Bot extends EventEmitter {
     }
 
     get OwnID() {
-        if (!(this.client && this.status.connected)) return
+        if (!(this.client && this.status.connected)) return;
         return this.client.SnapshotUnpacker.OwnID;
     }
-
+    /**
+     * @type {import('teeworlds').Client}
+     */
     get bot_client() {
         if (!this._clientProxy) {
             const self = this;
