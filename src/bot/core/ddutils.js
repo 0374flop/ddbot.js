@@ -1,3 +1,5 @@
+"use strict";
+
 class DDUtils {
     constructor() {}
 
@@ -129,6 +131,10 @@ class DDUtils {
         }
 
         return true;
+    }
+
+    static random(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 }
 

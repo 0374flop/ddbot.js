@@ -1,5 +1,5 @@
-const Bot = require('./core');
-const Chat = require('../chat');
+const Bot = require('./core/core');
+const Chat = require('./chat');
 
 (async () => {
     const bot = new Bot({

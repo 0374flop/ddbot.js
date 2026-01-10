@@ -1,3 +1,5 @@
+"use strict";
+
 const OriginalTeeworlds = require('teeworlds');
 const EventEmitter = require('events');
 const DDUtils = require('./ddutils');
