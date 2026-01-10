@@ -1,7 +1,5 @@
 class DDUtils {
-    constructor() {
-
-    }
+    constructor() {}
 
     static DefaultIdentity(name = 'nameless tee') {
         return {
@@ -73,7 +71,6 @@ class DDUtils {
             return false;
         }
 
-        // Проверяем наличие всех обязательных полей
         const requiredFields = [
             'm_Direction', 
             'm_TargetX', 
@@ -93,7 +90,6 @@ class DDUtils {
             }
         }
 
-        // Проверяем типы - все должны быть числами
         for (const field of requiredFields) {
             if (typeof input[field] !== 'number') {
                 return false;
@@ -107,8 +103,6 @@ class DDUtils {
         if (input.m_Direction < -1 || input.m_Direction > 1) {
             return false;
         }
-
-        // m_TargetX, m_TargetY: любые целые числа (не проверяем границы)
 
         // m_Jump, m_Fire, m_Hook: 0 или 1
         if (input.m_Jump !== 0 && input.m_Jump !== 1) {
