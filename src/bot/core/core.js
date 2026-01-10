@@ -1,6 +1,6 @@
 const OriginalTeeworlds = require('teeworlds');
 const EventEmitter = require('events');
-const DDUtils = require('../utils/ddutils');
+const DDUtils = require('./ddutils');
 
 class Bot extends EventEmitter {
     constructor(identity, options, CustomTeeworlds = OriginalTeeworlds) {
