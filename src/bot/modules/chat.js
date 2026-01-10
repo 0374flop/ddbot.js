@@ -1,16 +1,11 @@
-"use strict";
+const BaseModule = require('../core/module');
 
-const EventEmitter = require('events');
-
-class Chat extends EventEmitter {
+class Chat extends BaseModule {
     /**
      * @param {import('../core/core')} bot
      */
     constructor(bot) {
-        super();
-        if (!bot) throw new Error('Chat requires bot core');
-        this.bot = bot;
-
+        super(bot, 'Chat');
         this.chatinterval = null;
         this.chatset = new Set();
         this.chatlistener = (msg) => {
@@ -30,50 +25,30 @@ class Chat extends EventEmitter {
             } else {
                 this.emit(`systemchat`, msgraw, text);
             }
-        }
-
-        this._onDisconnect = () => this.destroy();
-        this.bot.on('disconnect', this._onDisconnect);
+        };
     }
 
     /**
-     * clear chatlistener, Interval, chatset
-    */
-    clear() {
+     * Start the chat module
+     * @param {number} interval - Interval for clearing chat cache in milliseconds
+     */
+    _start(interval = 1000) {
+        this.chatinterval = setInterval(() => {
+            this.chatset.clear();
+        }, interval);
+        this.bot.on('message', this.chatlistener);
+    }
+
+    /**
+     * Stop the chat module
+     */
+    _stop() {
         this.bot.off('message', this.chatlistener);
         this.chatset.clear();
         if (this.chatinterval) {
             clearInterval(this.chatinterval);
             this.chatinterval = null;
         }
-    }
-
-    /**
-     * start
-     * @param {number} time - Interval clear chatset (ms)
-     */
-    start(time = 1000) {
-        this.clear();
-        this.chatinterval = setInterval(() => {
-            this.chatset.clear();
-        }, time);
-        this.bot.on('message', this.chatlistener);
-    }
-
-    /**
-     * stop (just clear)
-     */
-    stop() {
-        this.clear();
-    }
-
-    /**
-     * Cleanup
-     */
-    destroy() {
-        this.stop();
-        this.bot.off('disconnect', this._onDisconnect);
-        this.removeAllListeners();
     }
 }
 

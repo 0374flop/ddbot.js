@@ -1,21 +1,17 @@
-"use strict";
+const BaseModule = require('../core/module');
 
-const EventEmitter = require('events');
-
-class PlayerList extends EventEmitter {
+class PlayerList extends BaseModule {
     /**
      * @param {import('../core/core')} bot
      */
     constructor(bot) {
-        super();
-        if (!bot) throw new Error('PlayerList requires bot core');
-        this.bot = bot;
+        super(bot, 'PlayerList');
         this.client = this.bot.bot_client;
 
         this.maxclients = 64;
-
         this.playermap = new Map();
         this.previousMap = new Map();
+
         this.snapshotlistener = () => {
             this.previousMap = new Map(this.playermap);
             this.playermap.clear();
@@ -25,6 +21,7 @@ class PlayerList extends EventEmitter {
                 const playerInfo = this.client.SnapshotUnpacker.getObjPlayerInfo(client_id);
                 const character = this.client.SnapshotUnpacker.getObjCharacter(client_id);
                 const DDNetCharacter = this.client.SnapshotUnpacker.getObjExDDNetCharacter(client_id);
+
                 if (clientInfo && playerInfo && character) {
                     const playerData = {
                         client_id,
@@ -54,42 +51,46 @@ class PlayerList extends EventEmitter {
                     });
                 }
             }
-        }
-
-        this._onDisconnect = () => this.destroy();
-        this.bot.on('disconnect', this._onDisconnect);
+        };
     }
 
     /**
-     *  [client_id, { client_id, clientInfo, playerInfo, character, DDNetCharacter }]
+     * Get list of all players
+     * @returns {Array} [client_id, { client_id, clientInfo, playerInfo, character, DDNetCharacter }]
      */
     get list() {
-        return [...this.playermap]
+        return [...this.playermap];
     }
 
     /**
-     * start
-     * @param {number} maxclients - max clients on the server.
+     * Get player by ID
+     * @param {number} client_id
+     * @returns {object|null} Player data or null
      */
-    start(maxclients = 64) {
+    getPlayer(client_id) {
+        return this.playermap.get(client_id) || null;
+    }
+
+    /**
+     * Get number of online players
+     * @returns {number}
+     */
+    getPlayerCount() {
+        return this.playermap.size;
+    }
+
+    /**
+     * @param {number} maxclients - Maximum clients on the server
+     */
+    _start(maxclients = 64) {
         this.maxclients = maxclients;
         this.bot.on('snapshot', this.snapshotlistener);
     }
 
-    /**
-     * stop
-     */
-    stop() {
+    _stop() {
         this.bot.off('snapshot', this.snapshotlistener);
-    }
-
-    /**
-     * Cleanup
-     */
-    destroy() {
-        this.stop()
-        this.bot.off('disconnect', this._onDisconnect);
-        this.removeAllListeners();
+        this.playermap.clear();
+        this.previousMap.clear();
     }
 }
 
