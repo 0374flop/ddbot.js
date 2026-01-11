@@ -51,6 +51,8 @@ class PlayerList extends BaseModule {
                     });
                 }
             }
+
+            previous.clear();
         };
     }
 

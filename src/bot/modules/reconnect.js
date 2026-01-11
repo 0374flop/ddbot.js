@@ -18,12 +18,17 @@ class Reconnect extends BaseModule {
         this.bot.on('disconnect', this.handleDisconnect);
     }
 
+    /**
+     * 
+     * @param {string|null} reason 
+     * @param {import('../core/ddutils').connectionInfo} connectionInfo { addr: 'string', port: num }
+     */
     handleDisconnect = (reason, connectionInfo) => {
         if (!reason) return;
         if (this.reconnecting) return;
         
-        if (!this.bot.lastAddr || !this.bot.lastPort) {
-            this.emit('reconnect_impossible', 'No connection info');
+        if (!connectionInfo.addr || !connectionInfo.port) {
+            this.emit('reconnect_failed', 'No connection info');
             return;
         }
         
@@ -50,7 +55,7 @@ class Reconnect extends BaseModule {
                 this.currentAttempts = 0;
                 this.emit('reconnected');
             } catch (err) {
-                this.emit('reconnect_error', err);
+                this.emit('reconnect_failed', err);
             } finally {
                 this.reconnecting = false;
             }

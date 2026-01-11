@@ -15,10 +15,10 @@ class Bot extends EventEmitter {
 
         this.status = {
             connected: false,
-            connecting: false
+            connecting: false,
+            addr: null,
+            port: null
         }
-        this.lastAddr = null;
-        this.lastPort = null;
 
         this._clientProxy = null;
 
@@ -63,8 +63,8 @@ class Bot extends EventEmitter {
             return Promise.reject(new Error('Already connected or connecting'));
         }
         this.status.connecting = true;
-        this.lastAddr = addr;
-        this.lastPort = port;
+        this.status.addr = addr;
+        this.status.port = port;
 
         return new Promise((resolve, reject) => {
             this.create_client(addr, port);
@@ -113,12 +113,12 @@ class Bot extends EventEmitter {
         this.status.connecting = false;
         if (this.client && this.status.connected) {
             try {
-                await this.client.Disconnect()
+                await this.client.Disconnect();
             } catch (e) {
                 console.error(e);
             }
             this.status.connected = false;
-            this.emit('disconnect', null, { addr: this.lastAddr, port: this.lastPort });
+            this.emit('disconnect', null, { addr: this.status.addr, port: this.status.port });
         }
         this.clean(true);
     }
@@ -138,13 +138,13 @@ class Bot extends EventEmitter {
         this.clean(false)
         this.client.on('connected', () => {
             this.status.connected = true;
-            this.emit('connect', { addr: this.lastAddr, port: this.lastPort });
+            this.emit('connect', { addr: this.status.addr, port: this.status.port });
         });
 
         this.client.on('disconnect', (reason) => {
             this.status.connected = false;
             this.clean(true);
-            this.emit('disconnect', reason, { addr: this.lastAddr, port: this.lastPort });
+            this.emit('disconnect', reason, { addr: this.status.addr, port: this.status.port });
         });
 
         this.client.on('broadcast', (message) => {

@@ -1,5 +1,36 @@
 "use strict";
 
+/**
+ * @typedef {Object} ConnectionInfo
+ * @property {string} addr - Server IP address or hostname
+ * @property {number} port - Server port number
+ */
+
+/**
+ * @typedef {Object} Identity
+ * @property {string} name - Player name (max 15 chars)
+ * @property {string} clan - Clan tag (max 11 chars)
+ * @property {string} skin - Skin name (1-23 chars)
+ * @property {0|1} use_custom_color - Use custom colors flag
+ * @property {number} color_body - Body color (integer)
+ * @property {number} color_feet - Feet color (integer)
+ * @property {number} country - Country code (-1 to 999)
+ */
+
+/**
+ * @typedef {Object} Input
+ * @property {-1|0|1} m_Direction - Movement direction
+ * @property {number} m_TargetX - Aim X coordinate
+ * @property {number} m_TargetY - Aim Y coordinate
+ * @property {0|1} m_Jump - Jump state
+ * @property {0|1} m_Fire - Fire state
+ * @property {0|1} m_Hook - Hook state
+ * @property {number} m_PlayerFlags - Player flags
+ * @property {1|2|3|4|5|6} m_WantedWeapon - Desired weapon
+ * @property {0|1} m_NextWeapon - Next weapon switch
+ * @property {0|1} m_PrevWeapon - Previous weapon switch
+ */
+
 class DDUtils {
     constructor() {}
 
@@ -135,6 +166,13 @@ class DDUtils {
 
     static random(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    static connectionInfo() {
+        return {
+            addr: 'string',
+            port: 8303
+        }
     }
 }
 
