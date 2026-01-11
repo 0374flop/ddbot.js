@@ -15,6 +15,7 @@ class PlayerList extends BaseModule {
         this.snapshotlistener = () => {
             this.previousMap = new Map(this.playermap);
             this.playermap.clear();
+            if (!this.client) return;
 
             for (let client_id = 0; client_id < this.maxclients; client_id++) {
                 const clientInfo = this.client.SnapshotUnpacker.getObjClientInfo(client_id);
@@ -22,13 +23,13 @@ class PlayerList extends BaseModule {
                 const character = this.client.SnapshotUnpacker.getObjCharacter(client_id);
                 const DDNetCharacter = this.client.SnapshotUnpacker.getObjExDDNetCharacter(client_id);
 
-                if (clientInfo && playerInfo && character) {
+                if (clientInfo && playerInfo) {
                     const playerData = {
                         client_id,
                         clientInfo,
                         playerInfo,
-                        character,
-                        DDNetCharacter
+                        character: character || null,
+                        DDNetCharacter: DDNetCharacter || null
                     };
                     this.playermap.set(client_id, playerData);
 
@@ -52,7 +53,7 @@ class PlayerList extends BaseModule {
                 }
             }
 
-            previous.clear();
+            this.previousMap.clear();
         };
     }
 

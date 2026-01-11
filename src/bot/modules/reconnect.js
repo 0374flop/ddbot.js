@@ -45,15 +45,15 @@ class Reconnect extends BaseModule {
             attempt: this.currentAttempts, 
             delay, 
             reason,
-            addr: this.bot.lastAddr,
-            port: this.bot.lastPort
+            addr: connectionInfo.addr,
+            port: connectionInfo.port
         });
 
         setTimeout(async () => {
             try {
-                await this.bot.connect(this.bot.lastAddr, this.bot.lastPort);
+                await this.bot.connect(connectionInfo.addr, connectionInfo.port);
                 this.currentAttempts = 0;
-                this.emit('reconnected');
+                this.emit('reconnected', connectionInfo.addr, connectionInfo.port);
             } catch (err) {
                 this.emit('reconnect_failed', err);
             } finally {
