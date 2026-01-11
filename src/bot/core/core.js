@@ -17,6 +17,8 @@ class Bot extends EventEmitter {
             connected: false,
             connecting: false
         }
+        this.lastAddr = null;
+        this.lastPort = null;
 
         this._clientProxy = null;
 
@@ -61,6 +63,8 @@ class Bot extends EventEmitter {
             return Promise.reject(new Error('Already connected or connecting'));
         }
         this.status.connecting = true;
+        this.lastAddr = addr;
+        this.lastPort = port;
 
         return new Promise((resolve, reject) => {
             this.create_client(addr, port);
@@ -105,12 +109,16 @@ class Bot extends EventEmitter {
         });
     }
 
-    disconnect() {
+    async disconnect() {
         this.status.connecting = false;
         if (this.client && this.status.connected) {
-            this.client.Disconnect();
+            try {
+                await this.client.Disconnect()
+            } catch (e) {
+                console.error(e);
+            }
             this.status.connected = false;
-            this.emit('disconnect', null);
+            this.emit('disconnect', null, { addr: this.lastAddr, port: this.lastPort });
         }
         this.clean(true);
     }
@@ -130,13 +138,13 @@ class Bot extends EventEmitter {
         this.clean(false)
         this.client.on('connected', () => {
             this.status.connected = true;
-            this.emit('connect');
+            this.emit('connect', { addr: this.lastAddr, port: this.lastPort });
         });
 
         this.client.on('disconnect', (reason) => {
             this.status.connected = false;
             this.clean(true);
-            this.emit('disconnect', reason);
+            this.emit('disconnect', reason, { addr: this.lastAddr, port: this.lastPort });
         });
 
         this.client.on('broadcast', (message) => {

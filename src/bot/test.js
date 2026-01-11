@@ -15,7 +15,7 @@ const Chat = require('./modules/chat');
     chat.start()
     await bot.connect('26.230.124.233', 8303, 1222222);
     const client = bot.bot_client;
-    chat.on('chat', (msgraw, autormsg, text, team, client_id) => {
+    chat.on('anychat', (msgraw, autormsg, text, team, client_id) => {
         console.log(autormsg ? autormsg : 'system', ':', text)
         if (text == 'exit') {
             bot.disconnect();
