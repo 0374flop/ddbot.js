@@ -4,6 +4,14 @@ const OriginalTeeworlds = require('teeworlds');
 const EventEmitter = require('events');
 const DDUtils = require('./ddutils');
 
+/**
+ * @typedef {import('./ddutils.js').ConnectionInfo} ConnectionInfo
+ * 
+ * @typedef {import('./ddutils.js').Identity} Identity
+ * 
+ * @typedef {import('./ddutils.js').Input} Input
+ */
+
 class Bot extends EventEmitter {
     constructor(identity, options, CustomTeeworlds = OriginalTeeworlds) {
         super();
@@ -44,6 +52,7 @@ class Bot extends EventEmitter {
         try {
             if (!this.client) return;
             this.client.removeAllListeners();
+            this.client.SnapshotUnpacker.removeAllListeners();
             if (clear) {
                 this.client = null;
             }
@@ -123,14 +132,20 @@ class Bot extends EventEmitter {
         this.clean(true);
     }
 
+    /**
+     * @param {Identity} identity 
+     */
     change_identity(identity) {
-        this.identity = DDUtils.IsValidIdentity(identity) ? identity : DDUtils.DefaultIdentity(this.identity.name);
+        this.identity = typeof identity === 'object' ? identity : DDUtils.DefaultIdentity(this.identity.name);
         if (this.client && this.status.connected) this.client.game.ChangePlayerInfo(this.identity);
     }
 
+    /**
+     * @param {Input} input 
+     */
     send_input(input) {
         if (!this.client) return;
-        if (!DDUtils.IsValidInput(input)) return;
+        // if (!DDUtils.IsValidInput(input)) return;
         this.client.movement.input = { ...input }
     }
 
@@ -138,12 +153,22 @@ class Bot extends EventEmitter {
         this.clean(false)
         this.client.on('connected', () => {
             this.status.connected = true;
+            /**
+             * @event Bot#connect
+             * @type {ConnectionInfo}
+             */
             this.emit('connect', { addr: this.status.addr, port: this.status.port });
         });
 
-        this.client.on('disconnect', (reason) => {
+        this.client.on('disconnect', (reason = null) => {
             this.status.connected = false;
             this.clean(true);
+            if (!reason) return;
+            /**
+             * @event Bot#disconnect
+             * @param {string} reason
+             * @param {ConnectionInfo} info
+             */
             this.emit('disconnect', reason, { addr: this.status.addr, port: this.status.port });
         });
 
@@ -186,8 +211,43 @@ class Bot extends EventEmitter {
         this.client.on('teamkill', (message) => {
             this.emit('teamkill', message);
         });
+
+        this.client.SnapshotUnpacker.on('spawn', (message) => {
+            this.emit('spawn', message);
+        });
+
+        this.client.SnapshotUnpacker.on('death', (message) => {
+            this.emit('death', message);
+        });
+
+        this.client.SnapshotUnpacker.on('hammerhit', (message) => {
+            this.emit('hammerhit', message);
+        });
+
+        this.client.SnapshotUnpacker.on('sound_world', (message) => {
+            this.emit('sound_world', message);
+        });
+
+        this.client.SnapshotUnpacker.on('explosion', (message) => {
+            this.emit('explosion', message);
+        });
+
+        this.client.SnapshotUnpacker.on('common', (message) => {
+            this.emit('common', message);
+        });
+
+        this.client.SnapshotUnpacker.on('damage_indicator', (message) => {
+            this.emit('damage_indicator', message);
+        });
+
+        this.client.SnapshotUnpacker.on('sound_global', (message) => {
+            this.emit('sound_global', message);
+        });
     }
 
+    /**
+     * @type {number}
+     */
     get OwnID() {
         if (!(this.client && this.status.connected)) return;
         return this.client.SnapshotUnpacker.OwnID;
@@ -221,8 +281,9 @@ class Bot extends EventEmitter {
         
         return this._clientProxy;
     }
-    destroy() {
-        this.disconnect();
+
+    async destroy() {
+        await this.disconnect();
         this.removeAllListeners();
         this._clientProxy = null;
     }

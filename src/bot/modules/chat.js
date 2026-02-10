@@ -74,7 +74,7 @@ class Chat extends BaseModule {
         const { text, team } = this.queue.shift();
 
         if (this.bot.bot_client) {
-            this.bot.bot_client.game.Say(text, team);
+            this.bot.bot_client?.game?.Say(text, team);
             this.lastSentTime = now;
 
             this.emit('sent', {
