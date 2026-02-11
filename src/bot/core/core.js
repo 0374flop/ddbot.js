@@ -22,8 +22,10 @@ class Bot extends EventEmitter {
         this.identity = DDUtils.IsValidIdentity(identity) ? identity : DDUtils.DefaultIdentity('nameless tee');
 
         this.status = {
-            connected: false,
-            connecting: false,
+            connect: {
+                connected: false,
+                connecting: false
+            },
             addr: null,
             port: null
         }
@@ -68,10 +70,10 @@ class Bot extends EventEmitter {
         if (timeout <= 0) {
             return Promise.reject(new Error('Timeout must be positive'));
         }
-        if (this.status.connected || this.status.connecting) {
+        if (this.status.connect.connected || this.status.connect.connecting) {
             return Promise.reject(new Error('Already connected or connecting'));
         }
-        this.status.connecting = true;
+        this.status.connect.connecting = true;
         this.status.addr = addr;
         this.status.port = port;
 
@@ -90,7 +92,7 @@ class Bot extends EventEmitter {
                 settled = true;
                 clearTimeout(timer);
                 cleanup();
-                this.status.connecting = false;
+                this.status.connect.connecting = false;
                 resolve();
             };
             
@@ -99,7 +101,7 @@ class Bot extends EventEmitter {
                 settled = true;
                 clearTimeout(timer);
                 cleanup();
-                this.status.connecting = false;
+                this.status.connect.connecting = false;
                 reject(new Error(`Disconnected during connect: ${reason}`));
             };
             
@@ -107,7 +109,7 @@ class Bot extends EventEmitter {
                 if (settled) return;
                 settled = true;
                 cleanup();
-                this.status.connecting = false;
+                this.status.connect.connecting = false;
                 this.clean(true);
                 reject(new Error('Connection timeout'));
             }, timeout);
@@ -119,14 +121,14 @@ class Bot extends EventEmitter {
     }
 
     async disconnect() {
-        this.status.connecting = false;
-        if (this.client && this.status.connected) {
+        this.status.connect.connecting = false;
+        if (this.client && this.status.connect.connected) {
             try {
                 await this.client.Disconnect();
             } catch (e) {
                 console.error(e);
             }
-            this.status.connected = false;
+            this.status.connect.connected = false;
             this.emit('disconnect', null, { addr: this.status.addr, port: this.status.port });
         }
         this.clean(true);
@@ -137,7 +139,7 @@ class Bot extends EventEmitter {
      */
     change_identity(identity) {
         this.identity = typeof identity === 'object' ? identity : DDUtils.DefaultIdentity(this.identity.name);
-        if (this.client && this.status.connected) this.client.game.ChangePlayerInfo(this.identity);
+        if (this.client && this.status.connect.connected) this.client.game.ChangePlayerInfo(this.identity);
     }
 
     /**
@@ -152,7 +154,7 @@ class Bot extends EventEmitter {
     client_events() {
         this.clean(false)
         this.client.on('connected', () => {
-            this.status.connected = true;
+            this.status.connect.connected = true;
             /**
              * @event Bot#connect
              * @type {ConnectionInfo}
@@ -161,7 +163,7 @@ class Bot extends EventEmitter {
         });
 
         this.client.on('disconnect', (reason = null) => {
-            this.status.connected = false;
+            this.status.connect.connected = false;
             this.clean(true);
             if (!reason) return;
             /**
@@ -249,7 +251,7 @@ class Bot extends EventEmitter {
      * @type {number}
      */
     get OwnID() {
-        if (!(this.client && this.status.connected)) return;
+        if (!(this.client && this.status.connect.connected)) return;
         return this.client.SnapshotUnpacker.OwnID;
     }
     /**

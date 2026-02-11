@@ -1,6 +1,6 @@
-const Bot = require('./core/core');
-const Chat = require('./modules/chat');
-const PlayerList = require('./modules/playerlist');
+const Bot = require('../core/core');
+const Chat = require('../modules/chat');
+const PlayerList = require('../modules/playerlist');
 
 function isHitOnMe(hitX, hitY, myX, myY) {
     const TILE = 32*1.1;

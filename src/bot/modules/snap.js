@@ -1,4 +1,4 @@
-const BaseModule = require('./core/module');
+const BaseModule = require('../core/module');
 
 class Snap extends BaseModule {
     /**
@@ -8,14 +8,14 @@ class Snap extends BaseModule {
         super(bot, 'Snap');
         this.bot = bot;
         this.hammerHitlistener = (hit) => {
-            if (this.areWithinTile(hit.common.x, hit.common.y, this.bot.bot_client.SnapshotUnpacker.getObjCharacter(this.bot.OwnID).character_core.x, this.bot.bot_client.SnapshotUnpacker.getObjCharacter(this.bot.OwnID).character_core.y)) {
-                this.emit('hammerhitme', hit);
+            if (Snap.areWithinTile(hit.common.x, hit.common.y, this.bot.bot_client.SnapshotUnpacker.getObjCharacter(this.bot.OwnID).character_core.x, this.bot.bot_client.SnapshotUnpacker.getObjCharacter(this.bot.OwnID).character_core.y)) {
+                this.emit('hammerhitme', hit, Snap.whoareWithinTile(hit.common.x, hit.common.y, this.bot.bot_client.SnapshotUnpacker.AllObjCharacter, [this.bot.OwnID]));
             }
         };
 
         this.firelistener = (sound) => {
             const list = this.bot.bot_client.SnapshotUnpacker.AllObjCharacter;
-            if (sound.sound_id === 0) this.emit('fire', Snap.whomadesound(sound, list));
+            if (sound.sound_id === 0) this.emit('fire', Snap.whoareWithinTile(sound.common.x, sound.common.y, list));
         }
     }
 
@@ -30,16 +30,19 @@ class Snap extends BaseModule {
 
     /**
      * 
-     * @param {object} sound - sound object
+     * @param {number} x - x coordinate
+     * @param {number} y - y coordinate
      * @param {Array.<object>} list - character list
      * @returns {number|null} - client_id or null
      */
-    static whomadesound(sound, list) {
+    static whoareWithinTile(x, y, list, ignoreClients = []) {
         for (const character of list) {
             const character_core = character?.character_core;
             if (!character_core) continue;
-            if (Snap.areWithinTile(sound.common.x, sound.common.y, character_core.x, character_core.y)) {
-                return character.client_id;
+            if (Snap.areWithinTile(x, y, character_core.x, character_core.y)) {
+                if (!ignoreClients.includes(character.client_id)) {
+                    return character.client_id;
+                }
             }
         }
         return null;
@@ -56,11 +59,13 @@ class Snap extends BaseModule {
     }
 
     _start() {
-        this.bot.client.SnapshotUnpacker.on('hammerhit', this.hammerHitlistener);
+        this.bot.client?.SnapshotUnpacker?.on('hammerhit', this.hammerHitlistener);
+        this.bot.client?.SnapshotUnpacker?.on('sound_world', this.firelistener);
     }
 
     _stop() {
-        this.bot.client.SnapshotUnpacker.off('hammerhit', this.hammerHitlistener);
+        this.bot.client?.SnapshotUnpacker?.off('hammerhit', this.hammerHitlistener);
+        this.bot.client?.SnapshotUnpacker?.off('sound_world', this.firelistener);
     }
 }
 
