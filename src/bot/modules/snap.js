@@ -15,7 +15,7 @@ class Snap extends BaseModule {
 
         this.firelistener = (sound) => {
             const list = this.bot.bot_client.SnapshotUnpacker.AllObjCharacter;
-            if (sound.sound_id === 0) this.emit('fire', Snap.whoareWithinTile(sound.common.x, sound.common.y, list));
+            if (sound.sound_id === 0) this.emit('fire', { common: sound.common }, Snap.whoareWithinTile(sound.common.x, sound.common.y, list));
         }
     }
 
@@ -29,7 +29,6 @@ class Snap extends BaseModule {
     }
 
     /**
-     * 
      * @param {number} x - x coordinate
      * @param {number} y - y coordinate
      * @param {Array.<object>} list - character list
@@ -59,13 +58,13 @@ class Snap extends BaseModule {
     }
 
     _start() {
-        this.bot.client?.SnapshotUnpacker?.on('hammerhit', this.hammerHitlistener);
-        this.bot.client?.SnapshotUnpacker?.on('sound_world', this.firelistener);
+        this.bot.on('hammerhit', this.hammerHitlistener);
+        this.bot.on('sound_world', this.firelistener);
     }
 
     _stop() {
-        this.bot.client?.SnapshotUnpacker?.off('hammerhit', this.hammerHitlistener);
-        this.bot.client?.SnapshotUnpacker?.off('sound_world', this.firelistener);
+        this.bot.off('hammerhit', this.hammerHitlistener);
+        this.bot.off('sound_world', this.firelistener);
     }
 }
 

@@ -53,9 +53,9 @@ function random(min, max) {
         }
     });
 
-    snap.on('fire', (id) => {
+    snap.on('fire', (common, id) => {
         try {
-            console.log('Выстрел', id);
+            console.log('Выстрел', common, id);
         } catch (error) {
             console.error(error)
         }

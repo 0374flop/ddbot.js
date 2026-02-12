@@ -93,7 +93,7 @@ class Bot extends EventEmitter {
                 clearTimeout(timer);
                 cleanup();
                 this.status.connect.connecting = false;
-                resolve();
+                resolve({ addr: this.status.addr, port: this.status.port });
             };
             
             const onDisconnect = (reason) => {
@@ -122,6 +122,7 @@ class Bot extends EventEmitter {
 
     async disconnect() {
         this.status.connect.connecting = false;
+        let info = null;
         if (this.client && this.status.connect.connected) {
             try {
                 await this.client.Disconnect();
@@ -129,9 +130,11 @@ class Bot extends EventEmitter {
                 console.error(e);
             }
             this.status.connect.connected = false;
-            this.emit('disconnect', null, { addr: this.status.addr, port: this.status.port });
+            info = { addr: this.status.addr, port: this.status.port };
+            this.emit('disconnect', null, info);
         }
         this.clean(true);
+        return info;
     }
 
     /**
