@@ -6,10 +6,7 @@
   "version": "3.2.8",
   "description": "ddbot.js — это Node.js проект для автоматизации и управления ботами.",
   "main": "./index.js",
-  "scripts": {
-    "start": "node ./docs/examples/main.js",
-    "test": "node ./docs/examples/echo-bot.js"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/0374flop/ddbot.js.git"
