@@ -1,4 +1,4 @@
-const { bot, botClassAndLoger } = require('../../index');
+const { bot, botClassAndLoger } = require('../../../index');
 botClassAndLoger.logDebuger.setDebugMode(true, true);
 
 async function main() {
