@@ -7,11 +7,13 @@ const BaseModule = require('./core/module');
 const Chat = require('./modules/chat');
 const PlayerList = require('./modules/playerlist');
 const Reconnect = require('./modules/reconnect');
+const Snap = require('./modules/snap');
 
 const StandardModules = {
     Chat,
     PlayerList,
-    Reconnect
+    Reconnect,
+    Snap
 }
 
 module.exports = {
