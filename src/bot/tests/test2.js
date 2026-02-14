@@ -26,7 +26,7 @@ function random(min, max) {
 
     const snap = new Snap(bot);
 
-    var [addr, port] = '45.141.57.22:8306'.split(':');
+    var [addr, port] = '57.128.201.180:8303'.split(':');
     await bot.connect(addr, Number(port), 10000);
     console.log('подключено');
 

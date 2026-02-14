@@ -11,10 +11,16 @@ class Chat extends BaseModule {
         this.chatlistener = (msg) => {
             try {
                 const msgraw = msg;
-                const text = msg?.message;
-                const client_id = msg?.client_id;
-                const autormsg = (msg?.author?.ClientInfo?.name || null);
-                const team = msg?.team;
+                /** @type {string} */
+                const text = String(msg?.message ?? '');
+                /** @type {number} */
+                const client_id = msg.client_id;
+
+                /** @type {string|null} */
+                const autormsg = msg?.author?.ClientInfo?.name ?? null;
+
+                /** @type {number} */
+                const team = msg.team;
 
                 const key = `${client_id}:${text}:${team}`;
                 if (this.chatset.has(key)) return;
