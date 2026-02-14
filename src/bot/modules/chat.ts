@@ -2,7 +2,7 @@ import BaseModule from '../core/module.js';
 import type { Bot, Identity } from '../core/core.js';
 
 interface ChatMessage {
-	message?: string | unknown;
+	message: string;
 	client_id: number;
 	team: number;
 	author?: {
