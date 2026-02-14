@@ -1,7 +1,6 @@
-const Bot = require('../core/core');
-const Chat = require('../modules/chat');
-const PlayerList = require('../modules/playerlist');
-const Snap = require('../modules/snap');
+import * as ddbot from '../lib/index.js';
+const { Bot } = ddbot;
+const { Chat, PlayerList, Reconnect, Snap } = ddbot.StandardModules;
 
 function random(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;

@@ -1,6 +1,6 @@
-const Bot = require('../core/core');
-const Chat = require('../modules/chat');
-const PlayerList = require('../modules/playerlist');
+import * as ddbot from '../lib/index.js';
+const { Bot } = ddbot;
+const { Chat, PlayerList, Reconnect, Snap } = ddbot.StandardModules;
 
 function isHitOnMe(hitX, hitY, myX, myY) {
     const TILE = 32*1.1;

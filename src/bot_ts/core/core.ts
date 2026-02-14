@@ -1,6 +1,7 @@
 "use strict";
 
 import { Client } from 'teeworlds';
+import * as Teeworlds from 'teeworlds';
 import { EventEmitter } from 'events';
 import * as DDUtils from './ddutils.js';
 
@@ -66,7 +67,7 @@ export class Bot extends EventEmitter {
 	constructor(
 		identity: Identity | { name: string },
 		options: BotOptions = {},
-		CustomTeeworlds: typeof import('teeworlds') = require('teeworlds')
+		CustomTeeworlds: typeof import('teeworlds') = Teeworlds
 	) {
 		super();
 
