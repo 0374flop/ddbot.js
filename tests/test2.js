@@ -2,11 +2,25 @@ import * as ddbot from '../lib/index.js';
 const { Bot } = ddbot;
 const { Chat, PlayerList, Reconnect, Snap } = ddbot.StandardModules;
 
+import ddmaster from 'ddmaster';
+
 function random(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 (async () => {
+    const nameman = 'Towa';
+    const servers = await ddmaster.findDDNetPlayerByName(nameman);
+    const serverAddresses = await ddmaster.getDDNetServers(servers);
+    let server;
+    if (serverAddresses.length === 0) {
+        console.log(`Игрок ${nameman} не найден на серверах ДДНета.`);
+        process.exit();
+    } else {
+        console.log(`Игрок ${nameman} найден на серверах:`, serverAddresses);
+        server = serverAddresses[0];
+    }
+
     const bot = new Bot({
         name: 'string',
         clan: 'string',
@@ -25,7 +39,7 @@ function random(min, max) {
 
     const snap = new Snap(bot);
 
-    var [addr, port] = '57.128.201.180:8303'.split(':');
+    var [addr, port] = server.split(':');
     await bot.connect(addr, Number(port), 10000);
     console.log('подключено');
 
