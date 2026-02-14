@@ -21,9 +21,12 @@
   ],
   "author": "0374flop",
   "license": "MIT",
-  "type": "commonjs",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/0374flop/ddbot.js/issues"
   },
-  "homepage": "https://github.com/0374flop/ddbot.js#readme"
+  "homepage": "https://github.com/0374flop/ddbot.js#readme",
+  "devDependencies": {
+    "@types/node": "^25.2.3"
+  }
 }
