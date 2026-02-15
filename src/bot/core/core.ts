@@ -4,61 +4,36 @@ import { Client } from 'teeworlds';
 import * as Teeworlds from 'teeworlds';
 import { EventEmitter } from 'events';
 import * as DDUtils from './ddutils.js';
+import * as Types from '../types.js';
 
 interface BotEvents {
-	connect: (info: ConnectionInfo) => void;
-	disconnect: (reason: string | null, info: ConnectionInfo) => void;
-	broadcast: (msg: any) => void;
-	capabilities: (msg: any) => void;
-	emote: (msg: any) => void;
-	kill: (msg: any) => void;
-	snapshot: (msg: any) => void;
-	map_change: (msg: any) => void;
-	motd: (msg: any) => void;
-	message: (msg: any) => void;
-	teams: (msg: any) => void;
-	teamkill: (msg: any) => void;
-	spawn: (msg: any) => void;
-	death: (msg: any) => void;
-	hammerhit: (msg: any) => void;
-	sound_world: (msg: any) => void;
-	explosion: (msg: any) => void;
-	common: (msg: any) => void;
-	damage_indicator: (msg: any) => void;
-	sound_global: (msg: any) => void;
-}
-
-export interface ConnectionInfo {
-	addr: string;
-	port: number;
-}
-
-export interface Identity {
-	name: string;
-	clan?: string;
-	skin?: string;
-	use_custom_color?: 0 | 1;
-	color_body?: number;
-	color_feet?: number;
-	country?: number;
-}
-
-export interface Input {
-	m_Direction?: -1 | 0 | 1;
-	m_TargetX?: number;
-	m_TargetY?: number;
-	m_Jump?: 0 | 1;
-	m_Fire?: 0 | 1;
-	m_Hook?: 0 | 1;
-	m_PlayerFlags?: number;
-	m_WantedWeapon?: 1 | 2 | 3 | 4 | 5 | 6;
-	m_NextWeapon?: 0 | 1;
-	m_PrevWeapon?: 0 | 1;
-	[key: string]: unknown;
-}
-
-interface BotOptions {
-	[key: string]: unknown;
+	connect: (info: Types.ConnectionInfo) => void;
+	disconnect: (reason: string | null, info: Types.ConnectionInfo) => void;
+	broadcast: (message: string) => void;
+	capabilities: (message: {
+		ChatTimeoutCode: boolean;
+		AnyPlayerFlag: boolean;
+		PingEx: boolean;
+		AllowDummy: boolean;
+		SyncWeaponInput: boolean;
+	}) => void;
+	emote: (message: Types.SnapshotItemTypes.iEmoticon) => void;
+	kill: (kill: Types.SnapshotItemTypes.iKillMsg) => void;
+	snapshot: (items: Types.DeltaItem[]) => void; // ✅
+	map_change: (message: Types.SnapshotItemTypes.iMapChange) => void;
+	motd: (message: string) => void;
+	message: (message: Types.SnapshotItemTypes.iMessage) => void;
+	teams: (teams: Array<number>) => void;
+	teamkill: (teamkill: Types.SnapshotItemTypes.iKillMsgTeam) => void;
+	// Snapshot
+	spawn: (msg: Types.SnapshotItemTypes.Spawn) => void;
+	death: (msg: Types.SnapshotItemTypes.Death) => void;
+	hammerhit: (msg: Types.SnapshotItemTypes.HammerHit) => void;
+	sound_world: (msg: Types.SnapshotItemTypes.SoundWorld) => void;
+	explosion: (msg: Types.SnapshotItemTypes.Explosion) => void;
+	common: (msg: Types.SnapshotItemTypes.Common) => void;
+	damage_indicator: (msg: Types.SnapshotItemTypes.DamageInd) => void;
+	sound_global: (msg: Types.SnapshotItemTypes.SoundGlobal) => void;
 }
 
 interface BotStatus {
@@ -75,8 +50,8 @@ export class Bot extends EventEmitter {
 	private client: Client | null = null;
 	private _clientProxy: Client | null = null;
 
-	public options: BotOptions;
-	public identity: Identity;
+	public options: Types.SnapshotItemTypes.iOptions;
+	public identity: Types.SnapshotItemTypes.Identity;
 
 	public status: BotStatus = {
 		connect: {
@@ -88,8 +63,8 @@ export class Bot extends EventEmitter {
 	};
 
 	constructor(
-		identity: Identity | { name: string },
-		options: BotOptions = {},
+		identity: Types.SnapshotItemTypes.Identity | { name: string },
+		options: Types.SnapshotItemTypes.iOptions = {},
 		CustomTeeworlds: typeof import('teeworlds') = Teeworlds
 	) {
 		super();
@@ -105,7 +80,7 @@ export class Bot extends EventEmitter {
 	/**
 	 * Get bot identity
 	 */
-	public get bot_identity(): Identity {
+	public get bot_identity(): Types.SnapshotItemTypes.Identity {
 		return this.identity;
 	}
 
@@ -150,7 +125,7 @@ export class Bot extends EventEmitter {
 	 * @param timeout - Connection timeout in ms (default: 5000)
 	 * @returns Promise with connection info
 	 */
-	public connect(addr: string, port = 8303, timeout = 5000): Promise<ConnectionInfo> {
+	public connect(addr: string, port = 8303, timeout = 5000): Promise<Types.ConnectionInfo> {
 		if (typeof addr !== 'string' || typeof port !== 'number') {
 			return Promise.reject(new Error('Invalid address or port'));
 		}
@@ -213,9 +188,9 @@ export class Bot extends EventEmitter {
 	 * Disconnect from server
 	 * @returns Promise with disconnection info or null
 	 */
-	public async disconnect(): Promise<ConnectionInfo | null> {
+	public async disconnect(): Promise<Types.ConnectionInfo | null> {
 		this.status.connect.connecting = false;
-		let info: ConnectionInfo | null = null;
+		let info: Types.ConnectionInfo | null = null;
 
 		if (this.client && this.status.connect.connected) {
 			try {
@@ -237,7 +212,7 @@ export class Bot extends EventEmitter {
 	 * Change bot identity (name, skin, colors, etc.)
 	 * @param identity - New identity or partial identity update
 	 */
-	public change_identity(identity: Identity | Partial<Identity>): void {
+	public change_identity(identity: Types.SnapshotItemTypes.Identity | Partial<Types.SnapshotItemTypes.Identity>): void {
 		this.identity =
 			typeof identity === 'object' && identity !== null
 				? { ...this.identity, ...identity }
@@ -252,7 +227,7 @@ export class Bot extends EventEmitter {
 	 * Send input to the game (movement, aim, actions)
 	 * @param input - Partial input object
 	 */
-	public send_input(input: Partial<Input>): void {
+	public send_input(input: Partial<Types.SnapshotItemTypes.PlayerInput>): void {
 		if (!this.client) return;
 		this.client.movement.input = { ...this.client.movement.input, ...input };
 	}
@@ -269,6 +244,7 @@ export class Bot extends EventEmitter {
 		this.client.on('connected', () => {
 			this.status.connect.connected = true;
 			this.emit('connect', { addr: this.status.addr!, port: this.status.port! });
+			this.setup_snapshot_events();
 		});
 
 		this.client.on('disconnect', (reason: string | null = null) => {
@@ -290,16 +266,25 @@ export class Bot extends EventEmitter {
 		this.client.on('message', (msg) => this.emit('message', msg));
 		this.client.on('teams', (msg) => this.emit('teams', msg));
 		this.client.on('teamkill', (msg) => this.emit('teamkill', msg));
+	}
 
-		// Snapshot unpacker events
-		this.client.SnapshotUnpacker?.on('spawn', (msg) => this.emit('spawn', msg));
-		this.client.SnapshotUnpacker?.on('death', (msg) => this.emit('death', msg));
-		this.client.SnapshotUnpacker?.on('hammerhit', (msg) => this.emit('hammerhit', msg));
-		this.client.SnapshotUnpacker?.on('sound_world', (msg) => this.emit('sound_world', msg));
-		this.client.SnapshotUnpacker?.on('explosion', (msg) => this.emit('explosion', msg));
-		this.client.SnapshotUnpacker?.on('common', (msg) => this.emit('common', msg));
-		this.client.SnapshotUnpacker?.on('damage_indicator', (msg) => this.emit('damage_indicator', msg));
-		this.client.SnapshotUnpacker?.on('sound_global', (msg) => this.emit('sound_global', msg));
+	/*
+	 * Setup snapshot unpacker events
+	 */
+	private setup_snapshot_events(): void {
+		if (!this.client?.SnapshotUnpacker) {
+			console.warn('SnapshotUnpacker not available yet');
+			return;
+		}
+
+		this.client.SnapshotUnpacker.on('spawn', (msg) => this.emit('spawn', msg));
+		this.client.SnapshotUnpacker.on('death', (msg) => this.emit('death', msg));
+		this.client.SnapshotUnpacker.on('hammerhit', (msg) => this.emit('hammerhit', msg));
+		this.client.SnapshotUnpacker.on('sound_world', (msg) => this.emit('sound_world', msg));
+		this.client.SnapshotUnpacker.on('explosion', (msg) => this.emit('explosion', msg));
+		this.client.SnapshotUnpacker.on('common', (msg) => this.emit('common', msg));
+		this.client.SnapshotUnpacker.on('damage_indicator', (msg) => this.emit('damage_indicator', msg));
+		this.client.SnapshotUnpacker.on('sound_global', (msg) => this.emit('sound_global', msg));
 	}
 
 	/**
