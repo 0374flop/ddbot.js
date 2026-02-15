@@ -1,5 +1,4 @@
 "use strict";
-
-const bot = require('./src/bot/index');
-
-module.exports = bot;
+Object.defineProperty(exports, "__esModule", { value: true });
+var ddbot = require("./lib/index");
+exports.default = ddbot;
