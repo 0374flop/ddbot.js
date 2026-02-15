@@ -94,13 +94,13 @@ class Snap extends BaseModule {
 	}
 
 	protected _start(): void {
-		this.bot.bot_client?.SnapshotUnpacker.on('hammerhit', this.hammerHitlistener);
-		this.bot.bot_client?.SnapshotUnpacker.on('sound_world', this.firelistener);
+		this.bot.on('hammerhit', this.hammerHitlistener);
+		this.bot.on('sound_world', this.firelistener);
 	}
 
 	protected _stop(): void {
-		this.bot.bot_client?.SnapshotUnpacker.off('hammerhit', this.hammerHitlistener);
-		this.bot.bot_client?.SnapshotUnpacker.off('sound_world', this.firelistener);
+		this.bot.off('hammerhit', this.hammerHitlistener);
+		this.bot.off('sound_world', this.firelistener);
 	}
 }
 
