@@ -5,6 +5,29 @@ import * as Teeworlds from 'teeworlds';
 import { EventEmitter } from 'events';
 import * as DDUtils from './ddutils.js';
 
+interface BotEvents {
+	connect: (info: ConnectionInfo) => void;
+	disconnect: (reason: string | null, info: ConnectionInfo) => void;
+	broadcast: (msg: any) => void;
+	capabilities: (msg: any) => void;
+	emote: (msg: any) => void;
+	kill: (msg: any) => void;
+	snapshot: (msg: any) => void;
+	map_change: (msg: any) => void;
+	motd: (msg: any) => void;
+	message: (msg: any) => void;
+	teams: (msg: any) => void;
+	teamkill: (msg: any) => void;
+	spawn: (msg: any) => void;
+	death: (msg: any) => void;
+	hammerhit: (msg: any) => void;
+	sound_world: (msg: any) => void;
+	explosion: (msg: any) => void;
+	common: (msg: any) => void;
+	damage_indicator: (msg: any) => void;
+	sound_global: (msg: any) => void;
+}
+
 export interface ConnectionInfo {
 	addr: string;
 	port: number;
@@ -319,6 +342,26 @@ export class Bot extends EventEmitter {
 		await this.disconnect();
 		this.removeAllListeners();
 		this._clientProxy = null;
+	}
+
+	public on<K extends keyof BotEvents>(event: K, listener: BotEvents[K]): this;
+	public on(event: string | symbol, listener: (...args: any[]) => void): this {
+		return super.on(event, listener);
+	}
+
+	public once<K extends keyof BotEvents>(event: K, listener: BotEvents[K]): this;
+	public once(event: string | symbol, listener: (...args: any[]) => void): this {
+		return super.once(event, listener);
+	}
+
+	public emit<K extends keyof BotEvents>(event: K, ...args: Parameters<BotEvents[K]>): boolean;
+	public emit(event: string | symbol, ...args: any[]): boolean {
+		return super.emit(event, ...args);
+	}
+
+	public off<K extends keyof BotEvents>(event: K, listener: BotEvents[K]): this;
+	public off(event: string | symbol, listener: (...args: any[]) => void): this {
+		return super.off(event, listener);
 	}
 }
 

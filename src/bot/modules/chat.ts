@@ -1,6 +1,14 @@
 import BaseModule from '../core/module.js';
 import type { Bot, Identity } from '../core/core.js';
 
+interface ChatEvents {
+	anychat: (msg: ChatMessage, author: string | null, text: string, team: number, client_id: number) => void;
+	chat: (msg: ChatMessage, author: string, text: string, team: number, client_id: number) => void;
+	systemchat: (msg: ChatMessage, text: string) => void;
+	queued: (info: { text: string; team: boolean; queueSize: number }) => void;
+	sent: (info: { text: string; team: boolean; queueSize: number }) => void;
+}
+
 interface ChatMessage {
 	message: string;
 	client_id: number;
@@ -139,6 +147,26 @@ class Chat extends BaseModule {
 
 	public destroy(): void {
 		super.destroy();
+	}
+
+	public on<K extends keyof ChatEvents>(event: K, listener: ChatEvents[K]): this;
+	public on(event: string | symbol, listener: (...args: any[]) => void): this {
+		return super.on(event, listener);
+	}
+
+	public once<K extends keyof ChatEvents>(event: K, listener: ChatEvents[K]): this;
+	public once(event: string | symbol, listener: (...args: any[]) => void): this {
+		return super.once(event, listener);
+	}
+
+	public emit<K extends keyof ChatEvents>(event: K, ...args: Parameters<ChatEvents[K]>): boolean;
+	public emit(event: string | symbol, ...args: any[]): boolean {
+		return super.emit(event, ...args);
+	}
+
+	public off<K extends keyof ChatEvents>(event: K, listener: ChatEvents[K]): this;
+	public off(event: string | symbol, listener: (...args: any[]) => void): this {
+		return super.off(event, listener);
 	}
 }
 

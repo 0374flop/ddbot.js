@@ -39,5 +39,8 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
-  }
+  },
+
+  "include": ["src/bot/**/*"],
+  "exclude": ["tests", "tests/**/*"],
 }
