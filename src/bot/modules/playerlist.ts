@@ -1,16 +1,22 @@
 import BaseModule from '../core/module.js';
 import type { Bot } from '../core/core.js';
+import type { Client } from 'teeworlds';
+import type { Types } from '../index.js';
 
 interface PlayerData {
 	client_id: number;
-	clientInfo: any;
-	playerInfo: any;
-	character: any | null;
-	DDNetCharacter: any | null;
+	clientInfo: Types.SnapshotItemTypes.ClientInfo;
+	playerInfo: Types.SnapshotItemTypes.PlayerInfo;
+	character: Types.SnapshotItemTypes.Character | null;
+	DDNetCharacter: Types.SnapshotItemTypes.DDNetCharacter | null;
 }
 
 class PlayerList extends BaseModule {
-	private client: any;
+	constructor(bot: Bot) {
+		super(bot, { moduleName: 'PlayerList' });
+		this.client = this.bot.bot_client;
+	}
+	private client: Client | null;
 	private maxclients: number = 64;
 	private playermap: Map<number, PlayerData> = new Map();
 	private previousMap: Map<number, PlayerData> = new Map();
@@ -21,10 +27,10 @@ class PlayerList extends BaseModule {
 		if (!this.client) return;
 
 		for (let client_id = 0; client_id < this.maxclients; client_id++) {
-			const clientInfo = this.client.SnapshotUnpacker.getObjClientInfo(client_id);
-			const playerInfo = this.client.SnapshotUnpacker.getObjPlayerInfo(client_id);
-			const character = this.client.SnapshotUnpacker.getObjCharacter(client_id);
-			const DDNetCharacter = this.client.SnapshotUnpacker.getObjExDDNetCharacter(client_id);
+			const clientInfo: Types.SnapshotItemTypes.ClientInfo = this.client.SnapshotUnpacker.getObjClientInfo(client_id);
+			const playerInfo: Types.SnapshotItemTypes.PlayerInfo = this.client.SnapshotUnpacker.getObjPlayerInfo(client_id);
+			const character: Types.SnapshotItemTypes.Character = this.client.SnapshotUnpacker.getObjCharacter(client_id);
+			const DDNetCharacter: Types.SnapshotItemTypes.DDNetCharacter = this.client.SnapshotUnpacker.getObjExDDNetCharacter(client_id);
 
 			if (clientInfo && playerInfo) {
 				const playerData: PlayerData = {
@@ -58,11 +64,6 @@ class PlayerList extends BaseModule {
 
 		this.previousMap.clear();
 	};
-
-	constructor(bot: Bot) {
-		super(bot, { moduleName: 'PlayerList' });
-		this.client = this.bot.bot_client;
-	}
 
 	/**
 	 * Get list of all players

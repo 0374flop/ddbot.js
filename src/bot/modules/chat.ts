@@ -1,22 +1,13 @@
 import BaseModule from '../core/module.js';
-import type { Bot, Identity } from '../core/core.js';
+import type { Bot } from '../core/core.js';
+import * as Types from '../types.js';
 
 interface ChatEvents {
-	anychat: (msg: ChatMessage, author: string | null, text: string, team: number, client_id: number) => void;
-	chat: (msg: ChatMessage, author: string, text: string, team: number, client_id: number) => void;
-	systemchat: (msg: ChatMessage, text: string) => void;
+	anychat: (msg: Types.SnapshotItemTypes.iMessage, author: string | null, text: string, team: number, client_id: number) => void;
+	chat: (msg: Types.SnapshotItemTypes.iMessage, author: string, text: string, team: number, client_id: number) => void;
+	systemchat: (msg: Types.SnapshotItemTypes.iMessage, text: string) => void;
 	queued: (info: { text: string; team: boolean; queueSize: number }) => void;
 	sent: (info: { text: string; team: boolean; queueSize: number }) => void;
-}
-
-interface ChatMessage {
-	message: string;
-	client_id: number;
-	team: number;
-	author?: {
-		ClientInfo?: Identity;
-	};
-	[key: string]: unknown;
 }
 
 interface QueuedMessage {
@@ -34,9 +25,9 @@ class Chat extends BaseModule {
 	private lastSentTime: number = 0;
 	private cooldown: number = 1000;
 
-	private readonly chatlistener = (msg: ChatMessage | unknown) => {
+	private readonly chatlistener = (msg: Types.SnapshotItemTypes.iMessage | unknown) => {
 		try {
-			const msgraw = msg as ChatMessage;
+			const msgraw = msg as Types.SnapshotItemTypes.iMessage;
 			const text = String(msgraw?.message ?? '');
 			const client_id = msgraw.client_id ?? -1;
 			const team = msgraw.team ?? 0;

@@ -1,5 +1,6 @@
 import { Bot } from './core/core.js';
 import { EventEmitter } from 'events';
+import * as Types from './types.js';
 
 class BotManager extends EventEmitter {
 	private bots: Map<string, Bot> = new Map();
@@ -112,10 +113,10 @@ class BotManager extends EventEmitter {
 		return id;
 	}
 
-	public removeBotById(id: string): void {
+	public async removeBotById(id: string): Promise<void> {
 		const bot = this.bots.get(id);
 		if (bot) {
-			bot.destroy();
+			await bot.destroy();
 			this.bots.delete(id);
 		}
 	}

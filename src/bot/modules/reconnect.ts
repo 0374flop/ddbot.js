@@ -1,5 +1,6 @@
 import BaseModule from '../core/module.js';
-import type { Bot, ConnectionInfo } from '../core/core.js';
+import type { Bot } from '../core/core.js';
+import * as Types from '../types.js';
 
 class Reconnect extends BaseModule {
 	private maxAttempts: number = -1;
@@ -17,8 +18,8 @@ class Reconnect extends BaseModule {
 		this.bot.on('disconnect', this.handleDisconnect);
 	}
 
-	private handleDisconnect = (reason: string | null, connectionInfo: ConnectionInfo): void => {
-		if (!reason) return;
+	private handleDisconnect = (reason: string | null, connectionInfo: Types.ConnectionInfo): void => {
+		if (reason === null) return;
 		if (this.reconnecting) return;
 
 		if (!connectionInfo.addr || !connectionInfo.port) {

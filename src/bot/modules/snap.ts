@@ -1,5 +1,6 @@
 import BaseModule from '../core/module.js';
 import type { Bot } from '../core/core.js';
+import * as Types from '../types.js';
 
 interface HammerHit {
 	common: {
@@ -21,7 +22,7 @@ interface Sound {
 class Snap extends BaseModule {
 	private readonly hammerHitlistener = (hit: HammerHit): void => {
         if (this.bot.OwnID === undefined) return;
-        const ownCharacter = this.bot.bot_client?.SnapshotUnpacker.getObjCharacter(this.bot.OwnID);
+        const ownCharacter: Types.SnapshotItemTypes.Character = this.bot.bot_client?.SnapshotUnpacker.getObjCharacter(this.bot.OwnID);
 		if (!ownCharacter) return;
 
 		if (
@@ -46,7 +47,7 @@ class Snap extends BaseModule {
 	};
 
 	private readonly firelistener = (sound: Sound): void => {
-		const list = this.bot.bot_client?.SnapshotUnpacker.AllObjCharacter || [];
+		const list = this.bot.bot_client?.SnapshotUnpacker?.AllObjCharacter || [];
 		if (sound.sound_id === 0) {
 			this.emit('fire', { common: sound.common }, Snap.whoareWithinTile(sound.common.x, sound.common.y, list));
 		}
@@ -83,7 +84,7 @@ class Snap extends BaseModule {
 		return null;
 	}
 
-	public static angleshot(character: any): { x: number; y: number } | null {
+	public static angleshot(character: Types.SnapshotItemTypes.Character): { x: number; y: number } | null {
 		if (!character || !character.character_core) return null;
 		const client_angle = character.character_core.angle;
 		const angleRad = (client_angle / 256.0) * (Math.PI / 128.0);
