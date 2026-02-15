@@ -7,6 +7,8 @@ import PlayerList from './modules/playerlist.js';
 import Reconnect from './modules/reconnect.js';
 import Snap from './modules/snap.js';
 
+import * as Types from './types.js';
+
 const StandardModules = {
 	Chat,
 	PlayerList,
@@ -16,6 +18,7 @@ const StandardModules = {
 
 export {
 	Bot,
+	Types,
 	DDUtils,
 	BaseModule,
 	BotManager,
