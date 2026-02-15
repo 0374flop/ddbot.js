@@ -54,7 +54,7 @@ class Snap extends BaseModule {
 	};
 
 	constructor(bot: Bot) {
-		super(bot, { moduleName: 'Snap' });
+		super(bot, { moduleName: 'Snap', offonDisconnect: false });
 	}
 
 	private static areWithinTile(x1: number, y1: number, x2: number, y2: number): boolean {

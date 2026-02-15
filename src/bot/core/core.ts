@@ -63,7 +63,7 @@ export class Bot extends EventEmitter {
 	};
 
 	constructor(
-		identity: Types.SnapshotItemTypes.Identity | { name: string },
+		identity?: Types.SnapshotItemTypes.Identity,
 		options: Types.SnapshotItemTypes.iOptions = {},
 		CustomTeeworlds: typeof import('teeworlds') = Teeworlds
 	) {
@@ -74,7 +74,7 @@ export class Bot extends EventEmitter {
 
 		this.identity = DDUtils.IsValidIdentity(identity)
 			? identity
-			: DDUtils.DefaultIdentity(typeof identity === 'string' ? identity : 'nameless tee');
+			: DDUtils.DefaultIdentity('nameless tee');
 	}
 
 	/**

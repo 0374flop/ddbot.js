@@ -13,7 +13,7 @@ interface PlayerData {
 
 class PlayerList extends BaseModule {
 	constructor(bot: Bot) {
-		super(bot, { moduleName: 'PlayerList' });
+		super(bot, { moduleName: 'PlayerList', offonDisconnect: false });
 		this.client = this.bot.bot_client;
 	}
 	private client: Client | null;

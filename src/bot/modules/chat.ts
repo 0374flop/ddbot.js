@@ -51,7 +51,7 @@ class Chat extends BaseModule {
 	};
 
 	constructor(bot: Bot) {
-		super(bot, { moduleName: 'Chat' });
+		super(bot, { moduleName: 'Chat', offonDisconnect: false });
 	}
 
 	/**

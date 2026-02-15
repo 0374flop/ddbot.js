@@ -45,28 +45,41 @@ export function IsValidIdentity(identity: unknown): identity is Identity {
 
 	const obj = identity as Record<string, unknown>;
 
-	const requiredFields = ['name', 'clan', 'skin', 'use_custom_color', 'color_body', 'color_feet', 'country'];
-	for (const field of requiredFields) {
-		if (!(field in obj)) {
-			return false;
-		}
+	// Только name обязательно!
+	if (!('name' in obj)) return false;
+	if (typeof obj.name !== 'string') return false;
+	if ((obj.name as string).length > 15 || (obj.name as string).length === 0) return false;
+
+	// Остальные поля опциональны, но если есть - валидируй
+	if ('clan' in obj) {
+		if (typeof obj.clan !== 'string') return false;
+		if ((obj.clan as string).length > 11) return false;
 	}
 
-	if (typeof obj.name !== 'string') return false;
-	if (typeof obj.clan !== 'string') return false;
-	if (typeof obj.skin !== 'string') return false;
-	if (typeof obj.use_custom_color !== 'number') return false;
-	if (typeof obj.color_body !== 'number') return false;
-	if (typeof obj.color_feet !== 'number') return false;
-	if (typeof obj.country !== 'number') return false;
+	if ('skin' in obj) {
+		if (typeof obj.skin !== 'string') return false;
+		if ((obj.skin as string).length > 23 || (obj.skin as string).length === 0) return false;
+	}
 
-	if ((obj.name as string).length > 15) return false;
-	if ((obj.clan as string).length > 11) return false;
-	if ((obj.skin as string).length > 23 || (obj.skin as string).length === 0) return false;
-	if (obj.use_custom_color !== 0 && obj.use_custom_color !== 1) return false;
-	if (!Number.isInteger(obj.color_body) || (obj.color_body as number) < 0) return false;
-	if (!Number.isInteger(obj.color_feet) || (obj.color_feet as number) < 0) return false;
-	if (!Number.isInteger(obj.country) || (obj.country as number) < -1 || (obj.country as number) > 999) return false;
+	if ('use_custom_color' in obj) {
+		if (typeof obj.use_custom_color !== 'number') return false;
+		if (obj.use_custom_color !== 0 && obj.use_custom_color !== 1) return false;
+	}
+
+	if ('color_body' in obj) {
+		if (typeof obj.color_body !== 'number') return false;
+		if (!Number.isInteger(obj.color_body) || (obj.color_body as number) < 0) return false;
+	}
+
+	if ('color_feet' in obj) {
+		if (typeof obj.color_feet !== 'number') return false;
+		if (!Number.isInteger(obj.color_feet) || (obj.color_feet as number) < 0) return false;
+	}
+
+	if ('country' in obj) {
+		if (typeof obj.country !== 'number') return false;
+		if (!Number.isInteger(obj.country) || (obj.country as number) < -1 || (obj.country as number) > 999) return false;
+	}
 
 	return true;
 }

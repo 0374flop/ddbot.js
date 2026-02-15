@@ -9,7 +9,7 @@ class Reconnect extends BaseModule {
 	private reconnecting: boolean = false;
 
 	constructor(bot: Bot) {
-		super(bot, { moduleName: 'Reconnect' });
+		super(bot, { moduleName: 'Reconnect', offonDisconnect: false });
 	}
 
 	protected _start(maxAttempts: number = -1, randomDelay: boolean = true): void {
@@ -48,7 +48,10 @@ class Reconnect extends BaseModule {
 			try {
 				await this.bot.connect(connectionInfo.addr, connectionInfo.port);
 				this.currentAttempts = 0;
-				this.emit('reconnected', connectionInfo.addr, connectionInfo.port);
+				this.emit('reconnected', { 
+					addr: connectionInfo.addr, 
+					port: connectionInfo.port 
+				});
 			} catch (err) {
 				this.emit('reconnect_failed', err);
 			} finally {
