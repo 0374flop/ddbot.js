@@ -1,8 +1,6 @@
 src/
 index.ts
 tests/
-log
 docs/old/
 docs/old2/
-docs/skins_list.json
 tsconfig.json

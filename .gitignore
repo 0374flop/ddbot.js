@@ -1,6 +1,3 @@
 node_modules/
 lib/
-tests/test.log
-tests/log.log
-tests/asdasd.cjs
-loger0374.d.ts
+tests/
