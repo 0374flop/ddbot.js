@@ -62,6 +62,12 @@ export class Bot extends EventEmitter {
 		port: null,
 	};
 
+	/**
+	 * 
+	 * @param identity Bot identity
+	 * @param options Options for teeworlds.Client
+	 * @param CustomTeeworlds Custom teeworlds
+	 */
 	constructor(
 		identity?: Types.SnapshotItemTypes.Identity,
 		options: Types.SnapshotItemTypes.iOptions = {},

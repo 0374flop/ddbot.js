@@ -2,6 +2,13 @@ import BaseModule from '../core/module.js';
 import type { Bot } from '../core/core.js';
 import * as Types from '../types.js';
 
+export interface ReconnectingInfo {
+	attempt: number;
+	delay: number;
+	reason: string | null;
+	ConnectionInfo: Types.ConnectionInfo;
+}
+
 class Reconnect extends BaseModule {
 	private maxAttempts: number = -1;
 	private randomDelay: boolean = true;
@@ -40,8 +47,7 @@ class Reconnect extends BaseModule {
 			attempt: this.currentAttempts,
 			delay,
 			reason,
-			addr: connectionInfo.addr,
-			port: connectionInfo.port,
+			ConnectionInfo: connectionInfo
 		});
 
 		setTimeout(async () => {
