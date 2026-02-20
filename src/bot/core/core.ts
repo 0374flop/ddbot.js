@@ -256,7 +256,7 @@ export class Bot extends EventEmitter {
 		this.client.on('disconnect', (reason: string | null = null) => {
 			this.status.connect.connected = false;
 			this.clean(true);
-			if (reason) {
+			if (!!reason) {
 				this.emit('disconnect', reason, { addr: this.status.addr!, port: this.status.port! });
 			}
 		});
@@ -282,6 +282,8 @@ export class Bot extends EventEmitter {
 			console.warn('SnapshotUnpacker not available yet');
 			return;
 		}
+
+		this.client.SnapshotUnpacker.removeAllListeners();
 
 		this.client.SnapshotUnpacker.on('spawn', (msg) => this.emit('spawn', msg));
 		this.client.SnapshotUnpacker.on('death', (msg) => this.emit('death', msg));

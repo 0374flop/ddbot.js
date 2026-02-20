@@ -124,6 +124,7 @@ class Chat extends BaseModule {
 	protected _stop(): void {
 		this.bot.off('message', this.chatlistener);
 		this.chatset.clear();
+		this.queue.length = 0;
 
 		if (this.chatinterval) {
 			clearInterval(this.chatinterval);

@@ -14,6 +14,7 @@ class Reconnect extends BaseModule {
 	private randomDelay: boolean = true;
 	private currentAttempts: number = 0;
 	private reconnecting: boolean = false;
+	private reconnectTimer: NodeJS.Timeout | null = null;
 
 	constructor(bot: Bot) {
 		super(bot, { moduleName: 'Reconnect', offonDisconnect: false });
@@ -50,7 +51,7 @@ class Reconnect extends BaseModule {
 			ConnectionInfo: connectionInfo
 		});
 
-		setTimeout(async () => {
+		this.reconnectTimer = setTimeout(async () => {
 			try {
 				await this.bot.connect(connectionInfo.addr, connectionInfo.port);
 				this.currentAttempts = 0;
@@ -89,6 +90,10 @@ class Reconnect extends BaseModule {
 		this.bot.off('disconnect', this.handleDisconnect);
 		this.reconnecting = false;
 		this.currentAttempts = 0;
+		if (this.reconnectTimer) {
+			clearTimeout(this.reconnectTimer);
+			this.reconnectTimer = null;
+		}
 	}
 }
 
