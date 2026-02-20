@@ -19,7 +19,7 @@ interface BotEvents {
 	}) => void;
 	emote: (message: Types.SnapshotItemTypes.iEmoticon) => void;
 	kill: (kill: Types.SnapshotItemTypes.iKillMsg) => void;
-	snapshot: (items: Types.DeltaItem[]) => void; // ✅
+	snapshot: (items: Types.DeltaItem[]) => void;
 	map_change: (message: Types.SnapshotItemTypes.iMapChange) => void;
 	motd: (message: string) => void;
 	message: (message: Types.SnapshotItemTypes.iMessage) => void;
