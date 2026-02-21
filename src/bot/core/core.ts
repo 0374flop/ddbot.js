@@ -131,7 +131,7 @@ export class Bot extends EventEmitter {
 	 * @param timeout - Connection timeout in ms (default: 5000)
 	 * @returns Promise with connection info
 	 */
-	public connect(addr: string, port = 8303, timeout = 5000): Promise<Types.ConnectionInfo> {
+	public async connect(addr: string, port = 8303, timeout = 5000): Promise<Types.ConnectionInfo> {
 		if (typeof addr !== 'string' || typeof port !== 'number') {
 			return Promise.reject(new Error('Invalid address or port'));
 		}
@@ -145,10 +145,9 @@ export class Bot extends EventEmitter {
 		this.status.connect.connecting = true;
 		this.status.addr = addr;
 		this.status.port = port;
+		await this.create_client(addr, port);
 
 		return new Promise((resolve, reject) => {
-			this.create_client(addr, port);
-
 			let settled = false;
 
 			const cleanup = () => {
