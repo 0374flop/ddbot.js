@@ -93,8 +93,8 @@ export class Bot extends EventEmitter {
 	/**
 	 * Create new Teeworlds client instance
 	 */
-	private create_client(addr: string, port: number): void {
-		this.disconnect();
+	private async create_client(addr: string, port: number): Promise<void> {
+		if (this.client) await this.client.Disconnect();
 		this.clean(true);
 
 		this.client = new this.teeworlds.Client(addr, port, this.identity.name, {
