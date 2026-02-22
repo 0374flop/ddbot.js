@@ -7,7 +7,7 @@ interface BaseModuleOptions {
 	offonDisconnect?: boolean;
 }
 
-	class BaseModule<TStartArgs extends unknown[] = []> extends EventEmitter {
+class BaseModule<TStartArgs extends unknown[] = []> extends EventEmitter {
 	protected readonly bot: Bot;
 	public readonly moduleName: string;
 	public isRunning: boolean = false;

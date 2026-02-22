@@ -26,27 +26,23 @@ class Chat extends BaseModule<[interval?: number, cooldown?: number]> {
 	private cooldown: number = 1000;
 
 	private readonly chatlistener = (msg: Types.SnapshotItemTypes.iMessage | unknown) => {
-		try {
-			const msgraw = msg as Types.SnapshotItemTypes.iMessage;
-			const text = String(msgraw?.message ?? '');
-			const client_id = msgraw.client_id ?? -1;
-			const team = msgraw.team ?? 0;
+		const msgraw = msg as Types.SnapshotItemTypes.iMessage;
+		
+		const text = String(msgraw?.message ?? '');
+		const client_id = msgraw.client_id ?? -1;
+		const team = msgraw.team ?? 0;
+		const autormsg = msgraw?.author?.ClientInfo?.name ?? null;
 
-			const autormsg = msgraw?.author?.ClientInfo?.name ?? null;
+		const key = `${client_id}:${text}:${team}`;
 
-			const key = `${client_id}:${text}:${team}`;
-			if (this.chatset.has(key)) return;
-			this.chatset.add(key);
+		if (this.chatset.has(key)) return;
+		this.chatset.add(key);
 
-			this.emit('anychat', msgraw, autormsg, text, team, client_id);
-
-			if (autormsg) {
-				this.emit('chat', msgraw, autormsg, text, team, client_id);
-			} else {
-				this.emit('systemchat', msgraw, text);
-			}
-		} catch (e) {
-			console.error(`[${this.moduleName}] chat listener error:`, e);
+		this.emit('anychat', msgraw, autormsg, text, team, client_id);
+		if (autormsg) {
+			this.emit('chat', msgraw, autormsg, text, team, client_id);
+		} else {
+			this.emit('systemchat', msgraw, text);
 		}
 	};
 

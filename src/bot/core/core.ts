@@ -297,7 +297,7 @@ export class Bot extends EventEmitter {
 	 */
 	private setup_snapshot_events(): void {
 		if (!this.client?.SnapshotUnpacker) {
-			console.warn('SnapshotUnpacker not available yet');
+			this.error('SnapshotUnpacker not available yet');
 			return;
 		}
 
