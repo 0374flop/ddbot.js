@@ -35,7 +35,7 @@ reconnect.on('reconnect_failed', (reason, Connection) => {
     console.log('Failed to reconnect to:', Connection.addr+':'+Connection.port, 'Reason:', reason);
 });
 reconnect.on('reconnecting', (reconnectInfo) => {
-    console.log('Reconnecting to:', reconnectInfo.addr+':'+reconnectInfo.port, 'Reason:', reconnectInfo.reason, 'Attempt:', reconnectInfo.attempt, 'Delay:', reconnectInfo.delay);
+    console.log('Reconnecting to:', reconnectInfo.ConnectionInfo.addr+':'+reconnectInfo.ConnectionInfo.port, 'Reason:', reconnectInfo.reason, 'Attempt:', reconnectInfo.attempt, 'Delay:', reconnectInfo.delay);
 });
 
 (async () => {
