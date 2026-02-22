@@ -20,6 +20,8 @@ interface Sound {
 }
 
 class Snap extends BaseModule {
+	private _isFrozen = false;
+
 	private readonly hammerHitlistener = (hit: HammerHit): void => {
         if (this.bot.OwnID === undefined) return;
         const ownCharacter: Types.SnapshotItemTypes.Character = this.bot.bot_client?.SnapshotUnpacker.getObjCharacter(this.bot.OwnID);
@@ -51,6 +53,22 @@ class Snap extends BaseModule {
 		if (sound.sound_id === 0) {
 			this.emit('fire', { common: sound.common }, Snap.whoareWithinTile(sound.common.x, sound.common.y, list));
 		}
+	};
+
+	private readonly snapslistener = (): void => {
+		const ffs = () => { // ForFreezeState
+			if (this.bot.OwnID === undefined || !this.bot.bot_client?.SnapshotUnpacker) return;
+			const myDDNetChar: Types.SnapshotItemTypes.DDNetCharacter = this.bot.bot_client.SnapshotUnpacker.getObjExDDNetCharacter(this.bot.OwnID);
+			if (myDDNetChar) {
+				const wasFrozen = this._isFrozen;
+				this._isFrozen = myDDNetChar.m_FreezeEnd !== 0;
+				if (wasFrozen !== this._isFrozen) {
+					this.emit(this._isFrozen ? 'frozen' : 'unfrozen');
+				}
+			}
+		};
+
+		ffs();
 	};
 
 	constructor(bot: Bot) {
@@ -94,12 +112,19 @@ class Snap extends BaseModule {
 		};
 	}
 
+	public get isFrozen(): boolean {
+		return this._isFrozen;
+	}
+
 	protected _start(): void {
+		if (!this.bot.status.connect.connected) return;
+		this.bot.on('snapshot', this.snapslistener);
 		this.bot.on('hammerhit', this.hammerHitlistener);
 		this.bot.on('sound_world', this.firelistener);
 	}
 
 	protected _stop(): void {
+		this.bot.off('snapshot', this.snapslistener);
 		this.bot.off('hammerhit', this.hammerHitlistener);
 		this.bot.off('sound_world', this.firelistener);
 	}
