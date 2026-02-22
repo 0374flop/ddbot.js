@@ -137,10 +137,6 @@ class Chat extends BaseModule {
 		}
 	}
 
-	public destroy(): void {
-		super.destroy();
-	}
-
 	public on<K extends keyof ChatEvents>(event: K, listener: ChatEvents[K]): this;
 	public on(event: string | symbol, listener: (...args: any[]) => void): this {
 		return super.on(event, listener);

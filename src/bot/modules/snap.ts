@@ -68,7 +68,7 @@ class Snap extends BaseModule {
 			}
 		};
 
-		ffs();
+		ffs(); // in future snapshot can be biger, so we just make new functions.    блять идите нахуй со своим англиским, я не знаю но я стараюсь идите нахуй
 	};
 
 	constructor(bot: Bot) {
@@ -87,7 +87,7 @@ class Snap extends BaseModule {
 	private static whoareWithinTile(
 		x: number,
 		y: number,
-		list: any[],
+		list: Types.SnapshotItemTypes.Character[] = [],
 		ignoreClients: number[] = []
 	): number | null {
 		for (const character of list) {

@@ -21,6 +21,13 @@ interface BotEvents {
 	kill: (kill: Types.SnapshotItemTypes.iKillMsg) => void;
 	snapshot: (items: Types.DeltaItem[]) => void;
 	map_change: (message: Types.SnapshotItemTypes.iMapChange) => void;
+	map_details: (message: {
+        map_name: string;
+        map_sha256: Buffer;
+        map_crc: number;
+        map_size: number;
+        map_url: string;
+    }) => void;
 	motd: (message: string) => void;
 	message: (message: Types.SnapshotItemTypes.iMessage) => void;
 	teams: (teams: Array<number>) => void;
@@ -185,7 +192,11 @@ export class Bot extends EventEmitter {
 			this.once('connect', onConnect);
 			this.once('disconnect', onDisconnect);
 
-			this.client!.connect();
+			if (!this.client) {
+				reject(new Error('Client not created'));
+				return;
+			}
+			this.client.connect();
 		});
 	}
 
@@ -267,6 +278,7 @@ export class Bot extends EventEmitter {
 		this.client.on('kill', (msg) => this.emit('kill', msg));
 		this.client.on('snapshot', (msg) => this.emit('snapshot', msg));
 		this.client.on('map_change', (msg) => this.emit('map_change', msg));
+		this.client.on('map_details', (msg) => this.emit('map_details', msg));
 		this.client.on('motd', (msg) => this.emit('motd', msg));
 		this.client.on('message', (msg) => this.emit('message', msg));
 		this.client.on('teams', (msg) => this.emit('teams', msg));
