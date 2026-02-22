@@ -139,6 +139,9 @@ export function connectionInfo(): ConnectionInfo {
 
 import type { SnapshotItemTypes } from '../types.js';
 
+/**
+ * NOT FULL. baze.
+ */
 export function reconstructPlayerInput(
     char: SnapshotItemTypes.Character,
     ddnetChar: SnapshotItemTypes.DDNetCharacter | null = null,

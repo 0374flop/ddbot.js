@@ -9,7 +9,7 @@ export interface ReconnectingInfo {
 	ConnectionInfo: Types.ConnectionInfo;
 }
 
-class Reconnect extends BaseModule {
+class Reconnect extends BaseModule<[maxAttempts?: number, randomDelay?: boolean]> {
 	private maxAttempts: number = -1;
 	private randomDelay: boolean = true;
 	private currentAttempts: number = 0;

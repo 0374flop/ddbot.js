@@ -11,7 +11,7 @@ interface PlayerData {
 	DDNetCharacter: Types.SnapshotItemTypes.DDNetCharacter | null;
 }
 
-class PlayerList extends BaseModule {
+class PlayerList extends BaseModule<[maxclients?: number]> {
 	constructor(bot: Bot) {
 		super(bot, { moduleName: 'PlayerList', offonDisconnect: false });
 		this.client = this.bot.bot_client;

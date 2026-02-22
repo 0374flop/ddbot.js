@@ -7,7 +7,7 @@ interface BaseModuleOptions {
 	offonDisconnect?: boolean;
 }
 
-	class BaseModule extends EventEmitter {
+	class BaseModule<TStartArgs extends unknown[] = []> extends EventEmitter {
 	protected readonly bot: Bot;
 	public readonly moduleName: string;
 	public isRunning: boolean = false;
@@ -36,7 +36,7 @@ interface BaseModuleOptions {
 	 * Запускает модуль, если он ещё не запущен
 	 * @param args — аргументы, которые будут переданы в _start
 	 */
-	public start(...args: unknown[]): void {
+	public start(...args: TStartArgs): void {
 		if (this.isRunning) return;
 
 		this.isRunning = true;
@@ -57,7 +57,7 @@ interface BaseModuleOptions {
 	 * Метод, который нужно переопределить в наследниках
 	 * Здесь происходит основная логика запуска
 	 */
-	protected _start(...args: unknown[]): void {
+	protected _start(...args: TStartArgs): void {
 		// по умолчанию ничего не делаем
 	}
 

@@ -15,7 +15,7 @@ interface QueuedMessage {
 	team: boolean;
 }
 
-class Chat extends BaseModule {
+class Chat extends BaseModule<[interval?: number, cooldown?: number]> {
 	private chatinterval: NodeJS.Timeout | null = null;
 	private sendinterval: NodeJS.Timeout | null = null;
 

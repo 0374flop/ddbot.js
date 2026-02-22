@@ -7,6 +7,8 @@ import * as DDUtils from './ddutils.js';
 import * as Types from '../types.js';
 
 interface BotEvents {
+	error: (...args: any[]) => void;
+
 	connect: (info: Types.ConnectionInfo) => void;
 	disconnect: (reason: string | null, info: Types.ConnectionInfo) => void;
 	broadcast: (message: string) => void;
@@ -90,6 +92,11 @@ export class Bot extends EventEmitter {
 			: DDUtils.DefaultIdentity('nameless tee');
 	}
 
+	private error(...err: any[]): void {
+		//console.error(err);
+		this.emit('error', ...err);
+	}
+
 	/**
 	 * Get bot identity
 	 */
@@ -127,7 +134,7 @@ export class Bot extends EventEmitter {
 				this.client = null;
 			}
 		} catch (e) {
-			console.error('Error during clean:', e);
+			this.error('Error during clean:', e);
 		}
 	}
 
@@ -212,7 +219,7 @@ export class Bot extends EventEmitter {
 			try {
 				await this.client.Disconnect();
 			} catch (e) {
-				console.error('Error during disconnect:', e);
+				this.error('Error during disconnect:', e);
 			}
 
 			this.status.connect.connected = false;
