@@ -117,7 +117,6 @@ class Snap extends BaseModule {
 	}
 
 	protected _start(): void {
-		if (!this.bot.status.connect.connected) return;
 		this.bot.on('snapshot', this.snapslistener);
 		this.bot.on('hammerhit', this.hammerHitlistener);
 		this.bot.on('sound_world', this.firelistener);
