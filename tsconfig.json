@@ -3,6 +3,7 @@
     "rootDir": "./src/bot",
     "outDir": "./lib",
     "module": "commonjs",
+    "moduleResolution": "node",
     "target": "esnext",
     "types": ["node"],
     "declaration": true,

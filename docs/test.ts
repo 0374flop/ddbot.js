@@ -1,1 +1,0 @@
-const ddbot = require('../index.js');
