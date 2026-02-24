@@ -3,7 +3,7 @@
     "teeworlds": "^2.5.11"
   },
   "name": "ddbot.js-0374",
-  "version": "4.2.0",
+  "version": "4.3.0",
   "description": "ddbot.js — это Node.js проект для автоматизации и управления ботами.",
   "main": "./lib/index.js",
   "scripts": {
