@@ -3,8 +3,20 @@
 import { Client } from 'teeworlds';
 import * as Teeworlds from 'teeworlds';
 import { EventEmitter } from 'events';
-import * as DDUtils from './ddutils.js';
 import * as Types from '../types.js';
+
+
+function DefaultIdentity(name: string = 'nameless tee'): Types.SnapshotItemTypes.Identity {
+	return {
+		name: name,
+		clan: "",
+		skin: "default",
+		use_custom_color: 0,
+		color_body: 0,
+		color_feet: 0,
+		country: 0
+	};
+}
 
 interface BotEvents {
 	error: (...args: any[]) => void;
@@ -87,9 +99,7 @@ export class Bot extends EventEmitter {
 		this.teeworlds = CustomTeeworlds;
 		this.options = options;
 
-		this.identity = DDUtils.IsValidIdentity(identity)
-			? identity
-			: DDUtils.DefaultIdentity('nameless tee');
+		this.identity = identity ? identity : DefaultIdentity('nameless tee');
 	}
 
 	private error(...err: any[]): void {
@@ -239,7 +249,7 @@ export class Bot extends EventEmitter {
 		this.identity =
 			typeof identity === 'object' && identity !== null
 				? { ...this.identity, ...identity }
-				: DDUtils.DefaultIdentity(this.identity.name);
+				: DefaultIdentity(this.identity.name);
 
 		if (this.client && this.status.connect.connected) {
 			this.client.game.ChangePlayerInfo(this.identity);

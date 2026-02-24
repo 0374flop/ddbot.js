@@ -1,7 +1,6 @@
 /**
  * Типы из библиотеки teeworlds
  */
-
 export namespace SnapshotItemTypes {
     export interface PlayerInput {
         direction: number;

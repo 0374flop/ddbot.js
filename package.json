@@ -5,9 +5,9 @@
   "name": "ddbot.js-0374",
   "version": "4.2.0",
   "description": "ddbot.js — это Node.js проект для автоматизации и управления ботами.",
-  "main": "./index.js",
+  "main": "./lib/index.js",
   "scripts": {
-    "build": "tsc && tsc index.ts --outDir . --skipLibCheck",
+    "build": "tsc",
     "prepublishOnly": "npm run build"
   },
   "repository": {
