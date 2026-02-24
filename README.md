@@ -21,7 +21,7 @@ const ddbot = require('ddbot.js-0374');
 
 простейший пример
 ```ts
-    import * as ddbot from '../lib/index.js';
+import * as ddbot from '../lib/index.js';
 
     const bot = new ddbot.Bot(/* identity, options, custom teeworlds */);
     // if no identity is provided, it will be default 'nameless tee' with default skin
@@ -46,7 +46,7 @@ const ddbot = require('ddbot.js-0374');
             await bot.disconnect();
             process.exit(0);
         });
-    })();
+})();
 ```
 
 ## Документация
