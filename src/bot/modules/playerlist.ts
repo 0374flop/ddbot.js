@@ -14,7 +14,7 @@ interface PlayerData {
 class PlayerList extends BaseModule<[maxclients?: number]> {
 	constructor(bot: Bot) {
 		super(bot, { moduleName: 'PlayerList', offonDisconnect: false });
-		this.client = this.bot.bot_client;
+		this.client = this.bot.bot_client; // тута короче же прокси, так что ето работает
 	}
 	private client: Client | null;
 	private maxclients: number = 64;
