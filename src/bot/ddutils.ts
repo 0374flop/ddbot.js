@@ -12,13 +12,6 @@ export function DefaultIdentity(name: string = 'nameless tee'): Types.SnapshotIt
 	};
 }
 
-export function connectionInfo(): Types.ConnectionInfo {
-	return {
-		addr: 'string',
-		port: 8303
-	};
-}
-
 /**
  * NOT FULL. baze.
  */

@@ -250,9 +250,5 @@ myModule.start();
 
 **DDUtils.DefaultIdentity(name?)** - возвращает дефолтный identity `Identity`, если имени нет, то 'nameless tee'
 
-**DDUtils.connectionInfo()** - возвращает дефолтный `ConnectionInfo`,
-'ConnectionInfo = {
-    addr: 'string', port: 8303
-}'
 
 **DDUtils.reconstructPlayerInput(char, ddnetChar?, tick?)** - реконструирует инпут игрока из snapshot. NOT FULL. `Types.SnapshotItemTypes.PlayerInput`
