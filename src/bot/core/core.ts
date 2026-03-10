@@ -23,6 +23,8 @@ interface BotEvents {
 
 	connect: (info: Types.ConnectionInfo) => void;
 	disconnect: (reason: string | null, info: Types.ConnectionInfo) => void;
+	rawconnect: (info: Types.ConnectionInfo) => void;
+	rawdisconnect: (reason: string, info: Types.ConnectionInfo) => void;
 	broadcast: (message: string) => void;
 	capabilities: (message: {
 		ChatTimeoutCode: boolean;
@@ -290,6 +292,14 @@ export class Bot extends EventEmitter {
 			if (!!reason) {
 				this.emit('disconnect', reason, { addr: this.status.addr!, port: this.status.port! });
 			}
+		});
+
+		this.client.on('connected', () => {
+			this.emit('rawconnect', { addr: this.status.addr!, port: this.status.port! });
+		});
+
+		this.client.on('disconnect', (reason) => {
+			this.emit('rawdisconnect', reason, { addr: this.status.addr!, port: this.status.port! });
 		});
 
 		// Game events
