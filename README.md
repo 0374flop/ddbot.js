@@ -11,7 +11,7 @@
 npm i ddbot.js-0374
 ```
 
-експорт
+импорт
 ```ts
 import * as ddbot from 'ddbot.js-0374';
 ```

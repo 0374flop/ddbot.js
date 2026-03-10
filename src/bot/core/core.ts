@@ -231,7 +231,7 @@ export class Bot extends EventEmitter {
 			} catch (e) {
 				this.error('Error during disconnect:', e);
 			}
-
+			
 			this.status.connect.connected = false;
 			info = { addr: this.status.addr!, port: this.status.port! };
 			this.emit('disconnect', null, info);
@@ -275,12 +275,16 @@ export class Bot extends EventEmitter {
 
 		// Connection events
 		this.client.on('connected', () => {
-			this.status.connect.connected = true;
-			this.emit('connect', { addr: this.status.addr!, port: this.status.port! });
-			this.setup_snapshot_events();
+			if (this.status.connect.connected) {
+				this.error('connection received when already connected');
+			} else {
+				this.status.connect.connected = true;
+				this.emit('connect', { addr: this.status.addr!, port: this.status.port! });
+				this.setup_snapshot_events();
+			}
 		});
 
-		this.client.on('disconnect', (reason: string | null = null) => {
+		this.client.on('disconnect', (reason) => {
 			this.status.connect.connected = false;
 			this.clean(true);
 			if (!!reason) {
@@ -335,8 +339,6 @@ export class Bot extends EventEmitter {
 	 * Get proxied client instance for safe access
 	 */
 	public get bot_client(): Client | null {
-		if (!this.client) return null;
-
 		if (!this._clientProxy) {
 			const self = this;
 			this._clientProxy = new Proxy({} as Client, {
