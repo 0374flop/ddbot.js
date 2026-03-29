@@ -4,22 +4,11 @@ import { Client } from 'teeworlds';
 import * as Teeworlds from 'teeworlds';
 import { EventEmitter } from 'events';
 import * as Types from '../types.js';
-
-
-function DefaultIdentity(name: string = 'nameless tee'): Types.SnapshotItemTypes.Identity {
-	return {
-		name: name,
-		clan: "",
-		skin: "default",
-		use_custom_color: 0,
-		color_body: 0,
-		color_feet: 0,
-		country: 0
-	};
-}
+import { DefaultIdentity } from '../ddutils.js';
 
 interface BotEvents {
 	error: (...args: any[]) => void;
+	destroy: () => void;
 
 	connect: (info: Types.ConnectionInfo) => void;
 	disconnect: (reason: string | null, info: Types.ConnectionInfo) => void;
@@ -375,6 +364,7 @@ export class Bot extends EventEmitter {
 		await this.disconnect();
 		this.removeAllListeners();
 		this._clientProxy = null;
+		this.emit('destroy');
 	}
 
 	public on<K extends keyof BotEvents>(event: K, listener: BotEvents[K]): this;

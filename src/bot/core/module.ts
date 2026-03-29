@@ -30,6 +30,8 @@ class BaseModule<TStartArgs extends unknown[] = []> extends EventEmitter {
 		if (options.offonDisconnect !== false) {
 			this.bot.on('disconnect', this._onDisconnect);
 		}
+
+		this.bot.on('destroy', () => this.destroy());
 	}
 
 	/**
