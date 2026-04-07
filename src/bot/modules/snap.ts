@@ -128,13 +128,21 @@ class Snap extends BaseModule {
 	}
 
 	public lookatplayer(client_id: number): void {
-		const pl_character = this.bot.bot_client?.SnapshotUnpacker.getObjCharacter(client_id);
-		const own_character = this.bot.bot_client?.SnapshotUnpacker.getObjCharacter(this.bot.OwnID!);
+		try {
+			const pl_character = this.bot.bot_client?.SnapshotUnpacker.getObjCharacter(client_id);
+			const own_character = this.bot.bot_client?.SnapshotUnpacker.getObjCharacter(this.bot.OwnID!);
 
-		if (!pl_character || !own_character) return;
+			if (!pl_character || !own_character) {
+				return;
+			}
 
-		const angle = Math.atan2(pl_character.character_core.y - own_character.character_core.y, pl_character.character_core.x - own_character.character_core.x);
-		this.bot.send_input({ target_x : Math.cos(angle) * 256, target_y: Math.sin(angle) * 256 });
+			const angle = Math.atan2(pl_character.character_core.y - own_character.character_core.y, pl_character.character_core.x - own_character.character_core.x);
+
+			this.bot.send_input({ m_TargetX: Math.cos(angle) * 256, m_TargetY: Math.sin(angle) * 256 });
+			return;
+		} catch (e) {
+			return;
+		}
 	}
 
 	protected _start(): void {

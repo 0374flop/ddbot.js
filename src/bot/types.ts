@@ -3,16 +3,16 @@
  */
 export namespace SnapshotItemTypes {
     export interface PlayerInput {
-        direction: number;
-        target_x: number;
-        target_y: number;
-        jump: number;
-        fire: number;
-        hook: number;
-        player_flags: number;
-        wanted_weapon: number;
-        next_weapon: number;
-        prev_weapon: number;
+        m_Direction: number;
+        m_TargetX: number;
+        m_TargetY: number;
+        m_Jump: number;
+        m_Fire: number;
+        m_Hook: number;
+        m_PlayerFlags: number;
+        m_WantedWeapon: number;
+        m_NextWeapon: number;
+        m_PrevWeapon: number;
     }
 
     export interface iOptions {
