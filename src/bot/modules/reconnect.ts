@@ -9,6 +9,15 @@ export interface ReconnectingInfo {
 	ConnectionInfo: Types.ConnectionInfo;
 }
 
+interface ReconnectEvents {
+	/** Начинается попытка переподключения */
+	reconnecting: (info: ReconnectingInfo) => void;
+	/** Успешно переподключились */
+	reconnected: (info: { addr: string; port: number }) => void;
+	/** Переподключение не удалось (исчерпаны попытки или нет данных о сервере) */
+	reconnect_failed: (reason: string | number | unknown) => void;
+}
+
 class Reconnect extends BaseModule<[maxAttempts?: number, randomDelay?: boolean]> {
 	private maxAttempts: number = -1;
 	private randomDelay: boolean = true;
@@ -81,7 +90,7 @@ class Reconnect extends BaseModule<[maxAttempts?: number, randomDelay?: boolean]
 		}
 
 		if (this.randomDelay) {
-			return baseDelay + Math.random() * 1000;
+			return baseDelay + Math.random() * 5000;
 		}
 		return baseDelay;
 	}
@@ -94,6 +103,26 @@ class Reconnect extends BaseModule<[maxAttempts?: number, randomDelay?: boolean]
 			clearTimeout(this.reconnectTimer);
 			this.reconnectTimer = null;
 		}
+	}
+
+	public on<K extends keyof ReconnectEvents>(event: K, listener: ReconnectEvents[K]): this;
+	public on(event: string | symbol, listener: (...args: any[]) => void): this {
+		return super.on(event, listener);
+	}
+
+	public once<K extends keyof ReconnectEvents>(event: K, listener: ReconnectEvents[K]): this;
+	public once(event: string | symbol, listener: (...args: any[]) => void): this {
+		return super.once(event, listener);
+	}
+
+	public emit<K extends keyof ReconnectEvents>(event: K, ...args: Parameters<ReconnectEvents[K]>): boolean;
+	public emit(event: string | symbol, ...args: any[]): boolean {
+		return super.emit(event, ...args);
+	}
+
+	public off<K extends keyof ReconnectEvents>(event: K, listener: ReconnectEvents[K]): this;
+	public off(event: string | symbol, listener: (...args: any[]) => void): this {
+		return super.off(event, listener);
 	}
 }
 

@@ -19,6 +19,17 @@ interface Sound {
 	[key: string]: any;
 }
 
+interface SnapEvents {
+	/** Бота ударили молотком (hammer hit попал в тайл персонажа) */
+	hammerhitme: (hit: HammerHit, attackerId: number | null) => void;
+	/** Кто-то выстрелил рядом (sound_id === 0) */
+	fire: (common: { common: { x: number; y: number } }, nearestClient: number | null) => void;
+	/** Персонаж заморожен */
+	frozen: () => void;
+	/** Персонаж разморожен */
+	unfrozen: () => void;
+}
+
 class Snap extends BaseModule {
 	private _isFrozen = false;
 
@@ -126,6 +137,26 @@ class Snap extends BaseModule {
 		this.bot.off('snapshot', this.snapslistener);
 		this.bot.off('hammerhit', this.hammerHitlistener);
 		this.bot.off('sound_world', this.firelistener);
+	}
+
+	public on<K extends keyof SnapEvents>(event: K, listener: SnapEvents[K]): this;
+	public on(event: string | symbol, listener: (...args: any[]) => void): this {
+		return super.on(event, listener);
+	}
+
+	public once<K extends keyof SnapEvents>(event: K, listener: SnapEvents[K]): this;
+	public once(event: string | symbol, listener: (...args: any[]) => void): this {
+		return super.once(event, listener);
+	}
+
+	public emit<K extends keyof SnapEvents>(event: K, ...args: Parameters<SnapEvents[K]>): boolean;
+	public emit(event: string | symbol, ...args: any[]): boolean {
+		return super.emit(event, ...args);
+	}
+
+	public off<K extends keyof SnapEvents>(event: K, listener: SnapEvents[K]): this;
+	public off(event: string | symbol, listener: (...args: any[]) => void): this {
+		return super.off(event, listener);
 	}
 }
 
