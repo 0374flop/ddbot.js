@@ -28,14 +28,19 @@ interface SnapEvents {
 	frozen: () => void;
 	/** Персонаж разморожен */
 	unfrozen: () => void;
+	/** Другой игрок заморожен */
+	player_frozen: (client_id: number) => void;
+	/** Другой игрок разморожен */
+	player_unfrozen: (client_id: number) => void;
 }
 
 class Snap extends BaseModule {
 	private _isFrozen = false;
+	private _playerFreezeState: Map<number, boolean> = new Map();
 
 	private readonly hammerHitlistener = (hit: HammerHit): void => {
-        if (this.bot.OwnID === undefined) return;
-        const ownCharacter: Types.SnapshotItemTypes.Character = this.bot.bot_client?.SnapshotUnpacker.getObjCharacter(this.bot.OwnID);
+		if (this.bot.OwnID === undefined) return;
+		const ownCharacter: Types.SnapshotItemTypes.Character = this.bot.bot_client?.SnapshotUnpacker.getObjCharacter(this.bot.OwnID);
 		if (!ownCharacter) return;
 
 		if (
@@ -67,7 +72,7 @@ class Snap extends BaseModule {
 	};
 
 	private readonly snapslistener = (): void => {
-		const ffs = () => { // ForFreezeState
+		const ffs = () => {
 			if (this.bot.OwnID === undefined || !this.bot.bot_client?.SnapshotUnpacker) return;
 			const myDDNetChar: Types.SnapshotItemTypes.DDNetCharacter = this.bot.bot_client.SnapshotUnpacker.getObjExDDNetCharacter(this.bot.OwnID);
 			if (myDDNetChar) {
@@ -79,7 +84,43 @@ class Snap extends BaseModule {
 			}
 		};
 
-		ffs(); // in future snapshot can be biger, so we just make new functions.    блять идите нахуй со своим англиским, я не знаю но я стараюсь идите нахуй
+		const fps = () => {
+			if (!this.bot.bot_client?.SnapshotUnpacker) return;
+			const allChars = this.bot.bot_client.SnapshotUnpacker.AllObjCharacter || [];
+
+			const currentIds = new Set<number>();
+
+			for (const char of allChars) {
+				if (char.client_id === this.bot.OwnID) continue;
+
+				currentIds.add(char.client_id);
+
+				const ddnetChar: Types.SnapshotItemTypes.DDNetCharacter = this.bot.bot_client.SnapshotUnpacker.getObjExDDNetCharacter(char.client_id);
+				if (!ddnetChar) continue;
+
+				const isFrozen = ddnetChar.m_FreezeEnd !== 0;
+				const wasFrozen = this._playerFreezeState.get(char.client_id);
+
+				if (wasFrozen === undefined) {
+					this._playerFreezeState.set(char.client_id, isFrozen);
+					continue;
+				}
+
+				if (wasFrozen !== isFrozen) {
+					this._playerFreezeState.set(char.client_id, isFrozen);
+					this.emit(isFrozen ? 'player_frozen' : 'player_unfrozen', char.client_id);
+				}
+			}
+
+			for (const id of this._playerFreezeState.keys()) {
+				if (!currentIds.has(id)) {
+					this._playerFreezeState.delete(id);
+				}
+			}
+		};
+
+		ffs();
+		fps();
 	};
 
 	constructor(bot: Bot) {
@@ -88,11 +129,7 @@ class Snap extends BaseModule {
 
 	private static areWithinTile(x1: number, y1: number, x2: number, y2: number): boolean {
 		const TILE = 32 * 1.1;
-
-		const distanceX = Math.abs(x1 - x2);
-		const distanceY = Math.abs(y1 - y2);
-
-		return distanceX <= TILE && distanceY <= TILE;
+		return Math.abs(x1 - x2) <= TILE && Math.abs(y1 - y2) <= TILE;
 	}
 
 	private static whoareWithinTile(
@@ -127,19 +164,23 @@ class Snap extends BaseModule {
 		return this._isFrozen;
 	}
 
+	public isPlayerFrozen(client_id: number): boolean {
+		return this._playerFreezeState.get(client_id) ?? false;
+	}
+
 	public lookatplayer(client_id: number): void {
 		try {
 			const pl_character = this.bot.bot_client?.SnapshotUnpacker.getObjCharacter(client_id);
 			const own_character = this.bot.bot_client?.SnapshotUnpacker.getObjCharacter(this.bot.OwnID!);
 
-			if (!pl_character || !own_character) {
-				return;
-			}
+			if (!pl_character || !own_character) return;
 
-			const angle = Math.atan2(pl_character.character_core.y - own_character.character_core.y, pl_character.character_core.x - own_character.character_core.x);
+			const angle = Math.atan2(
+				pl_character.character_core.y - own_character.character_core.y,
+				pl_character.character_core.x - own_character.character_core.x
+			);
 
 			this.bot.send_input({ m_TargetX: Math.cos(angle) * 256, m_TargetY: Math.sin(angle) * 256 });
-			return;
 		} catch (e) {
 			return;
 		}
@@ -155,6 +196,7 @@ class Snap extends BaseModule {
 		this.bot.off('snapshot', this.snapslistener);
 		this.bot.off('hammerhit', this.hammerHitlistener);
 		this.bot.off('sound_world', this.firelistener);
+		this._playerFreezeState.clear();
 	}
 
 	public on<K extends keyof SnapEvents>(event: K, listener: SnapEvents[K]): this;
