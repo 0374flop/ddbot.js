@@ -127,6 +127,16 @@ class Snap extends BaseModule {
 		return this._isFrozen;
 	}
 
+	public lookatplayer(client_id: number): void {
+		const pl_character = this.bot.bot_client?.SnapshotUnpacker.getObjCharacter(client_id);
+		const own_character = this.bot.bot_client?.SnapshotUnpacker.getObjCharacter(this.bot.OwnID!);
+
+		if (!pl_character || !own_character) return;
+
+		const angle = Math.atan2(pl_character.character_core.y - own_character.character_core.y, pl_character.character_core.x - own_character.character_core.x);
+		this.bot.send_input({ target_x : Math.cos(angle) * 256, target_y: Math.sin(angle) * 256 });
+	}
+
 	protected _start(): void {
 		this.bot.on('snapshot', this.snapslistener);
 		this.bot.on('hammerhit', this.hammerHitlistener);
