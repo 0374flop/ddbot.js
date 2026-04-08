@@ -39,6 +39,7 @@ class PlayerList extends BaseModule<[maxclients?: number]> {
 	private maxclients: number = 64;
 	private playermap: Map<number, PlayerData> = new Map();
 	private previousMap: Map<number, PlayerData> = new Map();
+	private isFirstSnapshot: boolean = true;
 
 	private readonly snapshotlistener = (): void => {
 		this.previousMap = new Map(this.playermap);
@@ -61,27 +62,32 @@ class PlayerList extends BaseModule<[maxclients?: number]> {
 				};
 				this.playermap.set(client_id, playerData);
 
-				if (!this.previousMap.has(client_id)) {
-					this.emit('player_joined', {
+				if (!this.isFirstSnapshot && !this.previousMap.has(client_id)) {
+					this.emit('player_joined', { client_id, name: clientInfo.name, playerData });
+				}
+			}
+		}
+
+		if (!this.isFirstSnapshot) {
+			for (const [client_id, oldData] of this.previousMap) {
+				if (!this.playermap.has(client_id)) {
+					this.emit('player_left', {
 						client_id,
-						name: clientInfo.name,
-						playerData,
+						name: oldData.clientInfo.name,
+						playerData: oldData,
 					});
 				}
 			}
 		}
 
-		for (const [client_id, oldData] of this.previousMap) {
-			if (!this.playermap.has(client_id)) {
-				this.emit('player_left', {
-					client_id,
-					name: oldData.clientInfo.name,
-					playerData: oldData,
-				});
-			}
-		}
-
+		this.isFirstSnapshot = false;
 		this.previousMap.clear();
+	};
+
+	private readonly resetState = (): void => {
+		this.playermap.clear();
+		this.previousMap.clear();
+		this.isFirstSnapshot = true;
 	};
 
 	/**
@@ -107,11 +113,16 @@ class PlayerList extends BaseModule<[maxclients?: number]> {
 
 	protected _start(maxclients: number = 64): void {
 		this.maxclients = maxclients;
+		this.isFirstSnapshot = true;
 		this.bot.on('snapshot', this.snapshotlistener);
+		this.bot.on('connect', this.resetState);
+		this.bot.on('disconnect', this.resetState);
 	}
 
 	protected _stop(): void {
 		this.bot.off('snapshot', this.snapshotlistener);
+		this.bot.off('connect', this.resetState);
+		this.bot.off('disconnect', this.resetState);
 		this.playermap.clear();
 		this.previousMap.clear();
 	}
