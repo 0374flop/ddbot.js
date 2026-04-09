@@ -11,6 +11,8 @@ class BaseModule<TStartArgs extends unknown[] = []> extends EventEmitter {
 	protected readonly bot: Bot;
 	public readonly moduleName: string;
 	public isRunning: boolean = false;
+	private _timers: Set<ReturnType<typeof setTimeout>> = new Set();
+	private _intervals: Set<ReturnType<typeof setInterval>> = new Set();
 
 	private readonly _onDisconnect: () => void;
 
@@ -52,7 +54,42 @@ class BaseModule<TStartArgs extends unknown[] = []> extends EventEmitter {
 
 	protected _stop(): void {}
 
+	protected setTimeout(fn: () => void, ms: number) {
+		const timer = setTimeout(() => {
+			fn();
+			this._timers.delete(timer);
+		}, ms);
+		this._timers.add(timer);
+	}
+
+	protected setInterval(fn: () => void, ms: number) {
+		const interval = setInterval(fn, ms);
+		this._intervals.add(interval);
+	}
+
+	protected cancelTimeout(timer: ReturnType<typeof setTimeout>) {
+		clearTimeout(timer);
+		this._timers.delete(timer);
+	}
+
+	protected cancelInterval(interval: ReturnType<typeof setInterval>) {
+		clearInterval(interval);
+		this._intervals.delete(interval);
+	}
+
+	private _clearTimers() {
+		for (const timer of this._timers) {
+			clearTimeout(timer);
+		}
+		this._timers.clear();
+		for (const interval of this._intervals) {
+			clearInterval(interval);
+		}
+		this._intervals.clear();
+	}
+
 	public destroy(): void {
+		this._clearTimers();
 		this.stop();
 		this.bot.off('disconnect', this._onDisconnect);
 		this.removeAllListeners();
