@@ -40,6 +40,20 @@ class BaseModule<TStartArgs extends unknown[] = []> extends EventEmitter {
 		this.bot.on('destroy', () => this.destroy());
 	}
 
+	protected get bus(): EventEmitter {
+		if (!this.events) {
+			throw new Error(`${this.moduleName}: no container provided`);
+		}
+		return new Proxy(this.events, {
+			get: (target, prop) => {
+				if (prop === 'emit') {
+					return (event: string, ...args: any[]) => target.emit(`${this.moduleName}:${event}`, ...args);
+				}
+				return (target as any)[prop];
+			}
+		});
+	}
+
 	public start(...args: TStartArgs): void {
 		if (this.isRunning) return;
 
