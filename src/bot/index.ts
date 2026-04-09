@@ -1,5 +1,5 @@
 import { Bot } from './core/core.js';
-import BaseModule from './core/module.js';
+import BaseModule from './core/module/module.js';
 
 import Chat from './modules/chat.js';
 import PlayerList from './modules/playerlist.js';

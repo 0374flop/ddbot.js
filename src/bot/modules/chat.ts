@@ -1,4 +1,4 @@
-import BaseModule from '../core/module.js';
+import BaseModule from '../core/module/module.js';
 import type { Bot } from '../core/core.js';
 import * as Types from '../types.js';
 

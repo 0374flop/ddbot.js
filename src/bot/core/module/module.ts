@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 
-import type { Bot } from './core.js';
+import type { Bot } from '../core.js';
 
 interface BaseModuleOptions {
 	moduleName?: string;
@@ -34,10 +34,6 @@ class BaseModule<TStartArgs extends unknown[] = []> extends EventEmitter {
 		this.bot.on('destroy', () => this.destroy());
 	}
 
-	/**
-	 * Запускает модуль, если он ещё не запущен
-	 * @param args — аргументы, которые будут переданы в _start
-	 */
 	public start(...args: TStartArgs): void {
 		if (this.isRunning) return;
 
@@ -45,9 +41,6 @@ class BaseModule<TStartArgs extends unknown[] = []> extends EventEmitter {
 		this._start(...args);
 	}
 
-	/**
-	 * Останавливает модуль, если он запущен
-	 */
 	public stop(): void {
 		if (!this.isRunning) return;
 
@@ -55,28 +48,10 @@ class BaseModule<TStartArgs extends unknown[] = []> extends EventEmitter {
 		this._stop();
 	}
 
-	/**
-	 * Метод, который нужно переопределить в наследниках
-	 * Здесь происходит основная логика запуска
-	 */
-	protected _start(...args: TStartArgs): void {
-		// по умолчанию ничего не делаем
-	}
+	protected _start(...args: TStartArgs): void {}
 
-	/**
-	 * Метод, который нужно переопределить в наследниках
-	 * Здесь происходит очистка при остановке
-	 */
-	protected _stop(): void {
-		// по умолчанию ничего не делаем
-	}
+	protected _stop(): void {}
 
-	/**
-	 * Полная очистка модуля:
-	 * - останавливает работу
-	 * - снимает обработчик disconnect с bot
-	 * - удаляет все слушатели событий самого модуля
-	 */
 	public destroy(): void {
 		this.stop();
 		this.bot.off('disconnect', this._onDisconnect);
