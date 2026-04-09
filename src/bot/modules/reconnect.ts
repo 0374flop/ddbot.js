@@ -39,7 +39,10 @@ class Reconnect extends BaseModule<[maxAttempts?: number, randomDelay?: boolean]
 		if (reason === null) return;
 		if (this.reconnecting) return;
 
-		if (!connectionInfo.addr || !connectionInfo.port) {
+		const addr = connectionInfo.addr;
+		const port = connectionInfo.port;
+
+		if (!addr || !port) {
 			this.emit('reconnect_failed', 'No connection info');
 			return;
 		}
@@ -62,11 +65,11 @@ class Reconnect extends BaseModule<[maxAttempts?: number, randomDelay?: boolean]
 
 		this.reconnectTimer = setTimeout(async () => {
 			try {
-				await this.bot.connect(connectionInfo.addr, connectionInfo.port);
+				await this.bot.connect(addr, port, 30000);
 				this.currentAttempts = 0;
 				this.emit('reconnected', { 
-					addr: connectionInfo.addr, 
-					port: connectionInfo.port 
+					addr: addr, 
+					port: port 
 				});
 			} catch (err) {
 				this.emit('reconnect_failed', err);

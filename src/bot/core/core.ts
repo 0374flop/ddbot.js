@@ -176,7 +176,7 @@ export class Bot extends EventEmitter {
 				clearTimeout(timer);
 				cleanup();
 				this.status.connect.connecting = false;
-				resolve({ addr: this.status.addr!, port: this.status.port! });
+				resolve({ addr: this.status.addr, port: this.status.port });
 			};
 
 			const onDisconnect = (reason: string | null) => {
@@ -256,47 +256,43 @@ export class Bot extends EventEmitter {
 		this.client.movement.input = { ...this.client.movement.input, ...input };
 	}
 
+	private snapshotUnpackerRef: object | null = null;
+
 	/**
 	 * Setup all client event listeners and forward them
 	 */
 	private client_events(): void {
 		this.clean(false);
-
 		if (!this.client) return;
-
-		// Connection events
 		this.client.on('connected', () => {
+			this.emit('rawconnect', { addr: this.status.addr, port: this.status.port });
+			this.setup_snapshot_events();
 			if (this.status.connect.connected) {
 				this.error('connection received when already connected');
 			} else {
 				this.status.connect.connected = true;
-				this.emit('connect', { addr: this.status.addr!, port: this.status.port! });
-				this.setup_snapshot_events();
+				this.emit('connect', { addr: this.status.addr, port: this.status.port });
 			}
 		});
 
 		this.client.on('disconnect', (reason) => {
+			this.snapshotUnpackerRef = null;
+			this.emit('rawdisconnect', reason, { addr: this.status.addr, port: this.status.port });
 			this.status.connect.connected = false;
 			this.clean(true);
 			if (!!reason) {
-				this.emit('disconnect', reason, { addr: this.status.addr!, port: this.status.port! });
+				this.emit('disconnect', reason, { addr: this.status.addr, port: this.status.port });
 			}
 		});
 
-		this.client.on('connected', () => {
-			this.emit('rawconnect', { addr: this.status.addr!, port: this.status.port! });
-		});
-
-		this.client.on('disconnect', (reason) => {
-			this.emit('rawdisconnect', reason, { addr: this.status.addr!, port: this.status.port! });
-		});
-
-		// Game events
 		this.client.on('broadcast', (msg) => this.emit('broadcast', msg));
 		this.client.on('capabilities', (msg) => this.emit('capabilities', msg));
 		this.client.on('emote', (msg) => this.emit('emote', msg));
 		this.client.on('kill', (msg) => this.emit('kill', msg));
-		this.client.on('snapshot', (msg) => this.emit('snapshot', msg));
+		this.client.on('snapshot', (msg) => {
+			this.setup_snapshot_events();
+			this.emit('snapshot', msg);
+		});
 		this.client.on('map_change', (msg) => this.emit('map_change', msg));
 		this.client.on('map_details', (msg) => this.emit('map_details', msg));
 		this.client.on('motd', (msg) => this.emit('motd', msg));
@@ -309,11 +305,9 @@ export class Bot extends EventEmitter {
 	 * Setup snapshot unpacker events
 	 */
 	private setup_snapshot_events(): void {
-		if (!this.client?.SnapshotUnpacker) {
-			this.error('SnapshotUnpacker not available yet');
-			return;
-		}
-
+		if (!this.client?.SnapshotUnpacker) return;
+		if (this.snapshotUnpackerRef === this.client.SnapshotUnpacker) return;
+		this.snapshotUnpackerRef = this.client.SnapshotUnpacker;
 		this.client.SnapshotUnpacker.removeAllListeners();
 
 		this.client.SnapshotUnpacker.on('spawn', (msg) => this.emit('spawn', msg));

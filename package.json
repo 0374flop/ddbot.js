@@ -30,6 +30,6 @@
   },
   "homepage": "https://github.com/0374flop/ddbot.js#readme",
   "devDependencies": {
-    "@types/node": "^25.2.3"
+    "@types/node": "^25.5.2"
   }
 }

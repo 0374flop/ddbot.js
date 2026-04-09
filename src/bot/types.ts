@@ -313,6 +313,6 @@ export type DeltaItem = {
 };
 
 export interface ConnectionInfo {
-    addr: string;
-    port: number;
+    addr: string | null;
+    port: number | null;
 }
