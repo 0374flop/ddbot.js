@@ -1,15 +1,18 @@
 import { EventEmitter } from 'events';
 
 import type { Bot } from '../core.js';
+import ModuleContainer from './container.js';
 
 interface BaseModuleOptions {
 	moduleName?: string;
 	offonDisconnect?: boolean;
+	container?: ModuleContainer;
 }
 
 class BaseModule<TStartArgs extends unknown[] = []> extends EventEmitter {
 	protected readonly bot: Bot;
 	public readonly moduleName: string;
+	protected readonly events?: EventEmitter;
 	public isRunning: boolean = false;
 	private _timers: Set<ReturnType<typeof setTimeout>> = new Set();
 	private _intervals: Set<ReturnType<typeof setInterval>> = new Set();
@@ -27,6 +30,7 @@ class BaseModule<TStartArgs extends unknown[] = []> extends EventEmitter {
 
 		this.bot = bot;
 		this.moduleName = moduleName;
+		this.events = options.container?.events;
 
 		this._onDisconnect = () => this.destroy();
 		if (options.offonDisconnect !== false) {
