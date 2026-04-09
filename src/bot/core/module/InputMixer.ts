@@ -21,9 +21,10 @@ export class InputMixer {
         const owners = new Map<InputChannel, InputModule>();
 
         for (const module of this._modules) {
+            if (!module.isRunning) continue;
             for (const channel of module.channels) {
                 const current = owners.get(channel);
-                if (!current || module.priority < current.priority) {
+                if (!current || module.priority > current.priority) {
                     owners.set(channel, module);
                 }
             }

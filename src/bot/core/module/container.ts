@@ -22,12 +22,12 @@ export default class ModuleContainer {
         return instance;
     }
 
-    public registerModule(cls: new (bot: Bot, options?: any) => BaseModule) {
-        return this._register(cls, new cls(this.bot, { container: this }));
+    public registerModule<T extends BaseModule>(cls: new (bot: Bot, options?: any) => T): T {
+        return this._register(cls, new cls(this.bot, { container: this })) as T;
     }
 
-    public registerModuleFactory<T extends BaseModule>(cls: new (...args: any[]) => T, factory: (bot: Bot, container: ModuleContainer) => T) {
-        return this._register(cls, factory(this.bot, this));
+    public registerModuleFactory<T extends BaseModule>(cls: new (...args: any[]) => T, factory: (bot: Bot, container: ModuleContainer) => T): T {
+        return this._register(cls, factory(this.bot, this)) as T;
     }
 
     public getModule<T extends BaseModule>(cls: new (...args: any[]) => T): T {
