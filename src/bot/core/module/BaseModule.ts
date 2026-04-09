@@ -13,6 +13,7 @@ class BaseModule<TStartArgs extends unknown[] = []> extends EventEmitter {
 	protected readonly bot: Bot;
 	public readonly moduleName: string;
 	protected readonly events?: EventEmitter;
+	protected readonly container?: ModuleContainer;
 	public isRunning: boolean = false;
 	private _timers: Set<ReturnType<typeof setTimeout>> = new Set();
 	private _intervals: Set<ReturnType<typeof setInterval>> = new Set();
@@ -30,6 +31,7 @@ class BaseModule<TStartArgs extends unknown[] = []> extends EventEmitter {
 
 		this.bot = bot;
 		this.moduleName = moduleName;
+		this.container = options.container;
 		this.events = options.container?.events;
 
 		this._onDisconnect = () => this.destroy();

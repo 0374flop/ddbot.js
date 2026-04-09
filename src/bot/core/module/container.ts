@@ -1,14 +1,17 @@
 import { EventEmitter } from 'events'
 import type { Bot } from '../core.js';
 import type BaseModule from './BaseModule.js';
+import { InputMixer } from './InputMixer.js';
 
 export default class ModuleContainer {
     public readonly events = new EventEmitter();
     private _modules: Map<Function, BaseModule> = new Map();
+    public _mixer: InputMixer;
     public readonly bot: Bot;
 
     constructor(Bot: Bot) {
         this.bot = Bot;
+        this._mixer = new InputMixer();
     }
 
     private _register(cls: Function, instance: BaseModule) {
