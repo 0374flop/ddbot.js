@@ -1,4 +1,4 @@
-import BaseModule from '../core/module/module.js';
+import BaseModule from '../core/module/BaseModule.js';
 import type { Bot } from '../core/core.js';
 import type { Client } from 'teeworlds';
 import type { Types } from '../index.js';
