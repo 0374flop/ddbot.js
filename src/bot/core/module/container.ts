@@ -2,13 +2,12 @@ import { EventEmitter } from 'events'
 import type { Bot } from '../core.js';
 import type BaseModule from './BaseModule.js';
 
-export default class ModuleContainer extends EventEmitter {
+export default class ModuleContainer {
     public readonly events = new EventEmitter();
     private _modules: Map<Function, BaseModule> = new Map();
     public readonly bot: Bot;
 
     constructor(Bot: Bot) {
-        super();
         this.bot = Bot;
     }
 
@@ -24,8 +23,8 @@ export default class ModuleContainer extends EventEmitter {
         return this._register(cls, new cls(this.bot, { container: this }));
     }
 
-    public registerModuleFactory<T extends BaseModule>(cls: new (...args: any[]) => T, factory: (bot: Bot) => T) {
-        return this._register(cls, factory(this.bot));
+    public registerModuleFactory<T extends BaseModule>(cls: new (...args: any[]) => T, factory: (bot: Bot, container: ModuleContainer) => T) {
+        return this._register(cls, factory(this.bot, this));
     }
 
     public getModule<T extends BaseModule>(cls: new (...args: any[]) => T): T {
@@ -34,5 +33,12 @@ export default class ModuleContainer extends EventEmitter {
             throw new Error(`Module ${cls.name} is not registered.`);
         }
         return module as T;
+    }
+
+    public destroyAll() {
+        for (const module of this._modules.values()) {
+            module.destroy();
+        }
+        this._modules.clear();
     }
 }
