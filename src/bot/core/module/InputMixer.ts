@@ -1,4 +1,5 @@
 import type InputModule from './InputModule.js';
+import type * as Types from '../../types.js';
 
 export enum InputChannel {
     Direction = 'm_Direction',
@@ -16,7 +17,7 @@ export enum InputChannel {
 export class InputMixer {
     private _modules: Set<InputModule> = new Set();
 
-    private _recalculate() {
+    public _recalculate() {
         const owners = new Map<InputChannel, InputModule>();
 
         for (const module of this._modules) {
@@ -37,6 +38,32 @@ export class InputMixer {
                 }
             }
         }
+    }
+
+    public getSnapshot(): Types.SnapshotItemTypes.PlayerInput {
+        const result: Types.SnapshotItemTypes.PlayerInput = {
+            m_Direction: 0,
+            m_TargetX: 0,
+            m_TargetY: 0,
+            m_Jump: 0,
+            m_Fire: 0,
+            m_Hook: 0,
+            m_PlayerFlags: 0,
+            m_WantedWeapon: 0,
+            m_NextWeapon: 0,
+            m_PrevWeapon: 0,
+        };
+
+        for (const module of this._modules) {
+            if (!module.isRunning) continue;
+            for (const channel of module.channels) {
+                if (module.isChannelActive(channel)) {
+                    result[channel] = module.getInput(channel);
+                }
+            }
+        }
+
+        return result;
     }
 
     public register(module: InputModule) {

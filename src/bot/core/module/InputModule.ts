@@ -54,6 +54,16 @@ class InputModule<TStartArgs extends unknown[] = []> extends BaseModule<TStartAr
         this.container?._mixer.unregister(this);
         super.destroy();
     }
+
+    public start(...args: TStartArgs): void {
+        super.start(...args);
+        this.container?._mixer._recalculate();
+    }
+
+    public stop(): void {
+        super.stop();
+        this.container?._mixer._recalculate();
+    }
 }
 
 export default InputModule;
