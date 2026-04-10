@@ -1,4 +1,4 @@
-import InputModule from './../../core/module/InputModule.js';
+import InputModule from '../../core/module/InputModule.js';
 import type { Bot } from '../../core/core.js';
 import type ModuleContainer from '../../core/module/container.js';
 import { InputChannel } from '../../core/module/InputMixer.js';
