@@ -11,11 +11,6 @@ const playerList = container.registerModule(ddbot.StandardModules.PlayerList);
 const lookAt = container.registerModule(ddbot.InputModules.LookAt, { priority: 10 });
 const follow = container.registerModule(ddbot.InputModules.Follow, { priority: 11 });
 
-chat.start();
-playerList.start();
-lookAt.start();
-follow.start();
-
 bot.on('connect', () => {
     console.log('connect');
 

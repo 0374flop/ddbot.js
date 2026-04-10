@@ -29,16 +29,12 @@ export default class ModuleContainer {
 
     public registerModule<T extends BaseModule>(
         cls: new (bot: Bot, options?: any) => T,
-        options?: Record<string, any>
+        options?: Record<string, any> & { autoStart?: boolean }
     ): T {
-        return this._register(cls, new cls(this.bot, { container: this, ...options })) as T;
-    }
-
-    public registerModuleFactory<T extends BaseModule>(
-        cls: new (...args: any[]) => T,
-        factory: (bot: Bot, container: ModuleContainer) => T
-    ): T {
-        return this._register(cls, factory(this.bot, this)) as T;
+        const { autoStart = true, ...rest } = options ?? {};
+        const instance = this._register(cls, new cls(this.bot, { container: this, ...rest })) as T;
+        if (autoStart) instance.start();
+        return instance;
     }
 
     public getModule<T extends BaseModule>(cls: new (...args: any[]) => T): T {
