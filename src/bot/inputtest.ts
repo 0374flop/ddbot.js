@@ -8,16 +8,8 @@ const bot = new ddbot.Bot();
 const container = new ddbot.ModuleContainer(bot);
 const chat = container.registerModule(ddbot.StandardModules.Chat);
 const playerList = container.registerModule(ddbot.StandardModules.PlayerList);
-
-const lookAt = container.registerModuleFactory(
-    ddbot.InputModules.LookAt,
-    (b, c) => new ddbot.InputModules.LookAt(b, { container: c, priority: 10 })
-);
-
-const follow = container.registerModuleFactory(
-    ddbot.InputModules.Follow,
-    (b, c) => new ddbot.InputModules.Follow(b, { container: c, priority: 20 })
-);
+const lookAt = container.registerModule(ddbot.InputModules.LookAt, { priority: 10 });
+const follow = container.registerModule(ddbot.InputModules.Follow, { priority: 11 });
 
 chat.start();
 playerList.start();
@@ -25,9 +17,9 @@ lookAt.start();
 follow.start();
 
 bot.on('connect', () => {
-    console.log('[connect] подключился');
+    console.log('connect');
 
-    lookAt.setTarget(700, 1200);
+    lookAt.setTarget(496, 5456);
 
     setTimeout(() => {
         const players = playerList.list.filter(([id]) => id !== bot.OwnID);
@@ -62,7 +54,7 @@ playerList.on('player_left', ({ client_id, name }) => {
 
     process.on('SIGINT', async () => {
         console.log('\nexit');
-        container.destroyAll();
+        container.destroy();
         await bot.disconnect();
         process.exit(0);
     });

@@ -12,6 +12,7 @@ interface FollowOptions {
 class Follow extends InputModule<[]> {
     private _targetId: number | null = null;
     private readonly _radius: number;
+    private _inRange: boolean = false;
 
     private readonly _onSnapshot = (): void => {
         if (this._targetId === null) return;
@@ -28,9 +29,18 @@ class Follow extends InputModule<[]> {
         const dist = Math.sqrt(dx * dx + dy * dy);
 
         if (dist > this._radius) {
-            this.setInput(InputChannel.TargetX, 0);
-            this.setInput(InputChannel.TargetY, 0);
+            if (this._inRange) {
+                this._inRange = false;
+                for (const ch of this.channels) this.yieldChannel(ch);
+                this.container?._mixer._recalculate();
+            }
             return;
+        }
+
+        if (!this._inRange) {
+            this._inRange = true;
+            for (const ch of this.channels) this.claimChannel(ch);
+            this.container?._mixer._recalculate();
         }
 
         this.setInput(InputChannel.TargetX, dx);
@@ -43,21 +53,29 @@ class Follow extends InputModule<[]> {
             channels: [InputChannel.TargetX, InputChannel.TargetY],
             priority: options.priority ?? 50,
             container: options.container,
+            offonDisconnect: false,
         });
         this._radius = options.radius ?? 300;
     }
 
     public followPlayer(client_id: number): void {
         this._targetId = client_id;
+        this._inRange = false;
+        for (const ch of this.channels) this.yieldChannel(ch);
+        this.container?._mixer._recalculate();
     }
 
     public clearTarget(): void {
         this._targetId = null;
+        this._inRange = false;
         this.setInput(InputChannel.TargetX, 0);
         this.setInput(InputChannel.TargetY, 0);
+        for (const ch of this.channels) this.yieldChannel(ch);
+        this.container?._mixer._recalculate();
     }
 
     protected _start(): void {
+        for (const ch of this.channels) this.yieldChannel(ch);
         this.bot.on('snapshot', this._onSnapshot);
     }
 

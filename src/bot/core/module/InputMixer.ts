@@ -16,26 +16,29 @@ export enum InputChannel {
 
 export class InputMixer {
     private _modules: Set<InputModule> = new Set();
+    private _owners: Map<InputChannel, InputModule> = new Map();
 
     public _recalculate() {
-        const owners = new Map<InputChannel, InputModule>();
+        this._owners.clear();
 
         for (const module of this._modules) {
             if (!module.isRunning) continue;
             for (const channel of module.channels) {
-                const current = owners.get(channel);
+                if (module.hasYielded(channel)) continue;
+                const current = this._owners.get(channel);
                 if (!current || module.priority > current.priority) {
-                    owners.set(channel, module);
+                    this._owners.set(channel, module);
                 }
             }
         }
 
         for (const module of this._modules) {
             for (const channel of module.channels) {
-                if (owners.get(channel) === module) {
-                    module.resumeChannel(channel);
+                if (module.hasYielded(channel)) continue;
+                if (this._owners.get(channel) === module) {
+                    module._mixerResumeChannel(channel);
                 } else {
-                    module.pauseChannel(channel);
+                    module._mixerPauseChannel(channel);
                 }
             }
         }
@@ -55,13 +58,8 @@ export class InputMixer {
             m_PrevWeapon: 0,
         };
 
-        for (const module of this._modules) {
-            if (!module.isRunning) continue;
-            for (const channel of module.channels) {
-                if (module.isChannelActive(channel)) {
-                    result[channel] = module.getInput(channel);
-                }
-            }
+        for (const [channel, module] of this._owners) {
+            result[channel] = module.getInput(channel);
         }
 
         return result;

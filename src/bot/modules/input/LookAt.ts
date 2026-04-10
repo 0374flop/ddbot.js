@@ -9,26 +9,48 @@ interface LookAtOptions {
 }
 
 class LookAt extends InputModule<[]> {
+    private target: { x: number; y: number } | null = null;
+
+    private _onSnapshot = () => {
+        if (!this.target) return;
+        const me = this.bot.bot_client?.SnapshotUnpacker?.getObjCharacter(this.bot.OwnID!);
+        if (!me) return;
+        this.setInput(InputChannel.TargetX, this.target.x - me.character_core.x);
+        this.setInput(InputChannel.TargetY, this.target.y - me.character_core.y);
+    }
+
     constructor(bot: Bot, options: LookAtOptions) {
         super(bot, {
             moduleName: 'LookAt',
             channels: [InputChannel.TargetX, InputChannel.TargetY],
             priority: options.priority ?? 50,
             container: options.container,
+            offonDisconnect: false,
         });
     }
 
     public setTarget(worldX: number, worldY: number): void {
-        const me = this.bot.bot_client?.SnapshotUnpacker?.getObjCharacter(this.bot.OwnID!);
-        if (!me) return;
-
-        this.setInput(InputChannel.TargetX, worldX - me.character_core.x);
-        this.setInput(InputChannel.TargetY, worldY - me.character_core.y);
+        this.target = { x: worldX, y: worldY };
+        for (const ch of this.channels) this.claimChannel(ch);
+        this.container?._mixer._recalculate();
     }
 
     public clearTarget(): void {
+        this.target = null;
         this.setInput(InputChannel.TargetX, 0);
         this.setInput(InputChannel.TargetY, 0);
+        for (const ch of this.channels) this.yieldChannel(ch);
+        this.container?._mixer._recalculate();
+    }
+
+    protected _start(): void {
+        for (const ch of this.channels) this.yieldChannel(ch);
+        this.bot.on('snapshot', this._onSnapshot);
+    }
+
+    protected _stop(): void {
+        this.bot.off('snapshot', this._onSnapshot);
+        this.clearTarget();
     }
 }
 

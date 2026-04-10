@@ -9,9 +9,14 @@ export default class ModuleContainer {
     public _mixer: InputMixer;
     public readonly bot: Bot;
 
+    private readonly _onSnapshot: () => void = () => {
+        this.bot.send_input(this._mixer.getSnapshot());
+    }
+
     constructor(Bot: Bot) {
         this.bot = Bot;
         this._mixer = new InputMixer();
+        this.bot.on('snapshot', this._onSnapshot);
     }
 
     private _register(cls: Function, instance: BaseModule) {
@@ -22,11 +27,17 @@ export default class ModuleContainer {
         return instance;
     }
 
-    public registerModule<T extends BaseModule>(cls: new (bot: Bot, options?: any) => T): T {
-        return this._register(cls, new cls(this.bot, { container: this })) as T;
+    public registerModule<T extends BaseModule>(
+        cls: new (bot: Bot, options?: any) => T,
+        options?: Record<string, any>
+    ): T {
+        return this._register(cls, new cls(this.bot, { container: this, ...options })) as T;
     }
 
-    public registerModuleFactory<T extends BaseModule>(cls: new (...args: any[]) => T, factory: (bot: Bot, container: ModuleContainer) => T): T {
+    public registerModuleFactory<T extends BaseModule>(
+        cls: new (...args: any[]) => T,
+        factory: (bot: Bot, container: ModuleContainer) => T
+    ): T {
         return this._register(cls, factory(this.bot, this)) as T;
     }
 
@@ -38,10 +49,11 @@ export default class ModuleContainer {
         return module as T;
     }
 
-    public destroyAll() {
+    public destroy() {
         for (const module of this._modules.values()) {
             module.destroy();
         }
+        this.bot.off('snapshot', this._onSnapshot);
         this._modules.clear();
     }
 }
