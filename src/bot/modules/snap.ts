@@ -74,7 +74,7 @@ class Snap extends BaseModule {
 	private readonly snapslistener = (): void => {
 		const ffs = () => {
 			if (this.bot.OwnID === undefined || !this.bot.bot_client?.SnapshotUnpacker) return;
-			const myDDNetChar: Types.SnapshotItemTypes.DDNetCharacter = this.bot.bot_client.SnapshotUnpacker.getObjExDDNetCharacter(this.bot.OwnID);
+			const myDDNetChar: Types.SnapshotItemTypes.DDNetCharacter = this.bot.bot_client.SnapshotUnpacker?.getObjExDDNetCharacter(this.bot.OwnID);
 			if (myDDNetChar) {
 				const wasFrozen = this._isFrozen;
 				this._isFrozen = myDDNetChar.m_FreezeEnd !== 0;

@@ -90,6 +90,8 @@ class Reconnect extends BaseModule<[maxAttempts?: number, randomDelay?: boolean]
 			baseDelay = 20000;
 		} else if (reason.startsWith('Timed Out')) {
 			baseDelay = 500;
+		} else if (reason.startsWith('Only 4 players with the same IP are allowed')) {
+			baseDelay = 20000;
 		}
 
 		if (this.randomDelay) {

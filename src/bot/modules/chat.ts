@@ -50,14 +50,6 @@ class Chat extends BaseModule<[interval?: number, cooldown?: number]> {
 		super(bot, { moduleName: 'Chat', offonDisconnect: false });
 	}
 
-	/**
-	 * Добавить сообщение в очередь на отправку
-	 *
-	 * @param text     текст сообщения
-	 * @param team     отправить в командный чат? (true = team, false = all)
-	 * @param priority добавить в начало очереди (приоритетное сообщение)
-	 * @returns true если сообщение добавлено в очередь
-	 */
 	public send(text: string, team: boolean = false, priority: boolean = false): boolean {
 		if (!text || text.trim().length === 0) {
 		return false;

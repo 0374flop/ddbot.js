@@ -32,6 +32,14 @@ bot.on('connect', () => {
     });
 });
 
+chat.on('chat', (msg, autor, text, team, client_id) => {
+    console.log(`(${team}, ${client_id}) ${autor}: ${text}`);
+});
+
+chat.on('systemchat', (msg, text) => {
+    console.log(`*** ${text}`);
+});
+
 bot.on('disconnect', (reason) => {
     console.log('disconnect', reason);
 });
