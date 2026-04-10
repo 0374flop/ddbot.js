@@ -16,6 +16,7 @@ class InputModule<TStartArgs extends unknown[] = []> extends BaseModule<TStartAr
     public readonly priority: number;
     private _activeChannels: Set<InputChannel>;
     private _yieldedChannels: Set<InputChannel> = new Set();
+    private _pausedChannels: Set<InputChannel> = new Set();
     private _input: Partial<Record<InputChannel, number>> = {};
 
     constructor(bot: Bot, options: InputModuleOptions) {
@@ -42,6 +43,31 @@ class InputModule<TStartArgs extends unknown[] = []> extends BaseModule<TStartAr
 
     public hasYielded(channel: InputChannel): boolean {
         return this._yieldedChannels.has(channel);
+    }
+
+    public pauseInput(): void {
+        for (const channel of this.channels) {
+            if (!this._pausedChannels.has(channel)) {
+                this._pausedChannels.add(channel);
+                this.yieldChannel(channel);
+            }
+        }
+        this.container?._mixer._recalculate();
+        this.emit('input_paused');
+    }
+
+    public resumeInput(): void {
+        const toResume = [...this._pausedChannels];
+        this._pausedChannels.clear();
+        for (const channel of toResume) {
+            this.claimChannel(channel);
+        }
+        this.container?._mixer._recalculate();
+        this.emit('input_resumed');
+    }
+
+    public get isInputPaused(): boolean {
+        return this._pausedChannels.size > 0;
     }
 
     public _mixerPauseChannel(channel: InputChannel): void {
