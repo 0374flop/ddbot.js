@@ -26,7 +26,7 @@ class Reconnect extends BaseModule<[maxAttempts?: number, randomDelay?: boolean]
 	private reconnectTimer: NodeJS.Timeout | null = null;
 
 	constructor(bot: Bot) {
-		super(bot, { moduleName: 'Reconnect', offonDisconnect: false });
+		super(bot, { moduleName: 'Reconnect' });
 	}
 
 	protected _start(maxAttempts: number = -1, randomDelay: boolean = true): void {

@@ -5,7 +5,6 @@ import { InputChannel } from './InputMixer.js';
 
 interface InputModuleOptions {
     moduleName?: string;
-    offonDisconnect?: boolean;
     container?: ModuleContainer;
     channels: InputChannel[];
     priority: number;
@@ -19,7 +18,15 @@ class InputModule<TStartArgs extends unknown[] = []> extends BaseModule<TStartAr
     private _activeChannels: Set<InputChannel> = new Set();
 
     constructor(bot: Bot, options: InputModuleOptions) {
-        super(bot, { offonDisconnect: false, ...options });
+        super(bot, { ...options });
+
+        if (!options.channels || options.channels.length === 0) {
+            throw new Error(`${options.moduleName || 'InputModule'}: channels array cannot be empty`);
+        }
+        if (typeof options.priority !== 'number' || isNaN(options.priority)) {
+            throw new Error(`${options.moduleName || 'InputModule'}: priority must be a valid number`);
+        }
+
         this.channels = options.channels;
         this.priority = options.priority;
 

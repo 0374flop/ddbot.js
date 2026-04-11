@@ -5,7 +5,6 @@ import ModuleContainer from './container.js';
 
 interface BaseModuleOptions {
 	moduleName?: string;
-	offonDisconnect?: boolean;
 	container?: ModuleContainer;
 }
 
@@ -17,8 +16,7 @@ class BaseModule<TStartArgs extends unknown[] = []> extends EventEmitter {
 	public isRunning: boolean = false;
 	private _timers: Set<ReturnType<typeof setTimeout>> = new Set();
 	private _intervals: Set<ReturnType<typeof setInterval>> = new Set();
-
-	private readonly _onDisconnect: () => void;
+	private _busProxy?: EventEmitter;
 
 	constructor(bot: Bot, options: BaseModuleOptions = {}) {
 		super();
@@ -29,15 +27,9 @@ class BaseModule<TStartArgs extends unknown[] = []> extends EventEmitter {
 			throw new Error(`${moduleName} requires bot core`);
 		}
 
-		this.bot = bot;
-		this.moduleName = moduleName;
+		this.bot = bot;		this.moduleName = moduleName;
 		this.container = options.container;
 		this.events = options.container?.events;
-
-		this._onDisconnect = () => this.destroy();
-		if (options.offonDisconnect !== false) {
-			this.bot.on('disconnect', this._onDisconnect);
-		}
 
 		this.bot.on('destroy', () => this.destroy());
 	}
@@ -46,14 +38,19 @@ class BaseModule<TStartArgs extends unknown[] = []> extends EventEmitter {
 		if (!this.events) {
 			throw new Error(`${this.moduleName}: no container provided`);
 		}
-		return new Proxy(this.events, {
-			get: (target, prop) => {
-				if (prop === 'emit') {
-					return (event: string, ...args: any[]) => target.emit(`${this.moduleName}:${event}`, ...args);
+
+		if (!this._busProxy) {
+			this._busProxy = new Proxy(this.events, {
+				get: (target, prop) => {
+					if (prop === 'emit') {
+						return (event: string, ...args: any[]) => target.emit(`${this.moduleName}:${event}`, ...args);
+					}
+					return (target as any)[prop];
 				}
-				return (target as any)[prop];
-			}
-		});
+			});
+		}
+
+		return this._busProxy;
 	}
 
 	public start(...args: TStartArgs): void {
@@ -74,17 +71,34 @@ class BaseModule<TStartArgs extends unknown[] = []> extends EventEmitter {
 
 	protected _stop(): void {}
 
-	protected setTimeout(fn: () => void, ms: number) {
+	protected setTimeout(fn: () => void, ms: number): ReturnType<typeof setTimeout> {
 		const timer = setTimeout(() => {
-			fn();
+			if (!this.isRunning) {
+				this._timers.delete(timer);
+				return;
+			}
+			try {
+				fn();
+			} catch (e) {
+				console.error(this.moduleName, e);
+			}
 			this._timers.delete(timer);
 		}, ms);
 		this._timers.add(timer);
+		return timer;
 	}
 
-	protected setInterval(fn: () => void, ms: number) {
-		const interval = setInterval(fn, ms);
+	protected setInterval(fn: () => void, ms: number): ReturnType<typeof setInterval> {
+		const interval = setInterval(() => {
+			if (!this.isRunning) return;
+			try {
+				fn();
+			} catch (e) {
+				console.error(this.moduleName, e);
+			}
+		}, ms);
 		this._intervals.add(interval);
+		return interval;
 	}
 
 	protected cancelTimeout(timer: ReturnType<typeof setTimeout>) {
@@ -111,7 +125,6 @@ class BaseModule<TStartArgs extends unknown[] = []> extends EventEmitter {
 	public destroy(): void {
 		this._clearTimers();
 		this.stop();
-		this.bot.off('disconnect', this._onDisconnect);
 		this.removeAllListeners();
 	}
 }

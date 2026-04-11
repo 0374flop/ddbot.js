@@ -49,7 +49,11 @@ export default class ModuleContainer {
         for (const module of this._modules.values()) {
             module.destroy();
         }
-        this.bot.off('snapshot', this._onSnapshot);
+        try {
+            this.bot.off('snapshot', this._onSnapshot);
+        } catch (e) {
+        }
         this._modules.clear();
+        this.events.removeAllListeners();
     }
 }

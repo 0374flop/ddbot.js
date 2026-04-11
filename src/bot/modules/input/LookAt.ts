@@ -34,8 +34,7 @@ class LookAt extends InputModule<[]> {
             moduleName: 'LookAt',
             channels: [InputChannel.TargetX, InputChannel.TargetY],
             priority: options.priority ?? 50,
-            container: options.container,
-            offonDisconnect: false,
+            container: options.container
         });
     }
 

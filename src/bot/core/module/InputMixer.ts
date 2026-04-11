@@ -33,7 +33,7 @@ export class InputMixer {
 
         const sortedModules = Array.from(this._modules)
             .filter(m => m.isRunning)
-            .sort((a, b) => b.priority - a.priority);
+            .sort((a, b) => (b.priority || 0) - (a.priority || 0));
 
         const filledChannels = new Set<InputChannel>();
 

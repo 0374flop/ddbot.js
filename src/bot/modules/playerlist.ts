@@ -32,7 +32,7 @@ interface PlayerListEvents {
 
 class PlayerList extends BaseModule<[maxclients?: number]> {
 	constructor(bot: Bot) {
-		super(bot, { moduleName: 'PlayerList', offonDisconnect: false });
+		super(bot, { moduleName: 'PlayerList' });
 		this.client = this.bot.bot_client; // тута короче же прокси, так что ето работает
 	}
 	private client: Client | null;

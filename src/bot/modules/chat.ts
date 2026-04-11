@@ -47,7 +47,7 @@ class Chat extends BaseModule<[interval?: number, cooldown?: number]> {
 	};
 
 	constructor(bot: Bot) {
-		super(bot, { moduleName: 'Chat', offonDisconnect: false });
+		super(bot, { moduleName: 'Chat' });
 	}
 
 	public send(text: string, team: boolean = false, priority: boolean = false): boolean {

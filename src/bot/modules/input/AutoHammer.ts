@@ -59,8 +59,7 @@ class AutoHammer extends InputModule<[]> {
             moduleName: 'AutoHammer',
             channels: [InputChannel.Fire],
             priority: options.priority ?? 100,
-            container: options.container,
-            offonDisconnect: false,
+            container: options.container
         });
         this._radius = options.radius ?? 50;
     }
