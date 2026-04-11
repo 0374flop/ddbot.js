@@ -1,5 +1,5 @@
 import InputModule from '../../core/module/InputModule.js';
-import type { Bot } from '../../core.js';
+import type { Bot } from '../../core/core.js';
 import type ModuleContainer from '../../core/module/container.js';
 import { InputChannel } from '../../core/module/InputMixer.js';
 
@@ -23,8 +23,10 @@ class LookAt extends InputModule<[]> {
         }
         
         this.claimAll();
-        this.setInput(InputChannel.TargetX, this.target.x - me.character_core.x);
-        this.setInput(InputChannel.TargetY, this.target.y - me.character_core.y);
+        const dx = this.target.x - me.character_core.x;
+        const dy = this.target.y - me.character_core.y;
+        this.setInput(InputChannel.TargetX, dx);
+        this.setInput(InputChannel.TargetY, dy);
     }
 
     constructor(bot: Bot, options: LookAtOptions) {

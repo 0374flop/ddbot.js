@@ -10,6 +10,7 @@ import Reconnect from './modules/reconnect.js';
 import Snap from './modules/snap.js';
 import LookAt from './modules/input/LookAt.js';
 import Follow from './modules/input/Follow.js';
+import AutoHammer from './modules/input/AutoHammer.js';
 
 import * as DDUtils from './ddutils.js';
 import * as Types from './types.js';
@@ -24,6 +25,7 @@ const StandardModules = {
 const InputModules = {
 	LookAt,
 	Follow,
+	AutoHammer,
 };
 
 export {
