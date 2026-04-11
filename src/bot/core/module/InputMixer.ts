@@ -16,33 +16,6 @@ export enum InputChannel {
 
 export class InputMixer {
     private _modules: Set<InputModule> = new Set();
-    private _owners: Map<InputChannel, InputModule> = new Map();
-
-    public _recalculate() {
-        this._owners.clear();
-
-        for (const module of this._modules) {
-            if (!module.isRunning) continue;
-            for (const channel of module.channels) {
-                if (module.hasYielded(channel)) continue;
-                const current = this._owners.get(channel);
-                if (!current || module.priority > current.priority) {
-                    this._owners.set(channel, module);
-                }
-            }
-        }
-
-        for (const module of this._modules) {
-            for (const channel of module.channels) {
-                if (module.hasYielded(channel)) continue;
-                if (this._owners.get(channel) === module) {
-                    module._mixerResumeChannel(channel);
-                } else {
-                    module._mixerPauseChannel(channel);
-                }
-            }
-        }
-    }
 
     public getSnapshot(): Types.SnapshotItemTypes.PlayerInput {
         const result: Types.SnapshotItemTypes.PlayerInput = {
@@ -58,8 +31,19 @@ export class InputMixer {
             m_PrevWeapon: 0,
         };
 
-        for (const [channel, module] of this._owners) {
-            result[channel] = module.getInput(channel);
+        const sortedModules = Array.from(this._modules)
+            .filter(m => m.isRunning)
+            .sort((a, b) => b.priority - a.priority);
+
+        const filledChannels = new Set<InputChannel>();
+
+        for (const module of sortedModules) {
+            for (const channel of module.channels) {
+                if (!filledChannels.has(channel) && module.wantsChannel(channel)) {
+                    result[channel] = module.getInputValue(channel);
+                    filledChannels.add(channel);
+                }
+            }
         }
 
         return result;
@@ -67,11 +51,9 @@ export class InputMixer {
 
     public register(module: InputModule) {
         this._modules.add(module);
-        this._recalculate();
     }
 
     public unregister(module: InputModule) {
         this._modules.delete(module);
-        this._recalculate();
     }
 }

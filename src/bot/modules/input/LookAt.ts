@@ -1,5 +1,5 @@
 import InputModule from '../../core/module/InputModule.js';
-import type { Bot } from '../../core/core.js';
+import type { Bot } from '../../core.js';
 import type ModuleContainer from '../../core/module/container.js';
 import { InputChannel } from '../../core/module/InputMixer.js';
 
@@ -12,9 +12,17 @@ class LookAt extends InputModule<[]> {
     private target: { x: number; y: number } | null = null;
 
     private _onSnapshot = () => {
-        if (!this.target) return;
+        if (!this.target) {
+            this.releaseAll();
+            return;
+        }
         const me = this.bot.bot_client?.SnapshotUnpacker?.getObjCharacter(this.bot.OwnID!);
-        if (!me) return;
+        if (!me) {
+            this.releaseAll();
+            return;
+        }
+        
+        this.claimAll();
         this.setInput(InputChannel.TargetX, this.target.x - me.character_core.x);
         this.setInput(InputChannel.TargetY, this.target.y - me.character_core.y);
     }
@@ -31,20 +39,15 @@ class LookAt extends InputModule<[]> {
 
     public setTarget(worldX: number, worldY: number): void {
         this.target = { x: worldX, y: worldY };
-        for (const ch of this.channels) this.claimChannel(ch);
-        this.container?._mixer._recalculate();
     }
 
     public clearTarget(): void {
         this.target = null;
-        this.setInput(InputChannel.TargetX, 0);
-        this.setInput(InputChannel.TargetY, 0);
-        for (const ch of this.channels) this.yieldChannel(ch);
-        this.container?._mixer._recalculate();
+        this.releaseAll();
     }
 
     protected _start(): void {
-        for (const ch of this.channels) this.yieldChannel(ch);
+        this.releaseAll();
         this.bot.on('snapshot', this._onSnapshot);
     }
 
